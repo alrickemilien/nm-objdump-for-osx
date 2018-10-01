@@ -1,0 +1,11 @@
+*.o
+*.swp
+*.DS_STORE
+*.so
+*.a
+./nm
+ft_nm
+./otool
+ft_otool
+a.out
+loader.h

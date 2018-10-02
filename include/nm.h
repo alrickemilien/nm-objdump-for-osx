@@ -8,6 +8,7 @@
 #include <sys/stat.h>
 #include <sys/mman.h>
 #include <unistd.h>
+#include <stdio.h>
 
 #include "libft.h"
 #include "nm_options.h"

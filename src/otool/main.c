@@ -1,4 +1,4 @@
-#include "nm_otool.h"
+#include "otool.h"
 
 /*
  *	nm

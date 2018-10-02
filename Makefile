@@ -1,3 +1,5 @@
+OS := $(shell uname)
+
 ifneq ($(OS),Darwin)
 $(error OSX required ...)
 endif
@@ -24,11 +26,11 @@ all: $(NM) $(OTOOL)
 
 $(NM): $(NM_OBJ)
 	@make -C $(DIR_LIBFT)
-	@gcc $^ -o $@ $(INCLUDE) $(LINK_LIBFT)
+	@gcc $^ -o $@ $(LINK_LIBFT)
 
 $(OTOOL): $(OTOOL_OBJ)
 	@make -C $(DIR_LIBFT)
-	@gcc $^ -o $@ $(INCLUDE) $(LINK_LIBFT)
+	@gcc $^ -o $@ $(LINK_LIBFT)
 
 %.o: %.c
 	@gcc -o $@ -c $< $(INCLUDE) $(CCFLAGS)

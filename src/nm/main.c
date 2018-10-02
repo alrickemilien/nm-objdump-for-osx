@@ -1,4 +1,4 @@
-#include "nm_otool.h"
+#include "nm.h"
 
 /*
  *	nm
@@ -27,6 +27,7 @@ int	nm_64(void *ptr)
 	struct load_command		*lc;
 	struct symtab_command *symtab;
 	int										i;
+	struct symtab_command * sym;
 
 	/*
 	** A variable length string in a load command is represented by an lc_str

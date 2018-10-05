@@ -1,7 +1,7 @@
 #include "nm.h"
 
 /*
- *	nm
+**	nm
 */
 
 void print(int nsyms, int symoff, int stroff, char *ptr)
@@ -20,25 +20,16 @@ void print(int nsyms, int symoff, int stroff, char *ptr)
 	}
 }
 
-int	nm_64(void *ptr)
+int	nm_64(void *ptr, uint64_t filesize)
 {
 	int										ncmds;
 	struct mach_header_64	*header;
 	struct load_command		*lc;
 	struct symtab_command *symtab;
 	int										i;
-	struct symtab_command * sym;
 
-	/*
-	** A variable length string in a load command is represented by an lc_str
-	** 	union.  union lc_str {
-	**        uint32_t        offset;
-	** 	#ifndef __LP64__
-	** 	       char            *ptr;
-	** 	#endif
-	** };
-	*/
-	union lc_str					str;
+	if (filesize < sizeof(struct mach_header_64))
+		return (EXIT_FAILURE);
 
 
 	// Get the header that has all infos
@@ -56,9 +47,9 @@ int	nm_64(void *ptr)
 	{
 		if (lc->cmd == LC_SYMTAB)
 		{
-			sym = (struct symtab_command *) lc;
+			symtab = (struct symtab_command *) lc;
 
-			print(symtab->nsyms, symtab->symoff, symtab->stroff);
+			print(symtab->nsyms, symtab->symoff, symtab->stroff, ptr);
 			break ;
 		}
 
@@ -72,6 +63,53 @@ int	nm_64(void *ptr)
  		// MUST be a multiple of 4 bytes and for 64-bit architectures MUST be a multiple
  		// of 8 bytes (these are forever the maximum alignment of any load commands).
 
+		i++;
+	}
+
+	return (1);
+}
+int	nm_32(void *ptr, uint64_t filesize)
+{
+	int						ncmds;
+	struct mach_header		*header;
+	struct load_command		*lc;
+	struct symtab_command	*symtab;
+	int						i;
+
+	if (filesize < sizeof(struct mach_header))
+		return (EXIT_FAILURE);
+
+
+	// Get the header that has all infos
+	header = (struct mach_header*)ptr;
+
+	// Get the number of commands of the binary file
+	ncmds = header->ncmds;
+
+	// Get the start of the load commands
+	// The load commands directly follow the mach_header
+	lc = (struct load_command *) (ptr + sizeof(struct mach_header));
+
+	i = 0;
+	while (i < ncmds)
+	{
+		if (lc->cmd == LC_SYMTAB)
+		{
+			symtab = (struct symtab_command *) lc;
+
+			print(symtab->nsyms, symtab->symoff, symtab->stroff, ptr);
+			break ;
+		}
+
+		// Each command type has a structure specifically for it.
+		// The cmdsize field is the size in bytes
+ 		// of the particular load command structure plus anything that follows it that
+ 		// is a part of the load command
+		lc = (struct load_command *) ((void *)lc + lc->cmdsize);
+
+		// The cmdsize for 32-bit architectures
+ 		// MUST be a multiple of 4 bytes and for 64-bit architectures MUST be a multiple
+ 		// of 8 bytes (these are forever the maximum alignment of any load commands).
 
 		i++;
 	}
@@ -79,58 +117,50 @@ int	nm_64(void *ptr)
 	return (1);
 }
 
-int	nm(void *ptr)
+/*
+** 1) Check magic number
+*/
+
+int	nm(void *ptr, uint64_t filesize)
 {
-	int	magic_number;
+	uint32_t	magic_number;
 
 	// Get the magic number at the start of the file
-	magic_number = *(int *)ptr;
+	magic_number = *(uint32_t*)ptr;
 
-	if (magic_number == MH_MAGIC_64)
-		return nm_64(ptr);
+	if (magic_number == MH_MAGIC_64
+	|| magic_number == MH_CIGAM_64)
+		return (nm_64(ptr, filesize));
 
-	return (1);
+	return (nm_32(ptr, filesize));
 }
 
-int	exec(int fd)
+int	exec(char *filename)
 {
 	void		*ptr;
-	struct stat	buf;
-	int		file_type;
+	uint64_t	filesize;
 
-	// 1) We read the file
-	if (fstat(fd, &buf) < 0)
-		return (0);
+	// 1) Load the files
+	if ((ptr = map_loading_file(filename, &filesize)) == NULL)
+		return (EXIT_FAILURE);
 
-	// 2) Get the file type
-	file_type = buf.st_mode & S_IFMT;
+	if (filesize < sizeof(uint32_t))
+		return (EXIT_FAILURE);
 
-	// Check if the open file is a file
-	// Not a directory or a link
-	if (file_type != S_IFREG
-	&& file_type != S_IFLNK)
-	return (0);
+	// 2) Now we exec nm on the file
+	if (!nm(ptr, filesize))
+		return (EXIT_FAILURE);
 
-	if ((ptr = mmap(0, buf.st_size,
-		PROT_READ, PROT_WRITE,
-		fd, 0)) == MAP_FAILED)
-		return (0);
+	// 3) Then we free the memory asked to store the file content
+	if (map_unloading_file(ptr, filesize) == -1)
+		return (EXIT_FAILURE);
 
-	// 3) Now we exec nm on the file
-	if (!nm(ptr))
-		return (0);
-
-	// 4) Then we free the memory asked to store the file content
-	if (munmap(ptr, buf.st_size) < 0)
-		return (0);
-
-	return (1);
+	return (EXIT_OK);
 }
 
 int	main(int ac, char **av)
 {
 	int	i;
-	int	fd;
 	int	exit_value;
 	t_options options;
 
@@ -143,16 +173,8 @@ int	main(int ac, char **av)
 	// Read every arg
 	while (i < ac)
 	{
-		// Try to open the file passed as arg
-		if ((fd = open(av[i], O_RDONLY)) == -1)
+		if (exec(av[i]) == EXIT_FAILURE)
 			exit_value = EXIT_FAILURE;
-		else
-		{
-			// The file has been opened successfully
-			// Then we process the file
-			if (!exec(fd))
-				exit_value = EXIT_FAILURE;
-		}
 		i++;
 	}
 

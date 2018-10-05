@@ -1,7 +1,7 @@
 #ifndef NM_OPTIONS
 #define NM_OPTIONS
 
-/**
+/*
 ** Number of handled parameters
 */
 
@@ -37,5 +37,7 @@ typedef struct 	s_options_map {
 typedef struct s_options {
 	int foo_option;
 } t_options;
+
+int read_options_arguments(int ac, char **av, t_options *opt);
 
 #endif

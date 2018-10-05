@@ -46,5 +46,6 @@ typedef enum				e_mach_o_file_type
 */
 
 void	*map_loading_file(char *filename, uint64_t *file_size);
+int		map_unloading_file(void *ptr, uint64_t file_size);
 
 #endif

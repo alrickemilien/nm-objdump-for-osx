@@ -1,12 +1,5 @@
 #include "mach_o_utils.h"
 
-static void print_error(char *filename, char *str)
-{
-  ft_putstr_fd(filename, 2);
-  ft_putstr_fd(": ", 2);
-  ft_putendl_fd(str, 2);
-}
-
 int		map_unloading_file(void *ptr, uint64_t file_size)
 {
 	if (munmap(ptr, file_size) == -1)
@@ -22,31 +15,38 @@ int		map_unloading_file(void *ptr, uint64_t file_size)
 
 void	*map_loading_file(char *filename, uint64_t *file_size)
 {
-	int			fd;
-	void		*map;
-	struct stat	stats;
+	int			     fd;
+	void		     *map;
+	struct stat  stats;
 
 	if ((fd = open(filename, O_RDONLY)) == -1)
 	{
-		print_error(filename, "File does not exist or permission denied");
+		mach_o_error(MACH_O_ERROR_MAP_LOADING);
 		return (NULL);
 	}
 
-  if ((fstat(fd, &stats)) == -1)
-		return (NULL);
+  if ((fstat(fd, &stats)) == -1) {
+    mach_o_error(MACH_O_ERROR_MAP_LOADING);
+    return (NULL);
+  }
 
   if (stats.st_size <= 0)
-		return (NULL);
+  {
+    mach_o_error(MACH_O_ERROR_INVALID_FILE_SIZE);
+    return (NULL);
+  }
 
-  *file_size = ((uint64_t)stats.st_size);
+  *file_size = (off_t)stats.st_size;
 
-  if (stats.st_mode != S_IFREG && stats.st_mode != S_IFLNK)
-	return (0);
+  if ((stats.st_mode & S_IFMT) != S_IFREG && (stats.st_mode & S_IFMT) != S_IFLNK) {
+    mach_o_error(MACH_O_ERROR_INVALID_FILE_TYPE);
+    return (0);
+  }
 
   if (MAP_FAILED == (map = mmap(NULL, *file_size,
 				PROT_READ | PROT_WRITE, MAP_PRIVATE, fd, 0)))
 	{
-    print_error(filename, "File does not exist or permission denied");
+    mach_o_error(MACH_O_ERROR_MAP_LOADING);
 		map = NULL;
 	}
 

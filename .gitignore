@@ -7,5 +7,3 @@ ft_nm
 ft_otool
 a.out
 loader.h
-nm
-otool

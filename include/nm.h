@@ -1,19 +1,11 @@
 #ifndef NM_OTOOL_H
 #define NM_OTOOL_H
 
-# include <mach-o/loader.h>
-# include <mach-o/nlist.h>
-
-# include <fcntl.h>
-# include <sys/stat.h>
-# include <sys/mman.h>
-# include <unistd.h>
 # include <stdio.h>
 
-# include "libft.h"
-# include "boolean.h"
-# include "nm_options.h"
 # include "mach_o_utils.h"
+# include "nm_options.h"
+# include "libft.h"
 
 /*
 ** All ok
@@ -43,9 +35,5 @@ void print_error_on_option(const char *msg, const char *option);
 
 # define USAGE "./ft_nm <object file>"
 
-# define ERROR_DUMMY_FILE "the file was not recognized"
-# define ERROR_UNKNOWN_FILE_FORMAT DUMMY_FILE " as a valid object file\n"
-# define ERROR_FAT_DEF "Malformed fat file, "
-# define ERROR_FAT_HDR_TRUNC ERR_FAT_DEF "the fat header extends past the file\n"
 
 #endif

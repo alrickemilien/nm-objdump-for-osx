@@ -10,17 +10,19 @@ LIBFT=libft
 DIR_LIBFT=libft
 LINK_LIBFT=-lft -L $(DIR_LIBFT)
 
-NM=nm
+NM=ft_nm
 NM_SRC=src/nm/main.c \
-		src/nm/read_options_arguments.c \
-		src/nm/error.c
+			src/nm/read_options_arguments.c \
+			src/nm/error.c
 NM_OBJ=$(NM_SRC:.c=.o)
 
-OTOOL=otool
+OTOOL=ft_otool
 OTOOL_SRC=src/otool/main.c
 OTOOL_OBJ=$(OTOOL_SRC:.c=.o)
 
-LIB_SRC=src/lib/map_loading_file.c
+LIB_SRC=src/lib/map_loading_file.c \
+				src/lib/mach_o_error.c \
+				src/lib/endian.c
 LIB_OBJ=$(LIB_SRC:.c=.o)
 
 INCLUDE=-I include -I libft

@@ -70,15 +70,14 @@ int	nm_64(void *ptr, uint64_t filesize)
 }
 int	nm_32(void *ptr, uint64_t filesize)
 {
-	int						ncmds;
+	int										ncmds;
 	struct mach_header		*header;
 	struct load_command		*lc;
 	struct symtab_command	*symtab;
-	int						i;
+	int										i;
 
 	if (filesize < sizeof(struct mach_header))
-		return (EXIT_FAILURE);
-
+		return (mach_o_error(MACH_O_ERROR_INVALID_MACH_HEADER));
 
 	// Get the header that has all infos
 	header = (struct mach_header*)ptr;
@@ -125,14 +124,17 @@ int	nm(void *ptr, uint64_t filesize)
 {
 	uint32_t	magic_number;
 
+
 	// Get the magic number at the start of the file
 	magic_number = *(uint32_t*)ptr;
 
-	if (magic_number == MH_MAGIC_64
-	|| magic_number == MH_CIGAM_64)
+	if (magic_number == MH_MAGIC_64 || magic_number == MH_CIGAM_64)
 		return (nm_64(ptr, filesize));
 
-	return (nm_32(ptr, filesize));
+	if (magic_number == MH_MAGIC || magic_number == MH_CIGAM)
+		return (nm_32(ptr, filesize));
+
+	return (mach_o_error(MACH_O_ERROR_INVALID_MAGICK));
 }
 
 int	exec(char *filename)
@@ -144,6 +146,8 @@ int	exec(char *filename)
 	if ((ptr = map_loading_file(filename, &filesize)) == NULL)
 		return (EXIT_FAILURE);
 
+	// The file is lesser than uint32_t, its an error
+	// Because we need at least uint32_t to read a magick number
 	if (filesize < sizeof(uint32_t))
 		return (EXIT_FAILURE);
 
@@ -160,9 +164,9 @@ int	exec(char *filename)
 
 int	main(int ac, char **av)
 {
-	int	i;
-	int	exit_value;
-	t_options options;
+	int				i;
+	int				exit_value;
+	t_options	options;
 
 	exit_value = EXIT_SUCCESS;
 	i = 1;

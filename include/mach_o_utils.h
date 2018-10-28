@@ -38,6 +38,10 @@ typedef enum				e_mach_o_file_type
 void						*map_loading_file(char *filename, uint64_t *file_size);
 int							map_unloading_file(void *ptr, uint64_t file_size);
 
+bool						is_valid_filetype(uint32_t filetype);
+bool						is_valid_flag(uint32_t flag);
+bool						is_valid_cmd(uint32_t cmd);
+
 /*
 ** MACH O ERROR
 */
@@ -53,7 +57,7 @@ typedef struct	s_mach_o_error {
 int							mach_o_error(int code);
 
 /*
-** List eqch error of parsing a macho file
+** List each error of parsing a macho file
 */
 
 # define MACH_O_ERROR_INVALID_MAGICK 0
@@ -70,5 +74,8 @@ int							mach_o_error(int code);
 
 # define MACH_O_ERROR_INVALID_MACH_HEADER 4
 # define MACH_O_ERROR_INVALID_MACH_HEADER_STR "Invalid mach header"
+
+# define MACH_O_ERROR_INVALID_FILETYPE 5
+# define MACH_O_ERROR_INVALID_FILETYPE_STR "Invalid file type"
 
 #endif

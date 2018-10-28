@@ -22,14 +22,25 @@ OTOOL_OBJ=$(OTOOL_SRC:.c=.o)
 
 LIB_SRC=src/lib/map_loading_file.c \
 				src/lib/mach_o_error.c \
-				src/lib/endian.c
+				src/lib/endian.c \
+				src/lib/is_valid_filetype.c \
+				src/lib/is_valid_flag.c \
+				src/lib/is_valid_cmd.c
 LIB_OBJ=$(LIB_SRC:.c=.o)
+
+MACHO_O_BUILDER=mach-o-builder
+MACHO_O_BUILDER_SRC=src/mach_o_builder/main.c
+MACHO_O_BUILDER_OBJ=$(MACHO_O_BUILDER_SRC:.c=.o)
 
 INCLUDE=-I include -I libft
 
 .PHONY: all clean fclean
 
 all: $(NM) $(OTOOL)
+
+$(MACHO_O_BUILDER): $(LIB_OBJ) $(MACHO_O_BUILDER_OBJ)
+	@make -C $(DIR_LIBFT)
+	@gcc $^ -o $@ $(LINK_LIBFT)
 
 $(NM): $(LIB_OBJ) $(NM_OBJ)
 	@make -C $(DIR_LIBFT)

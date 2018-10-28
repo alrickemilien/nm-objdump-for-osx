@@ -74,6 +74,7 @@ int	nm_32(void *ptr, uint64_t filesize)
 	struct mach_header		*header;
 	struct load_command		*lc;
 	struct symtab_command	*symtab;
+	uint32_t				filetype;
 	int										i;
 
 	if (filesize < sizeof(struct mach_header))
@@ -82,8 +83,17 @@ int	nm_32(void *ptr, uint64_t filesize)
 	// Get the header that has all infos
 	header = (struct mach_header*)ptr;
 
+	filetype = header->filetype;
+
+	if (is_valid_filetype(filetype) == false)
+		return (mach_o_error(MACH_O_ERROR_INVALID_FILETYPE));
+
 	// Get the number of commands of the binary file
 	ncmds = header->ncmds;
+
+	// Check if the size of the file allow load commands to exists
+	if (filesize < (sizeof(struct mach_header) + sizeof(struct load_command)))
+		return (mach_o_error(MACH_O_ERROR_INVALID_MACH_HEADER));
 
 	// Get the start of the load commands
 	// The load commands directly follow the mach_header
@@ -123,7 +133,6 @@ int	nm_32(void *ptr, uint64_t filesize)
 int	nm(void *ptr, uint64_t filesize)
 {
 	uint32_t	magic_number;
-
 
 	// Get the magic number at the start of the file
 	magic_number = *(uint32_t*)ptr;

@@ -5,6 +5,7 @@
 
 # include "mach_o_utils.h"
 # include "libft.h"
+# include "mach_o_builder_options.h"
 
 /*
 ** All ok
@@ -21,6 +22,9 @@
 /*
 ** Main
 */
+int build_mach_o_from_conf(const char *path);
+int write_buffer_to_file(const char *output);
+int load_file_descriptor(const char *path);
 
 /*
 **   __________________  ___________  ______

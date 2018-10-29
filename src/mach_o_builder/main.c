@@ -4,10 +4,17 @@
 ** 1 - Load the file config
 */
 
+void print_error_on_option(const char *msg, const char *option)
+{
+	ft_putendl_fd(msg, 2);
+	ft_putendl_fd(" : ", 2);
+	ft_putendl_fd(option, 2);
+}
+
 /*
 ** @return fd - file descriptor
 */
-static int load_file_descriptor(const char *path)
+int load_file_descriptor(const char *path)
 {
 	int			     fd;
 	struct stat  stats;
@@ -26,41 +33,33 @@ static int load_file_descriptor(const char *path)
   return (fd);
 }
 
-int build_mach_o_from_conf(const char *path)
+static inline bool is_an_option(const char *s)
 {
-	int		fd;
-	char	*line;
-
-	fd = load_file_descriptor(path);
-
-	if (fd == -1)
-		return (EXIT_FAILURE)
-
-	while(get_next_line(fd, &line))
-	{
-		;
-	}
-
-	return (0);
+	if (s[0] == '-')
+		return (true);
+	return (false);
 }
 
 int main(int ac, const char **av)
 {
-	int	i;
+	int				i;
+	t_options	options;
 
 	if (ac == 1)
 	{
 		ft_putendl("No input file.");
-
 		return (0);
 	}
 
+	if (read_options_arguments(ac, av, &options) == EXIT_FAILURE)
+		return (EXIT_FAILURE);
+
 	i = 1;
-	while (i != ac)
+	while (i != ac && !is_an_option(av[i]))
 	{
 		build_mach_o_from_conf(av[i]);
 		i++;
 	}
-	
+
 	return (0);
 }

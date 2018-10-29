@@ -2,7 +2,7 @@
 
 /*
 ** List all handled flags
-** 
+**
 */
 
 static const uint32_t g_flag_map[] = {
@@ -120,7 +120,10 @@ static const uint32_t g_flag_map[] = {
  /* The code was linked for use in an
 application extension. */
 
+// This macro does not exist on Darwin <= 16.7.0
+#ifdef MH_NLIST_OUTOFSYNC_WITH_DYLDINFO
 	MH_NLIST_OUTOFSYNC_WITH_DYLDINFO,
+#endif
 /* The external symbols listed in the nlist
 symbol table do not include all the symbols
 listed in the dyld info. */

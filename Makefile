@@ -29,7 +29,10 @@ LIB_SRC=src/lib/map_loading_file.c \
 LIB_OBJ=$(LIB_SRC:.c=.o)
 
 MACHO_O_BUILDER=mach-o-builder
-MACHO_O_BUILDER_SRC=src/mach_o_builder/main.c
+MACHO_O_BUILDER_SRC=src/mach_o_builder/main.c \
+										src/mach_o_builder/read_options_arguments.c \
+										src/mach_o_builder/generate_file.c \
+										src/mach_o_builder/parser.c
 MACHO_O_BUILDER_OBJ=$(MACHO_O_BUILDER_SRC:.c=.o)
 
 INCLUDE=-I include -I libft

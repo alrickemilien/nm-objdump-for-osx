@@ -46,10 +46,10 @@ typedef struct        s_mach_o_command {
 ** Macho o builder structure
 */
 
-typedef struct       s_mach_o_builder {
+typedef struct          s_mach_o_builder {
     t_mach_o_header     header;
     t_list              *cmd; // List of t_mach_o_command
-}                    t_mach_o_builder;
+}                       t_mach_o_builder;
 
 /*
 ** Main

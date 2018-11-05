@@ -25,7 +25,8 @@ int load_file_descriptor(const char *path)
 		return (-1);
 	}
 
-  if ((fstat(fd, &stats)) == -1) {
+  if ((fstat(fd, &stats)) == -1)
+	{
     mach_o_error(MACH_O_ERROR_MAP_LOADING);
     return (-1);
   }
@@ -42,8 +43,9 @@ static inline bool is_an_option(const char *s)
 
 int main(int ac, const char **av)
 {
-	int				i;
-	t_options	options;
+	int								i;
+	t_options					options;
+	t_mach_o_builder	builder;
 
 	if (ac == 1)
 	{
@@ -57,7 +59,7 @@ int main(int ac, const char **av)
 	i = 1;
 	while (i != ac && !is_an_option(av[i]))
 	{
-		build_mach_o_from_conf(av[i]);
+		build_mach_o_from_conf(&builder, av[i]);
 		i++;
 	}
 

@@ -316,6 +316,9 @@ int build_mach_o_from_conf(t_mach_o_builder *b, const char *path)
     free(line);
   }
 
+  // When only one load_command has been given
+  if (NULL == builder.cmd_list && state != HEADER_STATE)
+    ft_lstadd(&builder.cmd_list, ft_lstnew(&builder.cmd, sizeof(t_mach_o_command)));
 
   memcpy(b, &builder, sizeof(t_mach_o_builder));
 

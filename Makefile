@@ -33,7 +33,9 @@ MACHO_O_BUILDER_SRC=src/mach_o_builder/main.c \
 										src/mach_o_builder/read_options_arguments.c \
 										src/mach_o_builder/generate_file.c \
 										src/mach_o_builder/parser.c \
-										src/mach_o_builder/atoi_base.c
+										src/mach_o_builder/atoi_base.c \
+										src/mach_o_builder/load_file.c \
+										src/mach_o_builder/mach_o_builder.c
 MACHO_O_BUILDER_OBJ=$(MACHO_O_BUILDER_SRC:.c=.o)
 
 INCLUDE=-I include -I libft

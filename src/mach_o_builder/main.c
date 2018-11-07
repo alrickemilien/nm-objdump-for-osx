@@ -11,27 +11,10 @@ void print_error_on_option(const char *msg, const char *option)
 	ft_putendl_fd(option, 2);
 }
 
-/*
-** @return fd - file descriptor
-*/
-int load_file_descriptor(const char *path)
+void del(void *v, size_t size)
 {
-	int			     fd;
-	struct stat  stats;
-
-	if ((fd = open(path, O_RDONLY)) == -1)
-	{
-		mach_o_error(MACH_O_ERROR_MAP_LOADING);
-		return (-1);
-	}
-
-  if ((fstat(fd, &stats)) == -1)
-	{
-    mach_o_error(MACH_O_ERROR_MAP_LOADING);
-    return (-1);
-  }
-
-  return (fd);
+	(void)size;
+	free(v);
 }
 
 static inline bool is_an_option(const char *s)
@@ -46,6 +29,9 @@ int main(int ac, const char **av)
 	int								i;
 	t_options					options;
 	t_mach_o_builder	builder;
+	void 							*buffer;
+	size_t 						size;
+	int  							ret;
 
 	if (ac == 1)
 	{
@@ -58,12 +44,16 @@ int main(int ac, const char **av)
 
 	i = 1;
 	while (i != ac && !is_an_option(av[i]))
-	{
-		printf("u\n");
-		build_mach_o_from_conf(&builder, av[i]);
-		printf("v\n");
-		i++;
-	}
+		build_mach_o_from_conf(&builder, av[i++]);
+
+	ret = mach_o_builder(&builder, &buffer, &size);
+
+	write(1, buffer, size);
+
+	if (NULL != buffer)
+		free(buffer);
+
+	ft_lstdel(&builder.cmd_list, &del);
 
 	return (0);
 }

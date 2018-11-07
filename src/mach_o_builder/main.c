@@ -59,7 +59,9 @@ int main(int ac, const char **av)
 	i = 1;
 	while (i != ac && !is_an_option(av[i]))
 	{
+		printf("u\n");
 		build_mach_o_from_conf(&builder, av[i]);
+		printf("v\n");
 		i++;
 	}
 

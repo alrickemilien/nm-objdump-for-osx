@@ -37,9 +37,13 @@ uint64_t atoi_base(const char *str, size_t base)
   uint64_t    ret;
 //  const char  *map = "0123456789ABCDEF";
 
+printf("yaaa\n");
+printf("yaaa %s\n", str);
+
   start_index = 0;
   if (0 == memcmp(str, "0x", sizeof(char) * 2))
     start_index = 2;
+
 
   printf("%s\n", str + start_index);
 
@@ -52,6 +56,7 @@ uint64_t atoi_base(const char *str, size_t base)
   ret = 0;
   i = 0;
   while (end_index >= start_index) {
+    printf("end_index : %ld start_index : %ld\n", end_index, start_index);
     if (is_digit(str[end_index]))
       ret += (str[end_index] - '0') * powl(base, i);
     else if (is_alpha_low(str[end_index]))

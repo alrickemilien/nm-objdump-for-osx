@@ -111,7 +111,8 @@ static t_mach_o_builder builder;
   };
 
 static const int HEADER_STATE = 0;
-//static const int LOAD_COMMAND_STATE = 1;
+static const int LOAD_COMMAND_STATE = 1;
+static const int SECTION_COMMAND_STATE = 2;
 
 /*
 ** Find key among global static array of the file
@@ -274,8 +275,17 @@ static void parse_line(const char *line, int *state)
       printf("The property %s is not handled\n", property[0]);
   }
 
+  // It means that the last command was a section and we are reading a new one
+  // we need to push it to the cmd list
+  if (current_state == LOAD_COMMAND_STATE && *state == SECTION_COMMAND_STATE) {
+    ft_lstadd(&builder.cmd_list, ft_lstnew(&builder.cmd, sizeof(t_mach_o_command)));
+  }
+
+  // Update the state
+  *state = current_state;
+
   if (ret > 0)
-    apply_property(current_state, ret, property[3]);
+    apply_property(current_state, ret, property[1]);
 
   clear_array(property);
 }
@@ -298,10 +308,14 @@ int build_mach_o_from_conf(t_mach_o_builder *b, const char *path)
 		return (EXIT_FAILURE);
 
   state = HEADER_STATE;
+  builder.cmd_list= NULL;
 	while(get_next_line(fd, &line) > 0) {
+    printf("%s\n", line);
     parse_line(line, &state);
+    printf("ok\n");
     free(line);
   }
+
 
   memcpy(b, &builder, sizeof(t_mach_o_builder));
 

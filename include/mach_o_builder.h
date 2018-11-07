@@ -2,6 +2,7 @@
 #define MACH_O_BUILDER_H
 
 # include <stdio.h>
+# include <math.h>
 
 # include "mach_o_utils.h"
 # include "libft.h"
@@ -38,6 +39,7 @@ typedef union         u_mach_o_section {
 }                     t_mach_o_section;
 
 typedef struct        s_mach_o_command {
+  uint32_t            section_architecture;
   struct load_command lc;
   t_mach_o_section    section;
 }                     t_mach_o_command;
@@ -48,8 +50,11 @@ typedef struct        s_mach_o_command {
 
 typedef struct          s_mach_o_builder {
     t_mach_o_header     header;
-    t_list              *cmd; // List of t_mach_o_command
+    t_mach_o_command    cmd;
+    t_list              *cmd_list; // List of t_mach_o_command
 }                       t_mach_o_builder;
+
+
 
 /*
 ** Main
@@ -58,6 +63,7 @@ typedef struct          s_mach_o_builder {
 int build_mach_o_from_conf(t_mach_o_builder *builder, const char *path);
 int write_buffer_to_file(const char *output);
 int load_file_descriptor(const char *path);
+uint64_t atoi_base(const char *str, size_t base);
 
 /*
 **   __________________  ___________  ______

@@ -1,6 +1,5 @@
 #include "mach_o_builder.h"
 
-
 struct mapping {
   char *key;
   void *value;
@@ -58,9 +57,9 @@ static t_mach_o_builder builder;
   */
 
   static const struct mapping load_command_g[] = {
-    { "cmd", &builder.cmd->lc.cmd },
-    { "cmdsize", &builder.cmd->lc.cmdsize },
-    { "section_architecture", &builder.cmd->lc.section_architecture },
+    { "cmd", &builder.cmd.lc.cmd },
+    { "cmdsize", &builder.cmd.lc.cmdsize },
+    { "section_architecture", &builder.cmd.section_architecture },
     { NULL, NULL},
   };
 
@@ -96,19 +95,18 @@ static t_mach_o_builder builder;
   */
 
   static const struct mapping section_keys_map_g[] = {
-    {"section_type", &builder.cmd->section.section_type },
-    {"sectname[16]", &builder.cmd->section.sectname },
-    {"segname[16]", &builder.cmd->section.segname },
-    {"addr", &builder.cmd->section.addr },
-    {"size", &builder.cmd->section.size },
-    {"offset", &builder.cmd->section.offset },
-    {"align", &builder.cmd->section.align },
-    {"reloff", &builder.cmd->section.reloff },
-    {"nreloc", &builder.cmd->section.nreloc },
-    {"flags", &builder.cmd->section.flags },
-    {"reserved1", &builder.cmd->section.reserved1 },
-    {"reserved2", &builder.cmd->section.reserved2 },
-    {"reserved3", &builder.cmd->section_64.reserved2 },
+    {"sectname[16]", &builder.cmd.section.section.sectname },
+    {"segname[16]", &builder.cmd.section.section.segname },
+    {"addr", &builder.cmd.section.section.addr },
+    {"size", &builder.cmd.section.section.size },
+    {"offset", &builder.cmd.section.section.offset },
+    {"align", &builder.cmd.section.section.align },
+    {"reloff", &builder.cmd.section.section.reloff },
+    {"nreloc", &builder.cmd.section.section.nreloc },
+    {"flags", &builder.cmd.section.section.flags },
+    {"reserved1", &builder.cmd.section.section.reserved1 },
+    {"reserved2", &builder.cmd.section.section.reserved2 },
+    {"reserved3", &builder.cmd.section.section_64.reserved2 },
     { NULL, NULL},
   };
 
@@ -228,13 +226,59 @@ static bool is_state_indication(const char *str, int *state)
   return (false);
 }
 
-static void apply_property(int state, int key, const char *value_str)
+static void apply_property(int state, int index, const char *value_str)
 {
-  (void)state;
-  (void)key;
-  (void)value_str;
+  int value;
+
+  const struct mapping *map[] = {
+    mach_header_keys_map_g,
+    load_command_g,
+    section_keys_map_g,
+    NULL,
+  };
+
+  value = atoi_base(value_str, 16);
+
+  *(uint32_t*)map[state][index].value = (uint32_t)value;
 }
 
+static void parse_line(const char *line, int *state)
+{
+  char  **property;
+  int   ret;
+  int   current_state;
+
+  current_state = *state;
+
+  property = ft_strsplit(line, '=');
+
+  trim_each_string_of_array(property);
+
+  if (NULL == *property)
+    return ;
+
+  ret = 0;
+
+  // Check if it is a current_state indication
+  if (is_state_indication(*(const char**)property, &current_state) == true)
+    ;
+
+  // Check the property
+  else if ((ret = find_valid_key(property[0], current_state)) < 1) {
+    if (*property[0] == '#')
+      ;
+    else if (ret == 0)
+      printf("The property %s is not allowed "
+            "for the current_state %s.\n", property[0], state_keys_g[current_state]);
+    else if (ret == -1)
+      printf("The property %s is not handled\n", property[0]);
+  }
+
+  if (ret > 0)
+    apply_property(current_state, ret, property[3]);
+
+  clear_array(property);
+}
 
 /*
 ** The state variable tells where are in the parsing routine
@@ -244,11 +288,9 @@ static void apply_property(int state, int key, const char *value_str)
 
 int build_mach_o_from_conf(t_mach_o_builder *b, const char *path)
 {
-	int		fd;
-	char	*line;
-  char  **property;
-  int    state;
-  int    ret;
+	int   fd;
+	char  *line;
+  int   state;
 
 	fd = load_file_descriptor(path);
 
@@ -256,36 +298,10 @@ int build_mach_o_from_conf(t_mach_o_builder *b, const char *path)
 		return (EXIT_FAILURE);
 
   state = HEADER_STATE;
-	while(get_next_line(fd, &line) > 0)
-	{
-		property = ft_strsplit(line, '=');
-
-    trim_each_string_of_array(property);
-
-    if (NULL == *property)
-      continue;
-
-    // Check if it is a state indication
-    if (is_state_indication(*(const char**)property, &state) == true)
-      ;
-
-    // Check the property
-    else if ((ret = find_valid_key(property[0], state)) < 1) {
-      if (*property[0] == '#')
-        ;
-      else if (ret == 0)
-        printf("The property %s is not allowed "
-              "for the state %s.\n", property[0], state_keys_g[state]);
-      else if (ret == -1)
-        printf("The property %s is not handled\n", property[0]);
-    }
-
-    if (ret > 0)
-      apply_property(state, ret, property[3]);
-
-    clear_array(property);
+	while(get_next_line(fd, &line) > 0) {
+    parse_line(line, &state);
     free(line);
-	}
+  }
 
   memcpy(b, &builder, sizeof(t_mach_o_builder));
 

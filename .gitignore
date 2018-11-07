@@ -8,3 +8,4 @@ ft_otool
 a.out
 loader.h
 mach-o-builder
+lol.c

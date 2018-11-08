@@ -9,8 +9,10 @@ static t_mach_o_builder builder;
 
   static const char *state_keys_g[] = {
     "[HEADER]",
+    "[FAT_HEADER]",
     "[LOAD_COMMAND]",
     "[SECTION_COMMAND]",
+    "[FAT_ARCH]",
     NULL,
   };
 
@@ -46,6 +48,47 @@ static t_mach_o_builder builder;
     { "sizeofcmds", &builder.header.header.sizeofcmds },
     { "flags", &builder.header.header_64.flags },
     { "reserved", &builder.header.header_64.reserved },
+    { NULL, NULL},
+  };
+
+  /*
+  ** struct fat_arch {
+  **        cpu_type_t      cputype;      // cpu specifier (int)
+  **        cpu_subtype_t   cpusubtype;   // machine specifier (int)
+  **        uint32_t        offset;       // file offset to this object file
+  **        uint32_t        size;         // size of this object file
+  **        uint32_t        align;        // alignment as a power of 2
+  ** };
+  **
+  ** struct fat_arch_64 {
+  **        cpu_type_t      cputype;    // cpu specifier (int)
+  **        cpu_subtype_t   cpusubtype; // machine specifier (int)
+  **        uint64_t        offset;     // file offset to this object file
+  **        uint64_t        size;       // size of this object file
+  **        uint32_t        align;      // alignment as a power of 2
+  **        uint32_t        reserved;   // reserved
+  ** };
+  */
+
+  static const struct mapping mach_fat_arch_keys_map_g[] = {
+    { "cputype", &builder.fat_arch.fat_arch.cputype },
+    { "cpusubtype", &builder.fat_arch.fat_arch.cpusubtype },
+    { "offset", &builder.fat_arch.fat_arch.offset },
+    { "size", &builder.fat_arch.fat_arch.size },
+    { "align", &builder.fat_arch.fat_arch.align },
+    { "reserved", &builder.fat_arch.fat_arch_64.reserved },
+    { NULL, NULL},
+  };
+
+  /*
+** struct fat_header {
+**        uint32_t        magic;          // FAT_MAGIC or FAT_MAGIC_64 
+**        uint32_t        nfat_arch;      // number of structs that follow 
+** };
+  */
+  static const struct mapping mach_fat_header_keys_map_g[] = {
+    { "magic", &builder.fat_header.magic },
+    { "nfat_arch", &builder.fat_header.nfat_arch },
     { NULL, NULL},
   };
 
@@ -111,8 +154,10 @@ static t_mach_o_builder builder;
   };
 
 static const int HEADER_STATE = 0;
-static const int LOAD_COMMAND_STATE = 1;
-static const int SECTION_COMMAND_STATE = 2;
+static const int FAT_HEADER_STATE = 1;
+static const int LOAD_COMMAND_STATE = 2;
+static const int SECTION_COMMAND_STATE = 3;
+//static const int FAT_ARCH_STATE = 4;
 
 /*
 ** Find key among global static array of the file
@@ -132,8 +177,10 @@ static int find_valid_key(const char *str, int state)
 
   const struct mapping *map[] = {
     mach_header_keys_map_g,
+    mach_fat_header_keys_map_g,
     load_command_g,
     section_keys_map_g,
+    mach_fat_arch_keys_map_g,
     NULL,
   };
 
@@ -233,8 +280,10 @@ static void apply_property(int state, int index, const char *value_str)
 
   const struct mapping *map[] = {
     mach_header_keys_map_g,
+    mach_fat_header_keys_map_g,
     load_command_g,
     section_keys_map_g,
+    mach_fat_arch_keys_map_g,
     NULL,
   };
 
@@ -269,17 +318,16 @@ static void parse_line(const char *line, int *state)
     if (*property[0] == '#')
       ;
     else if (ret == 0)
-      printf("The property %s is not allowed "
+      debug("The property %s is not allowed "
             "for the current_state %s.\n", property[0], state_keys_g[current_state]);
     else if (ret == -1)
-      printf("The property %s is not handled\n", property[0]);
+      debug("The property %s is not handled\n", property[0]);
   }
 
   // It means that the last command was a section and we are reading a new one
   // we need to push it to the cmd list
-  if (current_state == LOAD_COMMAND_STATE && *state == SECTION_COMMAND_STATE) {
+  if (current_state == LOAD_COMMAND_STATE && *state == SECTION_COMMAND_STATE)
     ft_lstadd(&builder.cmd_list, ft_lstnew(&builder.cmd, sizeof(t_mach_o_command)));
-  }
 
   // Update the state
   *state = current_state;
@@ -310,14 +358,14 @@ int build_mach_o_from_conf(t_mach_o_builder *b, const char *path)
   state = HEADER_STATE;
   builder.cmd_list= NULL;
 	while(get_next_line(fd, &line) > 0) {
-    printf("%s\n", line);
+    debug("%s\n", line);
     parse_line(line, &state);
-    printf("ok\n");
+    debug_s("ok\n");
     free(line);
   }
 
   // When only one load_command has been given
-  if (NULL == builder.cmd_list && state != HEADER_STATE)
+  if (NULL == builder.cmd_list && state != HEADER_STATE && state != FAT_HEADER_STATE)
     ft_lstadd(&builder.cmd_list, ft_lstnew(&builder.cmd, sizeof(t_mach_o_command)));
 
   memcpy(b, &builder, sizeof(t_mach_o_builder));

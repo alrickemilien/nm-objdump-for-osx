@@ -143,6 +143,14 @@ int	nm(void *ptr, uint64_t filesize)
 	if (magic_number == MH_MAGIC || magic_number == MH_CIGAM)
 		return (nm_32(ptr, filesize));
 
+	// When it is a fat arhc
+	if (magic_number == FAT_MAGIC || magic_number == FAT_CIGAM)
+		return (nm_32(ptr, filesize));
+
+	// When it is a fat arhc 64 bits
+	if (magic_number == FAT_MAGIC_64 || magic_number == FAT_CIGAM_64)
+		return (nm_64(ptr, filesize));
+
 	return (mach_o_error(MACH_O_ERROR_INVALID_MAGICK));
 }
 

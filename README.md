@@ -11,5 +11,6 @@ This project provides two binaries :
 ./otool # This program displays segment text of mach o files
 ```
 ## External sources
+- [Get started](https://lowlevelbits.org/parsing-mach-o-files/)
 - [loader.h](https://opensource.apple.com/source/cctools/cctools-795/include/mach-o/loader.h)
 - [nlist.h](https://opensource.apple.com/source/xnu/xnu-201/EXTERNAL_HEADERS/mach-o/nlist.h)

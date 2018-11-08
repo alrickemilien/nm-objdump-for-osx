@@ -35,7 +35,7 @@ int main(int ac, const char **av)
 
 	if (ac == 1)
 	{
-		ft_putendl("No input file.");
+		ft_putendl_fd("No input file.", 2);
 		return (0);
 	}
 
@@ -52,6 +52,8 @@ int main(int ac, const char **av)
 
 	if (NULL != buffer)
 		free(buffer);
+
+	debug_s("ici\n");
 
 	ft_lstdel(&builder.cmd_list, &del);
 

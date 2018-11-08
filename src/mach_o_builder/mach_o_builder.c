@@ -28,7 +28,7 @@ static size_t get_buffer_size_from_builder(t_mach_o_builder *builder){
     else
       ret += sizeof(struct section);
 
-    printf("lqlqlqlq\n");
+    debug_s("lqlqlqlq\n");
 
     x = x->next;
   }
@@ -68,16 +68,16 @@ static void copy_commands(t_mach_o_builder *builder, void *buffer, size_t *curso
     cmd = (t_mach_o_command*)x->content;
 
     // Copy load command datas
-    *cursor += sizeof(struct mach_header);
     memcpy(buffer + *cursor, &cmd->lc, sizeof(struct load_command));
+    *cursor += sizeof(struct load_command);
 
     // Copy section datas
     if (cmd->section_architecture == BITS_64) {
-      *cursor += sizeof(struct section_64);
       memcpy(buffer + *cursor, &cmd->section.section_64, sizeof(struct section_64));
+      *cursor += sizeof(struct section_64);
     } else {
-      *cursor += sizeof(struct section);
       memcpy(buffer + *cursor, &cmd->section.section, sizeof(struct section));
+      *cursor += sizeof(struct section);
     }
 
     x = x->next;
@@ -102,8 +102,6 @@ int mach_o_builder(t_mach_o_builder *builder, void **buffer, size_t *size)
     return (-1);
 
   cursor = 0;
-
-
 
   copy_header_data(builder, *buffer, &cursor);
 

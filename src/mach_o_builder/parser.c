@@ -355,6 +355,8 @@ int build_mach_o_from_conf(t_mach_o_builder *b, const char *path)
 	if (fd == -1)
 		return (EXIT_FAILURE);
 
+  memset(&builder, 0, sizeof(t_mach_o_builder));
+
   state = HEADER_STATE;
   builder.cmd_list= NULL;
 	while(get_next_line(fd, &line) > 0) {

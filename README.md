@@ -3,12 +3,18 @@
 Rewrite the tools nm and otool that you can find on OSX.
 These provides the same functionnalities as objdump on Linux softwares.
 
-This project provides two binaries :
+This project provides three binaries :
 ```bash
-./nm # This program read mach o files
+# This program read mach o files
+./nm
 ```
 ```bash
-./otool # This program displays segment text of mach o files
+# This program displays segment text of mach o files
+./otool
+```
+```bash
+# This program generate a mach o file from a config
+./mach-o-builder mach-o-builder.conf 1> mach-o-object.gen.o
 ```
 ## External sources
 - [Get started](https://lowlevelbits.org/parsing-mach-o-files/)

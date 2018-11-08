@@ -28,6 +28,8 @@ static size_t get_buffer_size_from_builder(t_mach_o_builder *builder){
     else
       ret += sizeof(struct section);
 
+    ret += cmd->section.section.size;
+
     debug_s("lqlqlqlq\n");
 
     x = x->next;
@@ -80,6 +82,9 @@ static void copy_commands(t_mach_o_builder *builder, void *buffer, size_t *curso
       *cursor += sizeof(struct section);
     }
 
+    // Fill datas at the offset provided
+    // fill_data();
+
     x = x->next;
   }
 }
@@ -106,6 +111,8 @@ int mach_o_builder(t_mach_o_builder *builder, void **buffer, size_t *size)
   copy_header_data(builder, *buffer, &cursor);
 
   copy_commands(builder, *buffer, &cursor);
+
+  debug("%ld bytes will be written to stdout\n", *size);
 
   return (0);
 }

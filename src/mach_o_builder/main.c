@@ -53,8 +53,6 @@ int main(int ac, const char **av)
 	if (NULL != buffer)
 		free(buffer);
 
-	debug_s("ici\n");
-
 	ft_lstdel(&builder.cmd_list, &del);
 
 	return (0);

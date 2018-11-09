@@ -1,8 +1,24 @@
 #include "mach_o_builder.h"
 
 struct mapping {
-  char *key;
-  void *value;
+  // Key in the configuration file
+  char   *key;
+
+  // Pointeur zhere ze zill store the value
+  void   *value;
+
+  // Type of the value (char*, uint32_t, uint64_t)
+  uint32_t type;
+};
+
+/*
+** Allowed types
+*/
+
+enum {
+  STRING_TYPE = 0UL,
+  UINT32_TYPE,
+  UINT64_TYPE,
 };
 
 static t_mach_o_builder builder;
@@ -13,6 +29,8 @@ static t_mach_o_builder builder;
     "[LOAD_COMMAND]",
     "[SECTION_COMMAND]",
     "[FAT_ARCH]",
+    "[SEGMENT_COMMAND]",
+    "[DATA_COMMAND]",
     NULL,
   };
 
@@ -40,15 +58,15 @@ static t_mach_o_builder builder;
   */
 
   static const struct mapping mach_header_keys_map_g[] = {
-    { "magic_number", &builder.header.header.magic },
-    { "cputype", &builder.header.header.cputype },
-    { "cpusubtype", &builder.header.header.cpusubtype },
-    { "filetype", &builder.header.header.filetype },
-    { "ncmds", &builder.header.header.ncmds },
-    { "sizeofcmds", &builder.header.header.sizeofcmds },
-    { "flags", &builder.header.header_64.flags },
-    { "reserved", &builder.header.header_64.reserved },
-    { NULL, NULL},
+    { "magic_number", &builder.header.header.magic, UINT32_TYPE },
+    { "cputype", &builder.header.header.cputype, UINT32_TYPE },
+    { "cpusubtype", &builder.header.header.cpusubtype, UINT32_TYPE },
+    { "filetype", &builder.header.header.filetype, UINT32_TYPE },
+    { "ncmds", &builder.header.header.ncmds, UINT32_TYPE },
+    { "sizeofcmds", &builder.header.header.sizeofcmds, UINT32_TYPE },
+    { "flags", &builder.header.header_64.flags, UINT32_TYPE },
+    { "reserved", &builder.header.header_64.reserved, UINT32_TYPE },
+    { NULL, NULL, 0 },
   };
 
   /*
@@ -71,25 +89,25 @@ static t_mach_o_builder builder;
   */
 
   static const struct mapping mach_fat_arch_keys_map_g[] = {
-    { "cputype", &builder.fat_arch.fat_arch.cputype },
-    { "cpusubtype", &builder.fat_arch.fat_arch.cpusubtype },
-    { "offset", &builder.fat_arch.fat_arch.offset },
-    { "size", &builder.fat_arch.fat_arch.size },
-    { "align", &builder.fat_arch.fat_arch.align },
-    { "reserved", &builder.fat_arch.fat_arch_64.reserved },
-    { NULL, NULL},
+    { "cputype", &builder.fat_arch.fat_arch.cputype, UINT32_TYPE },
+    { "cpusubtype", &builder.fat_arch.fat_arch.cpusubtype, UINT32_TYPE },
+    { "offset", &builder.fat_arch.fat_arch.offset, UINT64_TYPE },
+    { "size", &builder.fat_arch.fat_arch.size, UINT32_TYPE },
+    { "align", &builder.fat_arch.fat_arch.align, UINT32_TYPE },
+    { "reserved", &builder.fat_arch.fat_arch_64.reserved, UINT32_TYPE },
+    { NULL, NULL, 0 },
   };
 
   /*
 ** struct fat_header {
-**        uint32_t        magic;          // FAT_MAGIC or FAT_MAGIC_64 
-**        uint32_t        nfat_arch;      // number of structs that follow 
+**        uint32_t        magic;          // FAT_MAGIC or FAT_MAGIC_64
+**        uint32_t        nfat_arch;      // number of structs that follow
 ** };
   */
   static const struct mapping mach_fat_header_keys_map_g[] = {
-    { "magic", &builder.fat_header.magic },
-    { "nfat_arch", &builder.fat_header.nfat_arch },
-    { NULL, NULL},
+    { "magic", &builder.fat_header.magic, UINT32_TYPE },
+    { "nfat_arch", &builder.fat_header.nfat_arch, UINT32_TYPE },
+    { NULL, NULL, 0 },
   };
 
   /*
@@ -100,11 +118,55 @@ static t_mach_o_builder builder;
   */
 
   static const struct mapping load_command_g[] = {
-    { "cmd", &builder.cmd.lc.cmd },
-    { "cmdsize", &builder.cmd.lc.cmdsize },
-    { "section_architecture", &builder.cmd.section_architecture },
-    { NULL, NULL},
+    { "cmd", &builder.cmd.lc.cmd, UINT32_TYPE },
+    { "cmdsize", &builder.cmd.lc.cmdsize, UINT32_TYPE },
+    { "section_architecture", &builder.cmd.section_architecture, UINT32_TYPE },
+    { NULL, NULL, 0 },
   };
+
+/*
+** struct segment_command { //for 32-bit architectures
+**         uint32_t        cmd;            // LC_SEGMENT
+**         uint32_t        cmdsize;        // includes sizeof section structs
+**         char            segname[16];    // segment name
+**         uint32_t        vmaddr;         // memory address of this segment
+**         uint32_t        vmsize;         // memory size of this segment
+**         uint32_t        fileoff;        // file offset of this segment
+**         uint32_t        filesize;       // amount to map from the file
+**         vm_prot_t       maxprot;        // maximum VM protection
+**         vm_prot_t       initprot;       // initial VM protection
+**         uint32_t        nsects;         // number of sections in segment
+**         uint32_t        flags;          // flags
+** };
+**
+** struct segment_command_64 { // for 64-bit architectures
+**         uint32_t        cmd;            // LC_SEGMENT_64
+**         uint32_t        cmdsize;        // includes sizeof section_64 structs
+**         char            segname[16];    // segment name
+**         uint64_t        vmaddr;         // memory address of this segment
+**         uint64_t        vmsize;         // memory size of this segment
+**         uint64_t        fileoff;        // file offset of this segment
+**         uint64_t        filesize;       // amount to map from the file
+**         vm_prot_t       maxprot;        // maximum VM protection
+**         vm_prot_t       initprot;       // initial VM protection
+**         uint32_t        nsects;         // number of sections in segment
+**         uint32_t        flags;          // flags
+** };
+*/
+static const struct mapping mach_segment_command_keys_map_g[] = {
+  { "cmd", &builder.segment.segment_64.cmd, UINT32_TYPE },
+  { "cmdsize", &builder.segment.segment_64.cmdsize, UINT32_TYPE },
+  { "segname", &builder.segment.segment_64.segname, UINT32_TYPE },
+  { "vmaddr", &builder.segment.segment_64.vmaddr, UINT64_TYPE },
+  { "vmsize", &builder.segment.segment_64.vmsize, UINT64_TYPE },
+  { "fileoff", &builder.segment.segment_64.fileoff, UINT64_TYPE },
+  { "filesize", &builder.segment.segment_64.filesize, UINT64_TYPE },
+  { "maxprot", &builder.segment.segment_64.maxprot, UINT32_TYPE },
+  { "initprot", &builder.segment.segment_64.initprot, UINT32_TYPE },
+  { "nsects", &builder.segment.segment_64.nsects, UINT32_TYPE },
+  { "flags", &builder.segment.segment_64.flags, UINT32_TYPE },
+  { NULL, NULL, 0 },
+};
 
   /*
   ** struct section { // for 32-bit architectures
@@ -138,19 +200,19 @@ static t_mach_o_builder builder;
   */
 
   static const struct mapping section_keys_map_g[] = {
-    {"sectname[16]", &builder.cmd.section.section.sectname },
-    {"segname[16]", &builder.cmd.section.section.segname },
-    {"addr", &builder.cmd.section.section.addr },
-    {"size", &builder.cmd.section.section.size },
-    {"offset", &builder.cmd.section.section.offset },
-    {"align", &builder.cmd.section.section.align },
-    {"reloff", &builder.cmd.section.section.reloff },
-    {"nreloc", &builder.cmd.section.section.nreloc },
-    {"flags", &builder.cmd.section.section.flags },
-    {"reserved1", &builder.cmd.section.section.reserved1 },
-    {"reserved2", &builder.cmd.section.section.reserved2 },
-    {"reserved3", &builder.cmd.section.section_64.reserved2 },
-    { NULL, NULL},
+    {"sectname[16]", &builder.cmd.section.section.sectname, STRING_TYPE },
+    {"segname[16]", &builder.cmd.section.section.segname, STRING_TYPE },
+    {"addr", &builder.cmd.section.section.addr, UINT64_TYPE },
+    {"size", &builder.cmd.section.section.size, UINT64_TYPE },
+    {"offset", &builder.cmd.section.section.offset, UINT32_TYPE },
+    {"align", &builder.cmd.section.section.align, UINT32_TYPE },
+    {"reloff", &builder.cmd.section.section.reloff, UINT32_TYPE },
+    {"nreloc", &builder.cmd.section.section.nreloc, UINT32_TYPE },
+    {"flags", &builder.cmd.section.section.flags, UINT32_TYPE },
+    {"reserved1", &builder.cmd.section.section.reserved1, UINT32_TYPE },
+    {"reserved2", &builder.cmd.section.section.reserved2, UINT32_TYPE },
+    {"reserved3", &builder.cmd.section.section_64.reserved2, UINT32_TYPE },
+    { NULL, NULL, 0 },
   };
 
 static const int HEADER_STATE = 0;
@@ -169,11 +231,8 @@ static const int SECTION_COMMAND_STATE = 3;
 
 static int find_valid_key(const char *str, int state)
 {
-  size_t i;
   size_t j;
   int   ret;
-
-  (void)state;
 
   const struct mapping *map[] = {
     mach_header_keys_map_g,
@@ -181,30 +240,21 @@ static int find_valid_key(const char *str, int state)
     load_command_g,
     section_keys_map_g,
     mach_fat_arch_keys_map_g,
+    mach_segment_command_keys_map_g,
     NULL,
   };
 
-  i = 0;
   ret = -1;
-  while(map[i])
+
+  j = 0;
+  while (map[state][j].key)
   {
-    j = 0;
-    while (map[i][j].key)
+    if (!ft_strcmp(map[state][j].key, str))
     {
-      if (!ft_strcmp(map[i][j].key, str))
-      {
-        // If the state does not accept this key
-        if ((int)i != state)
-            ret = 0;
-        else
-          return (j);
-
-      }
-
-      j++;
+      return (j);
     }
 
-    i++;
+    j++;
   }
 
   return (ret);
@@ -276,7 +326,7 @@ static bool is_state_indication(const char *str, int *state)
 
 static void apply_property(int state, int index, const char *value_str)
 {
-  int value;
+  uint64_t value;
 
   const struct mapping *map[] = {
     mach_header_keys_map_g,
@@ -284,12 +334,21 @@ static void apply_property(int state, int index, const char *value_str)
     load_command_g,
     section_keys_map_g,
     mach_fat_arch_keys_map_g,
+    mach_segment_command_keys_map_g,
     NULL,
   };
 
-  value = atoi_base(value_str, 16);
-
-  *(uint32_t*)map[state][index].value = (uint32_t)value;
+  // Handle each type of data
+  if (map[state][index].type == STRING_TYPE) {
+    // @TODO need to copy jusauau next \n or \0
+    memcpy(map[state][index].value, value_str, 1);
+  } else if (map[state][index].type == UINT32_TYPE) {
+    value = atoi_base(value_str, 16);
+    *(uint32_t*)map[state][index].value = (uint32_t)value;
+  } else if (map[state][index].type == UINT64_TYPE) {
+    value = atoi_base(value_str, 16);
+    *(uint64_t*)map[state][index].value = (uint64_t)value;
+  }
 }
 
 static void parse_line(const char *line, int *state)

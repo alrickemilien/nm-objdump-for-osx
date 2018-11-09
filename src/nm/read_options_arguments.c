@@ -4,10 +4,86 @@
 ** This map regroups all options
 */
 
+/*
+**  -a     Display all symbol table entries, including those inserted for use by debuggers.
+**  -g     Display only global (external) symbols.
+**  -n     Sort numerically rather than alphabetically.
+**  -o     Prepend file or archive element name to each output line, rather than only once.
+**  -p     Don't sort; display in symbol-table order.
+**  -r     Sort in reverse order.
+**  -u     Display only undefined symbols.
+**  -U     Don't display undefined symbols.
+**  -m     Display  the  N_SECT  type  symbols (Mach-O symbols) as (segment_name, section_name) followed by either external or non-external and then the symbol
+**  						name.  Undefined, common, absolute and indirect symbols get displayed as (undefined), (common), (absolute), and (indirect), respectively.
+**  -x     Display the symbol table entry's fields in hexadecimal, along with the name as a string.
+**  -j     Just display the symbol names (no value or type).
+**  -l     List a pseudo symbol .section_start if no symbol has as its value the starting address of the section.  (This is used with the -s option above.)
+**  -f     For nm-classic(1) this displays the symbol table of a dynamic library flat (as one file not separate modules).  This is obsolete and  not  supported
+**  			with llvm-nm(1).
+**  -A     Write the pathname or library name of an object on each line.
+**  -P     Write information in a portable output format.
+*/
+
 static t_options_map options_map[OPTIONS_MAP_LENGTH] = {
 		{
-			"foo",
-			FOO_OPTION,
+			"a",
+			ALL_SYMBOL,
+		},
+		{
+			"g",
+			ONLY_GLOBAL_SYMBOL,
+		},
+		{
+			"n",
+			SORT_NUMERIC,
+		},
+		{
+			"o",
+			PREPEND_FILE_ARCHIVE_NAME,
+		},
+		{
+			"p",
+			DO_NOT_SORT,
+		},
+		{
+			"r",
+			REVERSE_SORT,
+		},
+		{
+			"u",
+			ONLY_UNDEFINED_SYMBOL,
+		},
+		{
+			"U",
+			DO_NOT_DISPLAY_UNDEFINED_SYMBOL,
+		},
+		{
+			"m",
+			DISPLAY_NSECT,
+		},
+		{
+			"x",
+			DISPLAY_HEXA,
+		},
+		{
+			"j",
+			ONLY_SYMBOL_NAME,
+		},
+		{
+			"l",
+			LIST_PSEUDO_SYMBOL,
+		},
+		{
+			"f",
+			DISPLAY_DYNAMIC_LIB_SYMBOL,
+		},
+		{
+			"A",
+			DISPLAY_PATH_NAME,
+		},
+		{
+			"P",
+			DISPLAY_PORTABLE,
 		},
 };
 

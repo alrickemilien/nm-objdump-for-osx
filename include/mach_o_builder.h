@@ -50,6 +50,11 @@ typedef union         u_mach_o_section {
   struct section_64   section_64;
 }                     t_mach_o_section;
 
+typedef union             u_mach_o_segment {
+struct segment_command    segment;
+struct segment_command_64 segment_64;
+}                         t_mach_o_segment;
+
 typedef struct        s_mach_o_command {
   uint32_t            section_architecture;
   struct load_command lc;
@@ -63,6 +68,7 @@ typedef struct        s_mach_o_command {
 typedef struct          s_mach_o_builder {
     uint32_t            header_architecture;
     t_mach_o_header     header;
+    t_mach_o_segment    segment;
     struct fat_header   fat_header;
     t_mach_o_command    cmd;
     t_list              *cmd_list; // List of t_mach_o_command

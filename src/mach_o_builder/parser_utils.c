@@ -1,3 +1,4 @@
+#include "mach_o_builder.h"
 
 /*
 ** Remove blank chars arround each word of the given array of word

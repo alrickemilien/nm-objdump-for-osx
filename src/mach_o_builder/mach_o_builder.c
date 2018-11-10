@@ -2,6 +2,76 @@
 
 static const int BITS_64 = 2;
 
+static size_t get_segment_command_list_size(t_mach_o_builder *builder) {
+  size_t                ret;
+  t_list                *x;
+  t_mach_o_segment      *segment;
+
+  (void)segment;
+
+  ret = 0;
+  x = builder->segment_list;
+  while (x) {
+    ret += sizeof(t_mach_o_segment);
+
+    // @TODO need to handle segment
+    // segment = (struct symtab_command*)x->content;
+    // ret += segment->section.section.size;
+
+    x = x->next;
+  }
+
+  return (ret);
+}
+
+static size_t get_section_command_list_size(t_mach_o_builder *builder) {
+  size_t  ret;
+  t_list                *x;
+  t_mach_o_section *section;
+
+  (void)section;
+  ret = 0;
+  x = builder->section_list;
+  while (x) {
+    ret += sizeof(t_mach_o_section);
+
+    // @TODO need to handle section
+    // section = (struct symtab_command*)x->content;
+    // ret += section->section.section.size;
+
+    x = x->next;
+  }
+
+  return (ret);
+}
+
+static size_t get_symtab_command_list_size(t_mach_o_builder *builder) {
+  size_t  ret;
+  t_list                *x;
+  struct symtab_command *symtab;
+
+  (void)symtab;
+  ret = 0;
+  x = builder->symtab_list;
+  while (x) {
+    ret += sizeof(struct symtab_command);
+
+    // @TODO need to handle symtab
+    // symtab = (struct symtab_command*)x->content;
+    // ret += symtab->section.section.size;
+
+    x = x->next;
+  }
+
+  return (ret);
+}
+
+static size_t get_load_command_list_size(t_mach_o_builder *builder) {
+  return get_segment_command_list_size(builder)
+        + get_section_command_list_size(builder)
+        + get_symtab_command_list_size(builder);
+}
+
 /*
 ** Read the builder, and provide a buff size
 ** take into account the arhcitecture provided of the header and each command
@@ -9,31 +79,13 @@ static const int BITS_64 = 2;
 
 static size_t get_buffer_size_from_builder(t_mach_o_builder *builder){
   size_t  ret;
-  t_list  *x;
-  t_mach_o_command *cmd;
 
   // Set the header size
   ret = sizeof(struct mach_header);
   if (builder->header_architecture == BITS_64)
     ret = sizeof(struct mach_header_64);
 
-  x = builder->cmd_list;
-  while (x) {
-    ret += sizeof(struct load_command);
-
-    cmd = (t_mach_o_command*)x->content;
-
-    if (cmd->section_architecture == BITS_64)
-      ret += sizeof(struct section_64);
-    else
-      ret += sizeof(struct section);
-
-    ret += cmd->section.section.size;
-
-    debug_s("lqlqlqlq\n");
-
-    x = x->next;
-  }
+  ret += get_load_command_list_size(builder);
 
   return (ret);
 }
@@ -56,37 +108,73 @@ static void copy_header_data(t_mach_o_builder *builder, void *buffer, size_t *cu
   }
 }
 
+static void copy_segment_command_data(t_mach_o_builder *builder, void *buffer, size_t *cursor) {
+  t_list            *x;
+  t_mach_o_segment  *segment;
+
+  x = builder->segment_list;
+  while (x) {
+    segment = (t_mach_o_segment*)x->content;
+
+    // Copy load command datas
+    // @TODO need to handle 64bits structure
+    memcpy(buffer + *cursor, segment, sizeof(struct segment_command));
+    *cursor += sizeof(struct segment_command);
+
+    x = x->next;
+  }
+}
+
+static void copy_section_command_data(t_mach_o_builder *builder, void *buffer, size_t *cursor) {
+  t_list            *x;
+  t_mach_o_section  *section;
+
+  x = builder->section_list;
+  while (x) {
+    section = (t_mach_o_section*)x->content;
+
+    // Copy load command datas
+    // @TODO need to handle 64bits structure
+    memcpy(buffer + *cursor, section, sizeof(struct segment_command));
+    *cursor += sizeof(struct section);
+
+    x = x->next;
+  }
+}
+
+static void copy_symtab_command_data(t_mach_o_builder *builder, void *buffer, size_t *cursor) {
+  t_list                 *x;
+  struct symtab_command  *symtab;
+
+  x = builder->symtab_list;
+  while (x) {
+    symtab = (struct symtab_command*)x->content;
+
+    // Copy load command datas
+    memcpy(buffer + *cursor, symtab, sizeof(struct symtab_command));
+    *cursor += sizeof(struct symtab_command);
+
+    x = x->next;
+  }
+}
+
 /*
 ** Copy each commands from the list
 ** into the buffer
 */
 
-static void copy_load_commands(t_mach_o_builder *builder, void *buffer, size_t *cursor) {
-  t_list            *x;
-  t_mach_o_command  *cmd;
+static void copy_load_commands_data(t_mach_o_builder *builder, void *buffer, size_t *cursor) {
+  copy_segment_command_data(builder, buffer, cursor);
+  copy_symtab_command_data(builder, buffer, cursor);
+  copy_section_command_data(builder, buffer, cursor);
+}
 
-  x = builder->cmd_list;
-  while (x) {
-    cmd = (t_mach_o_command*)x->content;
+static void copy_data_section_data(t_mach_o_builder *builder, void *buffer, size_t *cursor) {
+  (void)builder;
+  (void)buffer;
+  (void)cursor;
 
-    // Copy load command datas
-    memcpy(buffer + *cursor, &cmd->lc, sizeof(struct load_command));
-    *cursor += sizeof(struct load_command);
-
-    // Copy section datas
-    if (cmd->section_architecture == BITS_64) {
-      memcpy(buffer + *cursor, &cmd->section.section_64, sizeof(struct section_64));
-      *cursor += sizeof(struct section_64);
-    } else {
-      memcpy(buffer + *cursor, &cmd->section.section, sizeof(struct section));
-      *cursor += sizeof(struct section);
-    }
-
-    // Fill datas at the offset provided
-    // fill_data();
-
-    x = x->next;
-  }
+  return;
 }
 
 /*
@@ -110,7 +198,9 @@ int mach_o_builder(t_mach_o_builder *builder, void **buffer, size_t *size)
 
   copy_header_data(builder, *buffer, &cursor);
 
-  copy_load_commands(builder, *buffer, &cursor);
+  copy_load_commands_data(builder, *buffer, &cursor);
+
+  copy_data_section_data(builder, *buffer, &cursor);
 
   debug("%ld bytes will be written to stdout\n", *size);
 

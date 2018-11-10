@@ -6,7 +6,7 @@
 
 void print(int nsyms, int symoff, int stroff, char *ptr)
 {
-	int							i;
+	size_t							i;
 	char						*stringtable;
 	struct nlist_64	*array;
 
@@ -22,15 +22,14 @@ void print(int nsyms, int symoff, int stroff, char *ptr)
 
 int	nm_64(void *ptr, uint64_t filesize)
 {
-	int										ncmds;
+	uint32_t										ncmds;
 	struct mach_header_64	*header;
 	struct load_command		*lc;
 	struct symtab_command *symtab;
-	int										i;
+	size_t										i;
 
 	if (filesize < sizeof(struct mach_header_64))
 		return (EXIT_FAILURE);
-
 
 	// Get the header that has all infos
 	header = (struct mach_header_64 *)ptr;
@@ -75,7 +74,7 @@ int	nm_32(void *ptr, uint64_t filesize)
 	struct load_command		*lc;
 	struct symtab_command	*symtab;
 	uint32_t				filetype;
-	int										i;
+	size_t										i;
 
 	if (filesize < sizeof(struct mach_header))
 		return (mach_o_error(MACH_O_ERROR_INVALID_MACH_HEADER));

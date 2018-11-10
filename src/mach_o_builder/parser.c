@@ -1,18 +1,16 @@
 #include "mach_o_builder.h"
 
-struct mapping {
-  // Key in the configuration file
-  char   *key;
+/*
+** This static variable is mandatory
+** it is filed during the parsing
+** Each sub map are filled zith pointeur on variables on this stati variable
+* At the end, the builder passed as parameter will be strictly memcopy from this static
+*/
 
-  // Pointeur zhere ze zill store the value
-  void   *value;
-
-  // Type of the value (char*, uint32_t, uint64_t)
-  uint32_t type;
-};
+static t_mach_o_builder builder;
 
 /*
-** Allowed types
+** Handled and allowed types for the parsed variables
 */
 
 enum {
@@ -21,17 +19,41 @@ enum {
   UINT64_TYPE,
 };
 
-static t_mach_o_builder builder;
+enum {
+  GLOBAL_CONFIGURATION_STATE = 0UL,
+  HEADER_STATE,
+  FAT_HEADER_STATE,
+  LOAD_COMMAND_STATE,
+  SECTION_COMMAND_STATE,
+  FAT_ARCH_STATE,
+  SEGMENT_COMMAND_STATE,
+  SYMTAB_COMMAND_STATE,
+  DATA_STATE,
+};
 
+  // Must be in the same order as the enum right before
   static const char *state_keys_g[] = {
+    "[GLOBAL_CONFIGURATION]",
     "[HEADER]",
     "[FAT_HEADER]",
     "[LOAD_COMMAND]",
     "[SECTION_COMMAND]",
     "[FAT_ARCH]",
     "[SEGMENT_COMMAND]",
-    "[DATA_COMMAND]",
+    "[SYMTAB_COMMAND]",
+    "[DATA_SECTION]",
     NULL,
+  };
+
+  struct mapping {
+    // Key in the configuration file
+    char   *key;
+
+    // Pointeur zhere ze zill store the value
+    void   *value;
+
+    // Type of the value (char*, uint32_t, uint64_t)
+    uint32_t type;
   };
 
   /*
@@ -99,11 +121,12 @@ static t_mach_o_builder builder;
   };
 
   /*
-** struct fat_header {
-**        uint32_t        magic;          // FAT_MAGIC or FAT_MAGIC_64
-**        uint32_t        nfat_arch;      // number of structs that follow
-** };
+  ** struct fat_header {
+  **        uint32_t        magic;          // FAT_MAGIC or FAT_MAGIC_64
+  **        uint32_t        nfat_arch;      // number of structs that follow
+  ** };
   */
+
   static const struct mapping mach_fat_header_keys_map_g[] = {
     { "magic", &builder.fat_header.magic, UINT32_TYPE },
     { "nfat_arch", &builder.fat_header.nfat_arch, UINT32_TYPE },
@@ -118,9 +141,9 @@ static t_mach_o_builder builder;
   */
 
   static const struct mapping load_command_g[] = {
-    { "cmd", &builder.cmd.lc.cmd, UINT32_TYPE },
-    { "cmdsize", &builder.cmd.lc.cmdsize, UINT32_TYPE },
-    { "section_architecture", &builder.cmd.section_architecture, UINT32_TYPE },
+    { "cmd", &builder.load_command.lc.cmd, UINT32_TYPE },
+    { "cmdsize", &builder.load_command.lc.cmdsize, UINT32_TYPE },
+    { "section_architecture", &builder.load_command.section_architecture, UINT32_TYPE },
     { NULL, NULL, 0 },
   };
 
@@ -200,26 +223,70 @@ static const struct mapping mach_segment_command_keys_map_g[] = {
   */
 
   static const struct mapping section_keys_map_g[] = {
-    {"sectname[16]", &builder.cmd.section.section.sectname, STRING_TYPE },
-    {"segname[16]", &builder.cmd.section.section.segname, STRING_TYPE },
-    {"addr", &builder.cmd.section.section.addr, UINT64_TYPE },
-    {"size", &builder.cmd.section.section.size, UINT64_TYPE },
-    {"offset", &builder.cmd.section.section.offset, UINT32_TYPE },
-    {"align", &builder.cmd.section.section.align, UINT32_TYPE },
-    {"reloff", &builder.cmd.section.section.reloff, UINT32_TYPE },
-    {"nreloc", &builder.cmd.section.section.nreloc, UINT32_TYPE },
-    {"flags", &builder.cmd.section.section.flags, UINT32_TYPE },
-    {"reserved1", &builder.cmd.section.section.reserved1, UINT32_TYPE },
-    {"reserved2", &builder.cmd.section.section.reserved2, UINT32_TYPE },
-    {"reserved3", &builder.cmd.section.section_64.reserved2, UINT32_TYPE },
+    {"sectname[16]", &builder.section.section.sectname, STRING_TYPE },
+    {"segname[16]", &builder.section.section.segname, STRING_TYPE },
+    {"addr", &builder.section.section.addr, UINT64_TYPE },
+    {"size", &builder.section.section.size, UINT64_TYPE },
+    {"offset", &builder.section.section.offset, UINT32_TYPE },
+    {"align", &builder.section.section.align, UINT32_TYPE },
+    {"reloff", &builder.section.section.reloff, UINT32_TYPE },
+    {"nreloc", &builder.section.section.nreloc, UINT32_TYPE },
+    {"flags", &builder.section.section.flags, UINT32_TYPE },
+    {"reserved1", &builder.section.section.reserved1, UINT32_TYPE },
+    {"reserved2", &builder.section.section.reserved2, UINT32_TYPE },
+    {"reserved3", &builder.section.section_64.reserved2, UINT32_TYPE },
     { NULL, NULL, 0 },
   };
 
-static const int HEADER_STATE = 0;
-static const int FAT_HEADER_STATE = 1;
-static const int LOAD_COMMAND_STATE = 2;
-static const int SECTION_COMMAND_STATE = 3;
-//static const int FAT_ARCH_STATE = 4;
+  /*
+  ** struct symtab_command {
+  **         uint32_t        cmd;            // LC_SYMTAB
+  **         uint32_t        cmdsize;        // sizeof(struct symtab_command)
+  **         uint32_t        symoff;         // symbol table offset
+  **         uint32_t        nsyms;          // number of symbol table entries
+  **         uint32_t        stroff;         // string table offset
+  **         uint32_t        strsize;        // string table size in bytes
+  ** };
+  */
+
+  static const struct mapping symtab_keys_map_g[] = {
+    {"cmd", &builder.symtab.cmd, UINT32_TYPE },
+    {"cmdsize", &builder.symtab.cmdsize, UINT32_TYPE },
+    {"symoff", &builder.symtab.symoff, UINT32_TYPE },
+    {"nsyms", &builder.symtab.nsyms, UINT32_TYPE },
+    {"stroff", &builder.symtab.stroff, UINT32_TYPE },
+    {"strsize", &builder.symtab.strsize, UINT32_TYPE },
+    { NULL, NULL, 0 },
+  };
+
+  static const struct mapping global_configuration_keys_map_g[] = {
+    { NULL, NULL, 0 },
+  };
+
+  /*
+  ** The following array map must respect in order the enum
+  ** by their index / position inthe map
+  **  GLOBAL_CONFIGURATION_STATE = 0UL,
+  **  HEADER_STATE,
+  **  FAT_HEADER_STATE,
+  **  LOAD_COMMAND_STATE,
+  **  SECTION_COMMAND_STATE,
+  **  FAT_ARCH_STATE,
+  **  SYMTAB_COMMAND_STATE,
+  **  SEGMENT_COMMAND_STATE,
+  */
+
+  static const struct mapping *map[] = {
+    global_configuration_keys_map_g,
+    mach_header_keys_map_g,
+    mach_fat_header_keys_map_g,
+    load_command_g,
+    section_keys_map_g,
+    mach_fat_arch_keys_map_g,
+    mach_segment_command_keys_map_g,
+    symtab_keys_map_g,
+    NULL,
+  };
 
 /*
 ** Find key among global static array of the file
@@ -233,16 +300,6 @@ static int find_valid_key(const char *str, int state)
 {
   size_t j;
   int   ret;
-
-  const struct mapping *map[] = {
-    mach_header_keys_map_g,
-    mach_fat_header_keys_map_g,
-    load_command_g,
-    section_keys_map_g,
-    mach_fat_arch_keys_map_g,
-    mach_segment_command_keys_map_g,
-    NULL,
-  };
 
   ret = -1;
 
@@ -258,47 +315,6 @@ static int find_valid_key(const char *str, int state)
   }
 
   return (ret);
-}
-
-/*
-** Remove blank chars arround each word of the given array of word
-*/
-
-static void trim_each_string_of_array(char **arr)
-{
-  size_t   i;
-  char  *tmp;
-
-  i = 0;
-  while (arr[i])
-  {
-    tmp = ft_strtrim(arr[i]);
-
-    free(arr[i]);
-
-    arr[i] = tmp;
-
-    i++;
-  }
-}
-
-/*
-** Realease the memory of an array of char*
-*/
-
-static void clear_array(char **arr)
-{
-  size_t   i;
-
-  i = 0;
-  while (arr[i])
-  {
-    free(arr[i]);
-
-    i++;
-  }
-
-  free(arr);
 }
 
 /*
@@ -328,28 +344,68 @@ static void apply_property(int state, int index, const char *value_str)
 {
   uint64_t value;
 
-  const struct mapping *map[] = {
-    mach_header_keys_map_g,
-    mach_fat_header_keys_map_g,
-    load_command_g,
-    section_keys_map_g,
-    mach_fat_arch_keys_map_g,
-    mach_segment_command_keys_map_g,
-    NULL,
-  };
-
   // Handle each type of data
   if (map[state][index].type == STRING_TYPE) {
     // @TODO need to copy jusauau next \n or \0
     memcpy(map[state][index].value, value_str, 1);
+
   } else if (map[state][index].type == UINT32_TYPE) {
     value = atoi_base(value_str, 16);
     *(uint32_t*)map[state][index].value = (uint32_t)value;
+
   } else if (map[state][index].type == UINT64_TYPE) {
     value = atoi_base(value_str, 16);
     *(uint64_t*)map[state][index].value = (uint64_t)value;
   }
 }
+
+/*
+** Append data to the corresponding list in t_mach_o_builder structure
+** A SYMTAB will go to symtab list
+** A SEGMENT will go to segment list
+** ...
+*/
+
+static void append_data_to_corresponding_state_list(int state)
+{
+  size_t i;
+
+  struct map_list_state {
+    int state;
+    void *list;
+    void *value_in_builder;
+    size_t size_value_in_builder;
+  };
+
+  const struct map_list_state list_map[] = {
+    { LOAD_COMMAND_STATE, &builder.load_command_list, &builder.load_command, sizeof(struct load_command) },
+    { SEGMENT_COMMAND_STATE, &builder.segment_list, &builder.segment, sizeof(t_mach_o_segment) },
+    { SECTION_COMMAND_STATE, &builder.section_list, &builder.section, sizeof(t_mach_o_section) },
+    { FAT_ARCH_STATE, &builder.fat_arch_list, &builder.fat_arch, sizeof(t_mach_o_fat_arch) },
+    { SYMTAB_COMMAND_STATE, &builder.symtab_list, &builder.symtab, sizeof(struct symtab_command) },
+
+    // End of the map
+    { -1, NULL, NULL, 0 },
+  };
+
+  i = 0;
+  while (list_map[i].state != -1)
+  {
+    if (list_map[i].state == state) {
+      // Add the strcture to the list
+      ft_lstadd(list_map[i].list,
+        ft_lstnew(list_map[i].value_in_builder, list_map[i].size_value_in_builder));
+
+      return ;
+    }
+
+    i++;
+  }
+}
+
+/*
+** Parse a single line of the file config
+*/
 
 static void parse_line(const char *line, int *state)
 {
@@ -383,10 +439,9 @@ static void parse_line(const char *line, int *state)
       debug("The property %s is not handled\n", property[0]);
   }
 
-  // It means that the last command was a section and we are reading a new one
-  // we need to push it to the cmd list
-  if (current_state == LOAD_COMMAND_STATE && *state == SECTION_COMMAND_STATE)
-    ft_lstadd(&builder.cmd_list, ft_lstnew(&builder.cmd, sizeof(t_mach_o_command)));
+  // It means that the last command is toappend to a list
+  if (current_state != *state)
+    append_data_to_corresponding_state_list(*state);
 
   // Update the state
   *state = current_state;
@@ -416,8 +471,7 @@ int build_mach_o_from_conf(t_mach_o_builder *b, const char *path)
 
   memset(&builder, 0, sizeof(t_mach_o_builder));
 
-  state = HEADER_STATE;
-  builder.cmd_list= NULL;
+  state = GLOBAL_CONFIGURATION_STATE;
 	while(get_next_line(fd, &line) > 0) {
     debug("%s\n", line);
     parse_line(line, &state);
@@ -426,8 +480,10 @@ int build_mach_o_from_conf(t_mach_o_builder *b, const char *path)
   }
 
   // When only one load_command has been given
-  if (NULL == builder.cmd_list && state != HEADER_STATE && state != FAT_HEADER_STATE)
-    ft_lstadd(&builder.cmd_list, ft_lstnew(&builder.cmd, sizeof(t_mach_o_command)));
+  if (NULL == builder.load_command_list && state != HEADER_STATE && state != FAT_HEADER_STATE) {
+    ft_lstadd(&builder.load_command_list,
+      ft_lstnew(&builder.load_command, sizeof(t_mach_o_load_command)));
+  }
 
   memcpy(b, &builder, sizeof(t_mach_o_builder));
 

@@ -61,7 +61,7 @@ static void copy_header_data(t_mach_o_builder *builder, void *buffer, size_t *cu
 ** into the buffer
 */
 
-static void copy_commands(t_mach_o_builder *builder, void *buffer, size_t *cursor) {
+static void copy_load_commands(t_mach_o_builder *builder, void *buffer, size_t *cursor) {
   t_list            *x;
   t_mach_o_command  *cmd;
 
@@ -110,7 +110,7 @@ int mach_o_builder(t_mach_o_builder *builder, void **buffer, size_t *size)
 
   copy_header_data(builder, *buffer, &cursor);
 
-  copy_commands(builder, *buffer, &cursor);
+  copy_load_commands(builder, *buffer, &cursor);
 
   debug("%ld bytes will be written to stdout\n", *size);
 

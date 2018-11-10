@@ -105,6 +105,7 @@ int       build_mach_o_from_conf(t_mach_o_builder *builder, const char *path);
 int       write_buffer_to_file(const char *output, const char *buffer, size_t size);
 int       load_file_descriptor(const char *path);
 uint64_t  atoi_base(const char *str, size_t base);
+void      read_string(const char *value_str, char **buffer);
 int       mach_o_builder(t_mach_o_builder *builder, void **buffer, size_t *size);
 size_t    get_buffer_size_from_builder(t_mach_o_builder *builder);
 

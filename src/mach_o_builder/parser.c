@@ -340,29 +340,6 @@ static bool is_state_indication(const char *str, int *state)
   return (false);
 }
 
-static void read_string(const char *value_str, char **buffer) {
-  size_t i;
-
-  i = 0;
-  while (value_str && value_str[i] && value_str[i] != '\n')
-    i++;
-
-  if (i == 0)
-    return ;
-
-  *buffer = (char*)malloc(sizeof(char) * i);
-
-  if (NULL == *buffer)
-    return ;
-
-  while (value_str[i] && value_str[i] != '\n')
-  {
-    (*buffer)[i] = value_str[i];
-
-    i++;
-  }
-}
-
 static void apply_property(int state, int index, const char *value_str)
 {
   uint64_t value;
@@ -454,11 +431,11 @@ static void parse_line(const char *line, int *state)
   else if ((ret = find_valid_key(property[0], current_state)) < 1) {
     if (*property[0] == '#')
       ;
-    else if (ret == 0)
-      debug("The property %s is not allowed "
-            "for the current_state %s.\n", property[0], state_keys_g[current_state]);
-    else if (ret == -1)
-      debug("The property %s is not handled\n", property[0]);
+    // else if (ret == 0)
+    //   debug("The property %s is not allowed "
+    //         "for the current_state %s.\n", property[0], state_keys_g[current_state]);
+    // else if (ret == -1)
+    //   debug("The property %s is not handled\n", property[0]);
   }
 
   // It means that the last command is toappend to a list
@@ -495,9 +472,9 @@ int build_mach_o_from_conf(t_mach_o_builder *b, const char *path)
 
   state = GLOBAL_CONFIGURATION_STATE;
 	while(get_next_line(fd, &line) > 0) {
-    debug("%s\n", line);
+  //  debug("%s\n", line);
     parse_line(line, &state);
-    debug_s("ok\n");
+  //  debug_s("ok\n");
     free(line);
   }
 

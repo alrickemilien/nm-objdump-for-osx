@@ -62,15 +62,15 @@ static size_t get_symtab_command_list_size(t_mach_o_builder *builder) {
   t_list                *x;
   struct symtab_command *symtab;
 
-  (void)symtab;
   ret = 0;
   x = builder->symtab_list;
   while (x) {
+    // @TODO need to handle symtab
     ret += sizeof(struct symtab_command);
 
-    // @TODO need to handle symtab
-    // symtab = (struct symtab_command*)x->content;
-    // ret += symtab->section.section.size;
+    symtab = (struct symtab_command*)x->content;
+
+    ret += symtab->strsize;
 
     x = x->next;
   }

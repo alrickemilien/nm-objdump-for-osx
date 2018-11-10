@@ -40,3 +40,28 @@ void clear_array(char **arr)
 
   free(arr);
 }
+
+
+void read_string(const char *value_str, char **buffer)
+{
+  size_t i;
+
+  i = 0;
+  while (value_str && value_str[i] && value_str[i] != '\n')
+    i++;
+
+  if (i == 0)
+    return ;
+
+  *buffer = (char*)malloc(sizeof(char) * i);
+
+  if (NULL == *buffer)
+    return ;
+
+  while (value_str[i] && value_str[i] != '\n')
+  {
+    (*buffer)[i] = value_str[i];
+
+    i++;
+  }
+}

@@ -47,6 +47,14 @@ int main(int ac, const char **av)
 		return (0);
 	}
 
+	debug("sizeof(struct mach_header_64) : %ld\n", sizeof(struct mach_header_64));
+	debug("sizeof(struct mach_header) : %ld\n", sizeof(struct mach_header));
+	debug("sizeof(struct section) : %ld\n", sizeof(struct section));
+	debug("sizeof(struct section_64) : %ld\n", sizeof(struct section_64));
+	debug("sizeof(struct segment_command) : %ld\n", sizeof(struct segment_command));
+	debug("sizeof(struct segment_command_64) : %ld\n", sizeof(struct segment_command_64));
+	debug("sizeof(struct symtab_command symtab) : %ld\n", sizeof(struct symtab_command));
+
 	if (read_options_arguments(ac, av, &options) == EXIT_FAILURE)
 		return (EXIT_FAILURE);
 

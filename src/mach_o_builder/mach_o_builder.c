@@ -23,7 +23,9 @@ static void copy_header_data(t_mach_o_builder *builder, void *buffer, size_t *cu
 static void copy_segment_command_data(t_mach_o_builder *builder, void *buffer, size_t *cursor) {
   t_list            *x;
   t_mach_o_segment  *segment;
+  size_t            i;
 
+  i = 0;
   x = builder->segment_list;
   while (x) {
     segment = (t_mach_o_segment*)x->content;
@@ -33,14 +35,18 @@ static void copy_segment_command_data(t_mach_o_builder *builder, void *buffer, s
     memcpy(buffer + *cursor, segment, sizeof(struct segment_command));
     *cursor += sizeof(struct segment_command);
 
+    i++;
     x = x->next;
   }
+  debug("Number of segment : %ld\n", i);
 }
 
 static void copy_section_command_data(t_mach_o_builder *builder, void *buffer, size_t *cursor) {
   t_list            *x;
   t_mach_o_section  *section;
+  size_t            i;
 
+  i = 0;
   x = builder->section_list;
   while (x) {
     section = (t_mach_o_section*)x->content;
@@ -51,13 +57,17 @@ static void copy_section_command_data(t_mach_o_builder *builder, void *buffer, s
     *cursor += sizeof(struct section);
 
     x = x->next;
+    i++;
   }
+  debug("Number of section : %ld\n", i);
 }
 
 static void copy_symtab_command_data(t_mach_o_builder *builder, void *buffer, size_t *cursor) {
   t_list                 *x;
   struct symtab_command  *symtab;
+  size_t            i;
 
+  i = 0;
   x = builder->symtab_list;
   while (x) {
     symtab = (struct symtab_command*)x->content;
@@ -67,7 +77,9 @@ static void copy_symtab_command_data(t_mach_o_builder *builder, void *buffer, si
     *cursor += sizeof(struct symtab_command);
 
     x = x->next;
+    i++;
   }
+  debug("Number of symtab : %ld\n", i);
 }
 
 /*

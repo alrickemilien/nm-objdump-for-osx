@@ -44,8 +44,7 @@ uint64_t atoi_base(const char *str, size_t base)
   if (0 == memcmp(str, "0x", sizeof(char) * 2))
     start_index = 2;
 
-
-  debug("%s\n", str + start_index);
+//  debug("%s\n", str + start_index);
 
   end_index = start_index;
   while (str[end_index] && is_alpha_num(str[end_index]))

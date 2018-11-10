@@ -24,6 +24,14 @@ static inline bool is_an_option(const char *s)
 	return (false);
 }
 
+static void destroy_builder(t_mach_o_builder *builder) {
+	ft_lstdel(&builder->load_command_list, &del);
+	ft_lstdel(&builder->segment_list, &del);
+	ft_lstdel(&builder->section_list, &del);
+	ft_lstdel(&builder->fat_arch_list, &del);
+	ft_lstdel(&builder->symtab_list, &del);
+}
+
 int main(int ac, const char **av)
 {
 	int								i;
@@ -46,6 +54,8 @@ int main(int ac, const char **av)
 	while (i != ac && !is_an_option(av[i]))
 		build_mach_o_from_conf(&builder, av[i++]);
 
+	debug_s("PARSING HAS FINISHED.\n");
+
 	ret = mach_o_builder(&builder, &buffer, &size);
 
 	write(1, buffer, size);
@@ -53,7 +63,7 @@ int main(int ac, const char **av)
 	if (NULL != buffer)
 		free(buffer);
 
-	ft_lstdel(&builder.cmd_list, &del);
+	destroy_builder(&builder);
 
 	return (0);
 }

@@ -4,9 +4,9 @@
 **	nm
 */
 
-void print(int nsyms, int symoff, int stroff, char *ptr)
+void print(uint32_t nsyms, int symoff, int stroff, char *ptr)
 {
-	size_t							i;
+	uint32_t							i;
 	char						*stringtable;
 	struct nlist_64	*array;
 
@@ -69,12 +69,12 @@ int	nm_64(void *ptr, uint64_t filesize)
 }
 int	nm_32(void *ptr, uint64_t filesize)
 {
-	int										ncmds;
+	uint32_t										ncmds;
 	struct mach_header		*header;
 	struct load_command		*lc;
 	struct symtab_command	*symtab;
 	uint32_t				filetype;
-	size_t										i;
+	uint32_t										i;
 
 	if (filesize < sizeof(struct mach_header))
 		return (mach_o_error(MACH_O_ERROR_INVALID_MACH_HEADER));

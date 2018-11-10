@@ -340,14 +340,36 @@ static bool is_state_indication(const char *str, int *state)
   return (false);
 }
 
+static void read_string(const char *value_str, char **buffer) {
+  size_t i;
+
+  i = 0;
+  while (value_str && value_str[i] && value_str[i] != '\n')
+    i++;
+
+  if (i == 0)
+    return ;
+
+  *buffer = (char*)malloc(sizeof(char) * i);
+
+  if (NULL == *buffer)
+    return ;
+
+  while (value_str[i] && value_str[i] != '\n')
+  {
+    (*buffer)[i] = value_str[i];
+
+    i++;
+  }
+}
+
 static void apply_property(int state, int index, const char *value_str)
 {
   uint64_t value;
 
   // Handle each type of data
   if (map[state][index].type == STRING_TYPE) {
-    // @TODO need to copy jusauau next \n or \0
-    memcpy(map[state][index].value, value_str, 1);
+    read_string(value_str, (char**)&map[state][index].value);
 
   } else if (map[state][index].type == UINT32_TYPE) {
     value = atoi_base(value_str, 16);

@@ -18,6 +18,8 @@ static void copy_header_data(t_mach_o_builder *builder, void *buffer, size_t *cu
     memcpy(buffer + *cursor, &builder->header.header, sizeof(struct mach_header));
     *cursor += sizeof(struct mach_header);
   }
+
+  debug_s("Header set.\n");
 }
 
 static void copy_segment_command_data(t_mach_o_builder *builder, void *buffer, size_t *cursor) {

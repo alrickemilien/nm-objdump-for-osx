@@ -41,7 +41,8 @@ enum {
     "[FAT_ARCH]",
     "[SEGMENT_COMMAND]",
     "[SYMTAB_COMMAND]",
-    "[DATA_SECTION]",
+    "[SYMBOL]",
+    "[STRING_TABLE]",
     NULL,
   };
 
@@ -259,6 +260,37 @@ static const struct mapping mach_segment_command_keys_map_g[] = {
     { NULL, NULL, 0 },
   };
 
+
+  // @TODO NEED TO HANDLE SYMBOLS
+/*
+**   struct nlist {
+**         union {
+** #ifndef __LP64__
+**                 char *n_name;
+** #endif
+**                 uint32_t n_strx;
+**         } n_un;
+**         uint8_t n_type;
+**         uint8_t n_sect;
+**         int16_t n_desc;
+**         uint32_t n_value;
+** };
+**
+**
+ ** This is the symbol table entry structure for 64-bit architectures.
+ **
+** struct nlist_64 {
+**     union {
+**         uint32_t  n_strx;
+**     } n_un;
+**     uint8_t n_type;
+**     uint8_t n_sect;
+**     uint16_t n_desc;
+**     uint64_t n_value;
+** };
+*/
+
+
   static const struct mapping global_configuration_keys_map_g[] = {
     { NULL, NULL, 0 },
   };
@@ -367,8 +399,6 @@ static void apply_property(int state, int index, const char *value_str)
 
 static void append_data_to_corresponding_state_list(int state)
 {
-  size_t i;
-
   struct map_list_state {
     int state;
     void *list;
@@ -387,10 +417,13 @@ static void append_data_to_corresponding_state_list(int state)
     { -1, NULL, NULL, 0 },
   };
 
+  size_t i;
+
   i = 0;
   while (list_map[i].state != -1)
   {
     if (list_map[i].state == state) {
+    //  debug("The state %s has been read and state is set to %d\n", state_keys_g[state]);
       // Add the strcture to the list
       ft_lstadd(list_map[i].list,
         ft_lstnew(list_map[i].value_in_builder, list_map[i].size_value_in_builder));
@@ -425,17 +458,15 @@ static void parse_line(const char *line, int *state)
 
   // Check if it is a current_state indication
   if (is_state_indication(*(const char**)property, &current_state) == true)
-    ;
+    ;//debug("The state %s has been read and state is set to %d\n", property[0], current_state);
 
   // Check the property
-  else if ((ret = find_valid_key(property[0], current_state)) < 1) {
+  else if ((ret = find_valid_key(property[0], current_state)) < 0) {
     if (*property[0] == '#')
       ;
-    // else if (ret == 0)
-    //   debug("The property %s is not allowed "
-    //         "for the current_state %s.\n", property[0], state_keys_g[current_state]);
-    // else if (ret == -1)
-    //   debug("The property %s is not handled\n", property[0]);
+    else if (ret == 0)
+      debug("The property %s is not allowed "
+            "for the current_state %s.\n", property[0], state_keys_g[current_state]);
   }
 
   // It means that the last command is toappend to a list
@@ -479,10 +510,7 @@ int build_mach_o_from_conf(t_mach_o_builder *b, const char *path)
   }
 
   // When only one load_command has been given
-  if (NULL == builder.load_command_list && state != HEADER_STATE && state != FAT_HEADER_STATE) {
-    ft_lstadd(&builder.load_command_list,
-      ft_lstnew(&builder.load_command, sizeof(t_mach_o_load_command)));
-  }
+  append_data_to_corresponding_state_list(state);
 
   memcpy(b, &builder, sizeof(t_mach_o_builder));
 

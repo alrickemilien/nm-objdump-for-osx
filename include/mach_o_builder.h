@@ -64,6 +64,16 @@ struct segment_command_64 segment_64;
 }                         t_mach_o_segment;
 
 /*
+** MACHO O SYMBOL
+** Union to mix 32 and 64 bits into single variable
+*/
+
+typedef union             u_mach_o_symbol {
+struct nlist              nlist;
+struct nlist_64           nlist_64;
+}                         t_mach_o_symbol;
+
+/*
 ** Load commad generic
 ** Maybe not used in later commits
 */
@@ -88,6 +98,8 @@ typedef struct            s_mach_o_builder {
     t_mach_o_section      section;
     struct symtab_command symtab;
     t_mach_o_fat_arch     fat_arch;
+    t_mach_o_symbol       symbol;
+    char                  *string_table;
 
     // All lists for parts that repeats in a mach o file
     t_list                *load_command_list;
@@ -95,6 +107,7 @@ typedef struct            s_mach_o_builder {
     t_list                *section_list;
     t_list                *fat_arch_list;
     t_list                *symtab_list;
+    t_list                *symbol_list;
 }                         t_mach_o_builder;
 
 /*
@@ -114,6 +127,7 @@ size_t    get_buffer_size_from_builder(t_mach_o_builder *builder);
 */
 void trim_each_string_of_array(char **arr);
 void clear_array(char **arr);
+char *merge_strings(char *a, char *b);
 
 
 /*

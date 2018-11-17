@@ -84,6 +84,27 @@ static void copy_symtab_command_data(t_mach_o_builder *builder, void *buffer, si
   debug("Number of symtab : %ld\n", i);
 }
 
+static void copy_symbol_command_data(t_mach_o_builder *builder, void *buffer, size_t *cursor) {
+  t_list                 *x;
+  struct nlist_64  *symtab;
+  size_t            i;
+
+  i = 0;
+  x = builder->symtab_list;
+  while (x) {
+    symtab = (struct nlist_64*)x->content;
+
+    // Copy load command datas
+    memcpy(buffer + *cursor, symtab, sizeof(struct nlist_64));
+    *cursor += sizeof(struct nlist_64);
+
+    x = x->next;
+    i++;
+  }
+
+  debug("Number of symbols : %ld\n", i);
+}
+
 /*
 ** Copy each commands from the list
 ** into the buffer
@@ -93,6 +114,7 @@ static void copy_load_commands_data(t_mach_o_builder *builder, void *buffer, siz
   copy_segment_command_data(builder, buffer, cursor);
   copy_symtab_command_data(builder, buffer, cursor);
   copy_section_command_data(builder, buffer, cursor);
+  copy_symbol_command_data(builder, buffer, cursor);
 }
 
 static void copy_data_section_data(t_mach_o_builder *builder, void *buffer, size_t *cursor) {

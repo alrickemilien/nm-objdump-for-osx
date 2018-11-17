@@ -25,6 +25,9 @@ static size_t get_segment_command_list_size(t_mach_o_builder *builder) {
     x = x->next;
   }
 
+  debug_s("Finsished zith get_segment_command_list_size\n");
+
+
   return (ret);
 }
 
@@ -49,6 +52,8 @@ static size_t get_section_command_list_size(t_mach_o_builder *builder) {
 
     x = x->next;
   }
+
+  debug_s("Finsished zith get_section_command_list_size\n");
 
   return (ret);
 }
@@ -75,13 +80,41 @@ static size_t get_symtab_command_list_size(t_mach_o_builder *builder) {
     x = x->next;
   }
 
+  debug_s("Finsished zith get_symtab_command_list_size\n");
+
+  return (ret);
+}
+
+/*
+** =====> SYMBOL SIZE
+*/
+
+static size_t get_symbol_command_list_size(t_mach_o_builder *builder) {
+  size_t  ret;
+  t_list                *x;
+  struct nlist_64       *symbol;
+
+  ret = 0;
+  x = builder->symbol_list;
+  while (x) {
+    // @TODO need to handle symbol
+    ret += sizeof(struct nlist_64);
+
+    symbol = (struct nlist_64*)x->content;
+
+    x = x->next;
+  }
+
+  debug_s("Finsished zith get_symbol_command_list_size\n");
+
   return (ret);
 }
 
 static size_t get_load_command_list_size(t_mach_o_builder *builder) {
   return get_segment_command_list_size(builder)
         + get_section_command_list_size(builder)
-        + get_symtab_command_list_size(builder);
+        + get_symtab_command_list_size(builder)
+        + get_symbol_command_list_size(builder);
 }
 
 /*
@@ -94,11 +127,14 @@ size_t get_buffer_size_from_builder(t_mach_o_builder *builder){
 
   // Set the header size
   ret = sizeof(struct mach_header);
-  if (builder->header_architecture == BITS_64)
+  if (builder->header_architecture == BITS_64) {
     ret = sizeof(struct mach_header_64);
+  }
 
   // Set the size of each load command
   ret += get_load_command_list_size(builder);
+
+  debug("ret : %ld\n", ret);
 
   return (ret);
 }

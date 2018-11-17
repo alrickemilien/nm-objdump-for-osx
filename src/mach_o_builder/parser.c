@@ -9,6 +9,8 @@
 
 static t_mach_o_builder builder;
 
+static bool new_state = true;
+
 /*
 ** Handled and allowed types for the parsed variables
 */
@@ -17,6 +19,9 @@ enum {
   STRING_TYPE = 0UL,
   UINT32_TYPE,
   UINT64_TYPE,
+  UINT8_TYPE,
+  UINT16_TYPE,
+  BUFFER_TYPE,
 };
 
 enum {
@@ -29,6 +34,7 @@ enum {
   SEGMENT_COMMAND_STATE,
   SYMTAB_COMMAND_STATE,
   DATA_STATE,
+  SYMBOL_COMMAND_STATE,
 };
 
   // Must be in the same order as the enum right before
@@ -290,6 +296,20 @@ static const struct mapping mach_segment_command_keys_map_g[] = {
 ** };
 */
 
+static const struct mapping symbol_keys_map_g[] = {
+  {"n_strx", &builder.symbol.nlist.n_un, UINT32_TYPE },
+  {"n_type", &builder.symbol.nlist.n_type, UINT8_TYPE },
+  {"n_sect", &builder.symbol.nlist.n_sect, UINT8_TYPE },
+  {"n_desc", &builder.symbol.nlist.n_desc, UINT16_TYPE },
+  {"n_value", &builder.symbol.nlist_64.n_value, UINT64_TYPE },
+  { NULL, NULL, 0 },
+};
+
+static const struct mapping string_table_keys_map_g[] = {
+  {"data", &builder.string_table, BUFFER_TYPE },
+  { NULL, NULL, 0 },
+};
+
 
   static const struct mapping global_configuration_keys_map_g[] = {
     { NULL, NULL, 0 },
@@ -317,6 +337,8 @@ static const struct mapping mach_segment_command_keys_map_g[] = {
     mach_fat_arch_keys_map_g,
     mach_segment_command_keys_map_g,
     symtab_keys_map_g,
+    symbol_keys_map_g,
+    string_table_keys_map_g,
     NULL,
   };
 
@@ -364,6 +386,7 @@ static bool is_state_indication(const char *str, int *state)
     if (!ft_strcmp(state_keys_g[i], str))
     {
       *state = (int)i;
+      new_state = true;
       return (true);
     }
     i++;
@@ -375,18 +398,47 @@ static bool is_state_indication(const char *str, int *state)
 static void apply_property(int state, int index, const char *value_str)
 {
   uint64_t value;
+  char     *tmp;
 
   // Handle each type of data
   if (map[state][index].type == STRING_TYPE) {
     read_string(value_str, (char**)&map[state][index].value);
+  }
 
-  } else if (map[state][index].type == UINT32_TYPE) {
+  else if (map[state][index].type == UINT32_TYPE) {
     value = atoi_base(value_str, 16);
     *(uint32_t*)map[state][index].value = (uint32_t)value;
 
-  } else if (map[state][index].type == UINT64_TYPE) {
+  }
+
+  else if (map[state][index].type == UINT64_TYPE) {
     value = atoi_base(value_str, 16);
     *(uint64_t*)map[state][index].value = (uint64_t)value;
+  }
+
+  else if (map[state][index].type == UINT8_TYPE) {
+    value = atoi_base(value_str, 16);
+    *(uint64_t*)map[state][index].value = (uint8_t)value;
+  }
+
+  else if (map[state][index].type == UINT16_TYPE) {
+    value = atoi_base(value_str, 16);
+    *(uint64_t*)map[state][index].value = (uint16_t)value;
+  }
+
+  else if (map[state][index].type == BUFFER_TYPE) {
+    tmp = NULL;
+
+    value = atoi_base(value_str, 16);
+    read_string(value_str, &tmp);
+
+    if (map[state][index].value == NULL) {
+      *(char**)&map[state][index].value = tmp;
+    }
+
+    else {
+      *(char**)&map[state][index].value = merge_strings((char*)map[state][index].value, tmp);
+    }
   }
 }
 
@@ -400,10 +452,10 @@ static void apply_property(int state, int index, const char *value_str)
 static void append_data_to_corresponding_state_list(int state)
 {
   struct map_list_state {
-    int state;
-    void *list;
-    void *value_in_builder;
-    size_t size_value_in_builder;
+    int     state;
+    void    *list;
+    void    *value_in_builder;
+    size_t  size_value_in_builder;
   };
 
   const struct map_list_state list_map[] = {
@@ -412,12 +464,15 @@ static void append_data_to_corresponding_state_list(int state)
     { SECTION_COMMAND_STATE, &builder.section_list, &builder.section, sizeof(t_mach_o_section) },
     { FAT_ARCH_STATE, &builder.fat_arch_list, &builder.fat_arch, sizeof(t_mach_o_fat_arch) },
     { SYMTAB_COMMAND_STATE, &builder.symtab_list, &builder.symtab, sizeof(struct symtab_command) },
+    { SYMBOL_COMMAND_STATE, &builder.symbol_list, &builder.symbol, sizeof(t_mach_o_symbol) },
 
     // End of the map
     { -1, NULL, NULL, 0 },
   };
 
   size_t i;
+
+  new_state = false;
 
   i = 0;
   while (list_map[i].state != -1)
@@ -467,11 +522,11 @@ static void parse_line(const char *line, int *state)
     else if (ret == 0)
       debug("The property %s is not allowed "
             "for the current_state %s.\n", property[0], state_keys_g[current_state]);
+    // It means that the last command is toappend to a list
+    if (new_state)
+          append_data_to_corresponding_state_list(*state);
   }
 
-  // It means that the last command is toappend to a list
-  if (current_state != *state)
-    append_data_to_corresponding_state_list(*state);
 
   // Update the state
   *state = current_state;
@@ -503,7 +558,7 @@ int build_mach_o_from_conf(t_mach_o_builder *b, const char *path)
 
   state = GLOBAL_CONFIGURATION_STATE;
 	while(get_next_line(fd, &line) > 0) {
-  //  debug("%s\n", line);
+    debug("%s\n", line);
     parse_line(line, &state);
   //  debug_s("ok\n");
     free(line);

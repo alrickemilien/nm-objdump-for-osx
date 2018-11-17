@@ -65,3 +65,42 @@ void read_string(const char *value_str, char **buffer)
     i++;
   }
 }
+
+
+/*
+** Merge the strings a and b,
+** free the both given as pareemeter and return a new one
+*/
+
+char *merge_strings(char *s1, char *s2) {
+  char      *new_str;
+	size_t		i;
+	size_t		j;
+
+	new_str = ft_strnew(strlen(s1) + strlen(s2));
+
+  if (NULL == new_str)
+		return (NULL);
+
+  j = 0;
+	i = 0;
+	while (s1[i] != '\0')
+	{
+		new_str[j] = s1[i];
+		i++;
+		j++;
+	}
+
+  i = 0;
+	while (s2[i] != '\0')
+	{
+		new_str[j] = s2[i];
+		i++;
+		j++;
+	}
+
+  free(s1);
+  free(s2);
+
+	return (new_str);
+}

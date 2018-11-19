@@ -9,8 +9,6 @@
 
 static t_mach_o_builder builder;
 
-static bool new_state = true;
-
 /*
 ** Handled and allowed types for the parsed variables
 */
@@ -33,8 +31,8 @@ enum {
   FAT_ARCH_STATE,
   SEGMENT_COMMAND_STATE,
   SYMTAB_COMMAND_STATE,
-  DATA_STATE,
   SYMBOL_COMMAND_STATE,
+  STRING_TABLE_STATE,
 };
 
   // Must be in the same order as the enum right before
@@ -267,7 +265,6 @@ static const struct mapping mach_segment_command_keys_map_g[] = {
   };
 
 
-  // @TODO NEED TO HANDLE SYMBOLS
 /*
 **   struct nlist {
 **         union {
@@ -386,7 +383,6 @@ static bool is_state_indication(const char *str, int *state)
     if (!ft_strcmp(state_keys_g[i], str))
     {
       *state = (int)i;
-      new_state = true;
       return (true);
     }
     i++;
@@ -472,8 +468,6 @@ static void append_data_to_corresponding_state_list(int state)
 
   size_t i;
 
-  new_state = false;
-
   i = 0;
   while (list_map[i].state != -1)
   {
@@ -512,21 +506,20 @@ static void parse_line(const char *line, int *state)
   ret = 0;
 
   // Check if it is a current_state indication
-  if (is_state_indication(*(const char**)property, &current_state) == true)
-    ;//debug("The state %s has been read and state is set to %d\n", property[0], current_state);
+  if (is_state_indication(*(const char**)property, &current_state) == true && *state != -1) {
+    //debug("The state %s has been read and state is set to %d\n", property[0], current_state);
+    append_data_to_corresponding_state_list(*state);
+  }
 
   // Check the property
-  else if ((ret = find_valid_key(property[0], current_state)) < 0) {
+  else if (*state != -1 && (ret = find_valid_key(property[0], current_state)) < 0) {
     if (*property[0] == '#')
       ;
     else if (ret == 0)
       debug("The property %s is not allowed "
             "for the current_state %s.\n", property[0], state_keys_g[current_state]);
     // It means that the last command is toappend to a list
-    if (new_state)
-          append_data_to_corresponding_state_list(*state);
   }
-
 
   // Update the state
   *state = current_state;
@@ -556,7 +549,7 @@ int build_mach_o_from_conf(t_mach_o_builder *b, const char *path)
 
   memset(&builder, 0, sizeof(t_mach_o_builder));
 
-  state = GLOBAL_CONFIGURATION_STATE;
+  state = -1;
 	while(get_next_line(fd, &line) > 0) {
     debug("%s\n", line);
     parse_line(line, &state);

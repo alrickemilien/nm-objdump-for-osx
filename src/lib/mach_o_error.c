@@ -25,8 +25,12 @@ static const t_mach_o_error g_macho_error[] = {
     MACH_O_ERROR_INVALID_FILETYPE,
     MACH_O_ERROR_INVALID_FILETYPE_STR,
   },
+  {
+    MACH_O_ERROR_INVALID_SYMBOL_TYPE,
+    MACH_O_ERROR_INVALID_SYMBOL_TYPE_STR,
+  },
 
-  
+
 
   {
     0,

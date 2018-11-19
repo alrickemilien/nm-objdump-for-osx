@@ -7,8 +7,8 @@
 void print(uint32_t nsyms, int symoff, int stroff, char *ptr)
 {
 	uint32_t							i;
-	char						*stringtable;
-	struct nlist_64	*array;
+	char									*stringtable;
+	struct nlist_64				*array;
 
 	array = (void *)ptr + symoff;
 	stringtable = (void *) ptr + stroff;
@@ -153,9 +153,9 @@ int	nm(void *ptr, uint64_t filesize)
 	return (mach_o_error(MACH_O_ERROR_INVALID_MAGICK));
 }
 
-int	exec(char *filename)
+static int	exec(char *filename)
 {
-	void		*ptr;
+	void			*ptr;
 	uint64_t	filesize;
 
 	// 1) Load the files

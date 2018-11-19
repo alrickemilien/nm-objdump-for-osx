@@ -42,6 +42,7 @@ int							map_unloading_file(void *ptr, uint64_t file_size);
 bool						is_valid_filetype(uint32_t filetype);
 bool						is_valid_flag(uint32_t flag);
 bool						is_valid_cmd(uint32_t cmd);
+bool						is_valid_symbol_type(uint8_t n_type);
 
 /*
 ** MACH O ERROR
@@ -78,5 +79,8 @@ int							mach_o_error(int code);
 
 # define MACH_O_ERROR_INVALID_FILETYPE 5
 # define MACH_O_ERROR_INVALID_FILETYPE_STR "Invalid file type"
+
+# define MACH_O_ERROR_INVALID_SYMBOL_TYPE 6
+# define MACH_O_ERROR_INVALID_SYMBOL_TYPE_STR "Invalid symbol type"
 
 #endif

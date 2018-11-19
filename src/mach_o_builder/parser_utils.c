@@ -66,7 +66,6 @@ void read_string(const char *value_str, char **buffer)
   }
 }
 
-
 /*
 ** Merge the strings a and b,
 ** free the both given as pareemeter and return a new one

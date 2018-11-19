@@ -110,11 +110,25 @@ static size_t get_symbol_command_list_size(t_mach_o_builder *builder) {
   return (ret);
 }
 
+static size_t get_string_table_size(t_mach_o_builder *builder) {
+  size_t ret;
+
+  ret = 0;
+
+  if (NULL != builder->string_table)
+    ret = strlen(builder->string_table);
+
+  debug_s("Finsished zith get_string_table_size\n");
+
+  return (ret);
+}
+
 static size_t get_load_command_list_size(t_mach_o_builder *builder) {
   return get_segment_command_list_size(builder)
         + get_section_command_list_size(builder)
         + get_symtab_command_list_size(builder)
-        + get_symbol_command_list_size(builder);
+        + get_symbol_command_list_size(builder)
+        + get_string_table_size(builder);
 }
 
 /*

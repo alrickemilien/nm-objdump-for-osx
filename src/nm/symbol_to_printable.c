@@ -38,15 +38,20 @@ static const uint32_t g_symbol_type_map[] = {
 	{(uint8_t)-1, 0},
 };
 
-int symbol_to_printable(struct nlist *symbol)
+int symbol_to_printable(struct nlist *symbol, void *printable_buffer)
 {
   size_t i;
 
   // Check basic cases into g_symbol_type_map
   i = 0;
-  while (g_symbol_type_map[i].value != 0 ) {
-    if (symbol->n_type == g_symbol_type_map[i].type)
-      return (g_symbol_type_map[i].value);
+  while (g_symbol_type_map[i].value != 0 )
+  {
+    if ((symbol->n_type & N_TYPE) == g_symbol_type_map[i].type )
+    {
+      ft_memcpy(printable_buffer, g_symbol_type_map[i].value, sizeof(g_symbol_type_map[i].value))
+      return (1);
+    }
+
     i++;
   }
 
@@ -57,7 +62,14 @@ int symbol_to_printable(struct nlist *symbol)
   // S
 
   // When no section is set
-  if (symbol->n_sect === NO_SECT)
+  if ((symbol->n_sect & N_TYPE) === NO_SECT) {
 
+  }
 
+  // Need to check which section it is
+  else {
+
+  }
+
+  return (-1);
 }

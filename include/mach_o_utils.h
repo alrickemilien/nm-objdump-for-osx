@@ -23,6 +23,7 @@
 /*
 ** List all .o files types
 */
+
 typedef enum				e_mach_o_file_type
 {
 	MACH_O_FILE_UNKNOWN = 0,
@@ -31,6 +32,14 @@ typedef enum				e_mach_o_file_type
 	MACH_O_FILE_MACHO,
 	SUPPORTED_MACH_O_FILE_TYPES,
 }                   t_mach_o_file_type;
+
+/*
+** This structure is used to manipulate mach o files
+*/
+
+typedef struct	s_mach_o {
+	uint32_t			endian;
+}								t_mach_o;
 
 /*
 ** Main
@@ -82,5 +91,8 @@ int							mach_o_error(int code);
 
 # define MACH_O_ERROR_INVALID_SYMBOL_TYPE 6
 # define MACH_O_ERROR_INVALID_SYMBOL_TYPE_STR "Invalid symbol type"
+
+# define MACH_O_ERROR_NO_SECTION_FOUND 7
+# define MACH_O_ERROR_NO_SECTION_FOUND_STR "No section found with the given sectname and segname"
 
 #endif

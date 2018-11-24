@@ -23,7 +23,7 @@ OTOOL_OBJ=$(OTOOL_SRC:.c=.o)
 LIB_SRC=src/lib/map_loading_file.c \
 				src/lib/mach_o_error.c \
 				src/lib/endian.c \
-				src/lib/is_valid_filetype.c \
+				src/lib/is_valid_macho_filetype.c \
 				src/lib/is_valid_flag.c \
 				src/lib/is_valid_cmd.c
 LIB_OBJ=$(LIB_SRC:.c=.o)

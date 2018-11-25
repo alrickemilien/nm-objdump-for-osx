@@ -110,6 +110,17 @@ static inline bool is_a_single_option(const char *name) {
 
 	return (0);
 }
+/*
+** Return 1 when the argument name is --
+** Return 0 othrwise
+*/
+
+static inline bool is_a_end_arguments_string(const char *name) {
+	if (name[0] == '-' && name[1] == '-' && name[2] == 0)
+		return (1);
+
+	return (0);
+}
 
 /*
 ** Read each option of multi_options like -l or -la
@@ -188,7 +199,10 @@ int read_options_arguments(int ac, char **av, t_options *options) {
 	{
 		ret = EXIT_OK;
 
-		if (is_a_single_option(av[i])) {
+		// When the argument is '--', it means end arguments
+		if (is_a_end_arguments_string(av[i]))
+			return (ret);
+		else if (is_a_single_option(av[i])) {
 			ret = handle_single_option(options, av[i]);
 		} else if (is_a_multi_option(av[i])) {
 			ret = handle_multi_option(options, av[i]);
@@ -199,7 +213,6 @@ int read_options_arguments(int ac, char **av, t_options *options) {
 
 		i++;
 	}
-
 
 	return (EXIT_OK);
 }

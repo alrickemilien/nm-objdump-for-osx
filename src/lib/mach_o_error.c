@@ -10,8 +10,8 @@ static const t_mach_o_error g_macho_error[] = {
     MACH_O_ERROR_INVALID_FILE_SIZE_STR,
   },
   {
-    MACH_O_ERROR_INVALID_FILE_TYPE,
-    MACH_O_ERROR_INVALID_FILE_TYPE_STR,
+    MACH_O_ERROR_INVALID_FILE,
+    MACH_O_ERROR_INVALID_FILE_STR,
   },
   {
     MACH_O_ERROR_MAP_LOADING,
@@ -29,7 +29,10 @@ static const t_mach_o_error g_macho_error[] = {
     MACH_O_ERROR_INVALID_SYMBOL_TYPE,
     MACH_O_ERROR_INVALID_SYMBOL_TYPE_STR,
   },
-
+  {
+    MACH_O_ERROR_INVALID_FILE_TYPE,
+    MACH_O_ERROR_INVALID_FILE_TYPE_STR,
+  },
 
 
   {

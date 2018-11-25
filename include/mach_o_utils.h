@@ -21,15 +21,19 @@
 # define LONG_ARCHIVE_NAME_MAGIC "#1/"
 
 /*
-** List all .o files types
+** List all files types handled
+** WARNING
+** Do not mix file type (archive, fat arch, macho file)
+** and macho file type (MH_OBJECT, MH_EXECUTE, MH_FVMLIB)
+** specific for macho file header
 */
 
 typedef enum				e_mach_o_file_type
 {
-	MACH_O_FILE_UNKNOWN = 0,
-	MACH_O_FILE_ARCHIVE,
-	MACH_O_FILE_FAT,
-	MACH_O_FILE_MACHO,
+	MACH_O_FILE_UNKNOWN = 0U,
+	ARCHIVE_FILE,
+	FAT_FILE,
+	OBJECT_FILE,
 	SUPPORTED_MACH_O_FILE_TYPES,
 }                   t_mach_o_file_type;
 
@@ -38,6 +42,14 @@ typedef enum				e_mach_o_file_type
 */
 
 typedef struct	s_mach_o {
+	// Path to the file
+	char				*path;
+
+	// Adresse o map loaded file into memory
+	void				*addr;
+	
+	t_mach_o_file_type	file_type;
+	uint32_t			magic;
 	uint32_t			endian;
 }								t_mach_o;
 
@@ -77,8 +89,8 @@ int							mach_o_error(int code);
 # define MACH_O_ERROR_INVALID_FILE_SIZE 1
 # define MACH_O_ERROR_INVALID_FILE_SIZE_STR "Invalid file size"
 
-# define MACH_O_ERROR_INVALID_FILE_TYPE 2
-# define MACH_O_ERROR_INVALID_FILE_TYPE_STR "Invalid file type, should be regular file or link on regulat file"
+# define MACH_O_ERROR_INVALID_FILE 2
+# define MACH_O_ERROR_INVALID_FILE_STR "Invalid file type, should be regular file or link on regulat file"
 
 # define MACH_O_ERROR_MAP_LOADING 3
 # define MACH_O_ERROR_MAP_LOADING_STR "File does not exist or permission denied"
@@ -94,5 +106,8 @@ int							mach_o_error(int code);
 
 # define MACH_O_ERROR_NO_SECTION_FOUND 7
 # define MACH_O_ERROR_NO_SECTION_FOUND_STR "No section found with the given sectname and segname"
+
+# define MACH_O_ERROR_INVALID_FILE_TYPE 8
+# define MACH_O_ERROR_INVALID_FILE_TYPE_STR "Unrecognized file type"
 
 #endif

@@ -1,13 +1,13 @@
 #include "mach_o_utils.h"
 
-int32_t	check_archive_addr(t_macho *ofile, void *addr)
+int32_t	check_archive_addr(t_mach_o *ofile, void *addr)
 {
 	if (NULL == ofile->archive_start_addr)
 		return (-1);
 
 	// When the adress is before (outside) the archive adress or the file adress itself
 	// Not valid, return -1
-	if (addr < ofile->archive_start_addr || addr < ofile->addr)
+	if (addr < ofile->archive_start_addr || addr < ofile->addr)
 		return (-1);
 
 	// When the adress is after the archive size or the file size itself
@@ -23,11 +23,11 @@ int32_t	check_archive_addr(t_macho *ofile, void *addr)
 	return (0);
 }
 
-int32_t	check_archive_addr_size(t_macho *ofile,
+int32_t	check_archive_addr_size(t_mach_o *ofile,
 								void *addr,
 								uint64_t size)
 {
-	if (ofile_file_check_addr_size(ofile, addr, size) == 0
+	if (check_file_addr_size(ofile, addr, size) == 0
 		&& check_archive_addr(ofile, addr) == 0
 		&& check_archive_addr(ofile, (uint8_t*)addr + size) == 0)
 		return (0);

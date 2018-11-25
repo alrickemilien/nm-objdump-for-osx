@@ -41,9 +41,10 @@ typedef enum				e_mach_o_file_type
 ** This structure is used to manipulate mach o files
 */
 
-typedef struct	s_mach_o {
+typedef struct 			s_mach_o {
 	// Path to the file
 	char				*path;
+	uint64_t			file_size;
 
 	// Adresse o map loaded file into memory
 	void				*addr;
@@ -51,7 +52,11 @@ typedef struct	s_mach_o {
 	t_mach_o_file_type	file_type;
 	uint32_t			magic;
 	uint32_t			endian;
-}								t_mach_o;
+
+	// Archive
+	uint64_t			archive_size;
+	void				*archive_start_addr;
+}						t_mach_o;
 
 /*
 ** Main

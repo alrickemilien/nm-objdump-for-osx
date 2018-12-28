@@ -23,11 +23,11 @@ int32_t	load_archive_file(t_macho *ofile,
 	ofile->members = ofile->archive_member_header_addr;
 
 	if (-1 == check_archive_addr_size(ofile,
-		ofile_archive_get_member_starting_addr(ofile),
+		get_archive_member_starting_addr(ofile),
 		(uint64_t)ofile->archive_member_header.st_size))
 		return (-1);
 
-	if (-1 == set_archive_symdef(ofile))
+	if (-1 == read_archive_symdef(ofile))
 		return (-1);
 
 	return (0);

@@ -20,7 +20,7 @@ static const t_map_file_type_checkers		g_file_loaders_map[SUPPORTED_OFILE_TYPES]
 ** - Load the entire file informations according to file type
 */
 
-int	load_macho_file(t_ofile *ofile, char *path, void *addr, uint64_t file_size)
+int	load_macho_file(t_mach_o *ofile, char *path, void *addr, uint64_t file_size)
 {
 	uint32_t						i;
 	

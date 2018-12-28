@@ -115,4 +115,7 @@ int							mach_o_error(int code);
 # define MACH_O_ERROR_INVALID_FILE_TYPE 8
 # define MACH_O_ERROR_INVALID_FILE_TYPE_STR "Unrecognized file type"
 
+# define MACH_O_ERROR_INVALID_SYMDEF 9
+# define MACH_O_ERROR_INVALID_SYMDEF_STR "First member of archive file is not SYMDEF or SYMDEF_SORTED"
+
 #endif

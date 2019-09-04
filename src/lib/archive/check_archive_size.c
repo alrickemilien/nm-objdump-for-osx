@@ -1,4 +1,4 @@
-#include "mach_o_utils.h"
+#include "mach_o.h"
 
 int32_t	check_archive_addr(t_mach_o *ofile, void *addr)
 {

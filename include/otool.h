@@ -1,7 +1,7 @@
 #ifndef OTOOL_H
 #define OTOOL_H
 
-# include "mach_o_utils.h"
+# include "mach_o.h"
 # include "libft.h"
 
 

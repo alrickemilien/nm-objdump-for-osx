@@ -26,7 +26,7 @@ static int32_t			swap_load_command(t_ofile *ofile,
 	lc->cmdsize = swap_int32(lc->cmdsize);
 	if (-1 == check_lc_bound(ofile, lc))
 	{
-		ft_dprintf(2, "Object file is malformed, "
+		dprintf(2, "Object file is malformed, "
 			"the load commands would go beyond the end of the file\n");
 		return (-1);
 	}

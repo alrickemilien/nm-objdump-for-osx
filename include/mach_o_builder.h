@@ -4,7 +4,7 @@
 # include <stdio.h>
 # include <math.h>
 
-# include "mach_o_utils.h"
+# include "mach_o.h"
 # include "libft.h"
 # include "mach_o_builder_options.h"
 

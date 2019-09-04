@@ -1,4 +1,4 @@
-#include "mach_o_utils.h"
+#include "mach_o.h"
 
 /*
 ** This file provides functions that read the file type

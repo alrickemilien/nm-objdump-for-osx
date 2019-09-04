@@ -1,4 +1,4 @@
-#include "mach_o_utils.h"
+#include "mach_o.h"
 
 /*
  ** Values for N_TYPE bits of the n_type field.

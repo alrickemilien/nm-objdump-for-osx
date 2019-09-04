@@ -1,4 +1,4 @@
-#include "mach_o_utils.h"
+#include "mach_o.h"
 
 static const t_mach_o_error g_macho_error[] = {
   {

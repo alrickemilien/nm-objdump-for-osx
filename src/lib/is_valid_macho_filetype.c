@@ -1,4 +1,4 @@
-#include "mach_o_utils.h"
+#include "mach_o.h"
 
 /*
 ** List all handled filetype

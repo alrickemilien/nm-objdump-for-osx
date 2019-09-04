@@ -28,7 +28,7 @@ inline static void	swap_fat_arch_64(struct fat_arch_64 *fat_arch_64)
 	fat_arch_64->reserved = swap_int32(fat_arch_64->reserved);
 }
 
-inline static void	swap_fat_archs_header(t_macho *ofile, uint32_t narch)
+inline static void	swap_fat_archs_header(t_mach_o *ofile, uint32_t narch)
 {
 	assert(ofile->fat_archs || ofile->fat_archs_64);
 	assert(sizeof(ofile->fat_archs->cputype) == sizeof(int32_t));
@@ -39,7 +39,7 @@ inline static void	swap_fat_archs_header(t_macho *ofile, uint32_t narch)
 		swap_fat_arch_64(&ofile->fat_archs_64[narch]);
 }
 
-int32_t				ofile_swap_fat_headers(t_macho *ofile)
+int32_t				ofile_swap_fat_headers(t_mach_o *ofile)
 {
 	uint32_t	i;
 
@@ -56,7 +56,7 @@ int32_t				ofile_swap_fat_headers(t_macho *ofile)
 			&& -1 == ofile_file_check_addr_size(ofile, ofile->fat_archs_64 + i,
 												sizeof(struct fat_arch_64))))
 		{
-			ft_dprintf(2, "%s: %s",
+			dprintf(2, "%s: %s",
 					ofile->file_name, ERR_UNKNOWN_FILE_FORMAT);
 			return (-1);
 		}

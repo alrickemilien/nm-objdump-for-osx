@@ -1,4 +1,4 @@
-void	swap_object_header(t_macho *ofile)
+void	swap_object_header(t_mach_o *ofile)
 {
 	struct mach_header	*mh;
 

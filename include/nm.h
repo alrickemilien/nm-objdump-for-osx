@@ -3,7 +3,7 @@
 
 # include <stdio.h>
 
-# include "mach_o_utils.h"
+# include "mach_o.h"
 # include "nm_options.h"
 # include "libft.h"
 

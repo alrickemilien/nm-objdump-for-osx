@@ -1,5 +1,6 @@
 require "test/unit"
 require 'open3'
+require "fileutils"
 
 def pipe(cmd, options = [])
 	data = {}
@@ -12,12 +13,22 @@ def pipe(cmd, options = [])
 	    	  until (line = stream.gets).nil? do
 	    	    data[key] = line
 	    	  end
-	    	end
+			end
 	  	end
 	  	# Don't exit until the external process is done
 	  	external.join
-		return data[:out], data[:err]
+		return data[:out], data[:err], external.value
 	end
+end
+
+# Wrapping function that make diff of two calls (equivalent of diff <(cmd_1) <(cmd_2))
+def diff(cmd_1, cmd_2)
+	out_1, err_1, code_1 = pipe(cmd_1)
+	out_2, err_2, code_2 = pipe(cmd_2)
+
+	assert_equal(code_1, code_2)
+	assert_equal(out_1, out_2)
+	assert_equal(err_1, err_2)
 end
 
 class TestSimpleNumber < Test::Unit::TestCase
@@ -107,12 +118,12 @@ class TestSimpleNumber < Test::Unit::TestCase
 		
 		# .s to .o
 		@s_samples = Dir["#{__dir__}/samples/*.s"]
-		@s_archs.each { |x| @s_samples.each { |y| cmd = "#{ENV['ASM']} -f #{x} #{y} -o #{y}.#{x}.o"; pipe(cmd) } }
+		# @s_archs.each { |x| @s_samples.each { |y| cmd = "#{ENV['ASM']} -f #{x} #{y} -o #{y}.#{x}.o"; pipe(cmd) } }
 	end
 
 	def teardown
-		@trash = Dir["#{__dir__}/samples/*.a", "#{__dir__}/samples/*.o", "#{__dir__}/samples/*.so", "#{__dir__}/samples/*.out"]
-		@trash.each { |y| cmd = "rm -rf #{y}"; puts cmd; pipe(cmd) }
+		# @trash = Dir["#{__dir__}/samples/*.a", "#{__dir__}/samples/*.o", "#{__dir__}/samples/*.so", "#{__dir__}/samples/*.out"]
+		# @trash.each { |y| cmd = "rm -rf #{y}"; puts cmd; pipe(cmd) }
 	end
 
 	#
@@ -120,7 +131,16 @@ class TestSimpleNumber < Test::Unit::TestCase
 	#
 
 	def test_simple
-		puts pipe('echo "Salut"')
+		file = Dir["#{__dir__}/samples/*.out"][0]
+		diff("nm #{file}", "./bin/ft_nm #{file}")
+	end
+
+	def test_no_read_rights
+		file = Dir["#{__dir__}/samples/*.out"][0]
+		FileUtils.chmod("-r", file)
+		ret, err = pipe("nm #{file}")
+		FileUtils.chmod("+r", file)
+		puts ret, err
 	end
 end
 

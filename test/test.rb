@@ -3,6 +3,7 @@ require 'open3'
 
 def pipe(cmd, options = [])
 	data = {}
+	puts cmd
 	Open3.popen3(cmd) do |stdin, out, err, external|
 
 	  # Create a thread to read from each stream
@@ -21,12 +22,20 @@ end
 
 class TestSimpleNumber < Test::Unit::TestCase
 	def self.startup
+		if ENV['CC'] == nil
+			ENV['CC'] = 'clang'
+		end
+
+		if ENV['ASM'] == nil
+			ENV['ASM'] = 'nasm'
+		end
+
 		@c_archs = [
 			'arm-none-eabi',
 			'armv7a-none-eabi',
-			'arm-linux-gnueabihf ',
+			'arm-linux-gnueabihf',
 			'arm-none-linux-gnueabi',
-			'i386-pc-linux-gnu ',
+			'i386-pc-linux-gnu',
 			'x86_64-apple-darwin10',
 			'i686-w64-windows-gnu', # same as i686-w64-mingw32
 			'x86_64-pc-linux-gnu', # from ubuntu 64 bit
@@ -36,11 +45,41 @@ class TestSimpleNumber < Test::Unit::TestCase
 			'x86_64-pc-windows-gnu', # MSVC 64-BIT
 		]
 
-		if ENV['CC'] == nil
-			ENV['CC'] = 'clang'
-		end
-		@c_samples = Dir["#{__dir__}/samples/**/*.c"]
-		@c_archs.each { |x| @c_samples.each { |y| cmd = "#{ENV['CC']} -c #{y} -o #{y}.#{x}.o -arch #{x}"; puts cmd; pipe(cmd) } }
+		# .o
+		@c_obj_samples = Dir["#{__dir__}/samples/*.lib.*.c"]
+		@c_archs.each { |x| @c_obj_samples.each { |y| cmd = "#{ENV['CC']} -c #{y} -o #{y}.#{x}.o -arch #{x}"; pipe(cmd) } }
+
+		# a.out
+		@c_bin_samples = Dir["#{__dir__}/samples/*.out.c"]
+		@c_archs.each { |x| @c_bin_samples.each { |y| cmd = "#{ENV['CC']} #{y} -o #{y}.#{x}.out -arch #{x}"; pipe(cmd) } }
+
+		# .a
+		@c_static_samples = Dir["#{__dir__}/samples/*.lib.*.o"]
+		@c_archs.each { |x| @c_static_samples.each { |y| cmd = "ar rc #{y}.#{x}.a #{y}"; pipe(cmd) } }
+
+		# .so
+		@c_shared_samples = Dir["#{__dir__}/samples/*.lib.c"]
+		@c_archs.each { |x| @c_shared_samples.each { |y| cmd = "#{ENV['CC']} #{y} -shared -o #{y}.#{x}.so -arch #{x}"; pipe(cmd) } }
+
+		# .so with fPIC	
+		@c_shared_samples = Dir["#{__dir__}/samples/*.lib.c"]
+		@c_archs.each { |x| @c_shared_samples.each { |y| cmd = "#{ENV['CC']} #{y} -shared -fPIC -o #{y}.#{x}.pic.so -arch #{x}"; pipe(cmd) } }
+
+		# .so with library dependancy
+		@c_dependant_shared_samples = Dir["#{__dir__}/samples/*.lib.math.c"]
+		@c_archs.each { |x| @c_dependant_shared_samples.each { |y| cmd = "#{ENV['CC']} #{y} -shared -o #{y}.#{x}.so -lm -arch #{x}"; pipe(cmd) } }
+
+		# .so with library dependancy and fPIC
+		@c_dependant_shared_samples = Dir["#{__dir__}/samples/*.lib.math.c"]
+		@c_archs.each { |x| @c_dependant_shared_samples.each { |y| cmd = "#{ENV['CC']} #{y} -shared -fPIC -o #{y}.#{x}.pic.so -lm -arch #{x}"; pipe(cmd) } }
+
+		# .o fat arch
+		@c_shared_samples = Dir["#{__dir__}/samples/*.lib.c"]
+		@c_shared_samples.each { |x| cmd = "#{ENV['CC']} #{x} -shared -o #{x}.fat.o -arch #{@c_archs.join(' -arch ')}"; pipe(cmd) }
+
+		# .so fat arch
+		@c_shared_samples = Dir["#{__dir__}/samples/*.lib.c"]
+		@c_shared_samples.each { |x| cmd = "#{ENV['CC']} #{x} -shared -o #{x}.fat.so -arch #{@c_archs.join(' -arch ')}"; pipe(cmd) }
 
 		@s_archs = [
 			'bin',       # flat-form binary files (e.g. DOS .COM, .SYS)
@@ -65,15 +104,20 @@ class TestSimpleNumber < Test::Unit::TestCase
 			'macho',     # MACHO (short name for MACHO32)
 			'win',       # WIN (short name for WIN32)
 		]
-
-		if ENV['ASM'] == nil
-			ENV['ASM'] = 'nasm'
-		end
-		@s_samples = Dir["#{__dir__}/samples/**/*.s"]
-		@s_archs.each { |x| @s_samples.each { |y| cmd = "#{ENV['ASM']} -f macho64 #{y} -o #{y}.#{x}.o -f #{x}"; puts cmd; pipe(cmd) } }
-
-		puts "OK"
+		
+		# .s to .o
+		@s_samples = Dir["#{__dir__}/samples/*.s"]
+		@s_archs.each { |x| @s_samples.each { |y| cmd = "#{ENV['ASM']} -f #{x} #{y} -o #{y}.#{x}.o"; pipe(cmd) } }
 	end
+
+	def teardown
+		@trash = Dir["#{__dir__}/samples/*.a", "#{__dir__}/samples/*.o", "#{__dir__}/samples/*.so", "#{__dir__}/samples/*.out"]
+		@trash.each { |y| cmd = "rm -rf #{y}"; puts cmd; pipe(cmd) }
+	end
+
+	#
+	# Tests
+	#
 
 	def test_simple
 		puts pipe('echo "Salut"')

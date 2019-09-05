@@ -3,9 +3,9 @@
 *.DS_STORE
 *.so
 *.a
+*~
 ft_nm
 ft_otool
-a.out
-loader.h
 mach-o-builder
 lol.c
+*.out

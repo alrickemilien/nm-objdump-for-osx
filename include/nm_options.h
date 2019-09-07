@@ -69,7 +69,9 @@ typedef struct 	s_options_map {
 */
 
 typedef struct s_options {
-	int foo_option;
+	int x;
+	int g;
+	int f;
 } t_options;
 
 int read_options_arguments(int ac, char **av, t_options *opt);

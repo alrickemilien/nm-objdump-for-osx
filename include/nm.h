@@ -27,14 +27,23 @@ typedef struct      s_symbol
 	uint32_t		pad;
 }                   t_symbol;
 
-int     read_options_arguments(int ac, char **av, t_options *options);
-int     nm(t_options *options, const char *path);
-int32_t	nm_object(t_mach_o *file, t_options *options);
-int32_t nm_fat_archive(t_mach_o *file, t_options *options);
-int32_t	nm_archive(t_mach_o *file, t_options *options);
-void	sort_symbols(t_symbol *symbols,
+int     	read_options_arguments(int ac, char **av, t_options *options);
+int     	nm(t_options *options, const char *path);
+int32_t		nm_object(t_mach_o *file, t_options *options);
+int32_t 	nm_fat_archive(t_mach_o *file, t_options *options);
+int32_t		nm_archive(t_mach_o *file, t_options *options);
+void		sort_symbols(t_symbol *symbols,
 					const uint64_t symbols_number,
 					const t_options *options);
+t_symbol	*get_symbols(t_mach_o *ofile,
+					t_mach_o_processor *nm_info);
+void		print_symbol(t_mach_o *file,
+					t_symbol *symbol,
+					t_mach_o_processor *info,
+					t_options *options);
+uint32_t	find_section(t_mach_o_processor *nm_info,
+					char *seg_name,
+					char *sec_name);
 
 /*
 **   __________________  ___________  ______

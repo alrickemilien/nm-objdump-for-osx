@@ -36,16 +36,16 @@ static bool	should_print_symbol(t_symbol *symbol,
 {
 	if (c == '-')
 		return (false);
-	if (flags->flags.bits.g && !is_symbol_extern(symbol, info))
+	if (options->g && !is_symbol_extern(symbol, info))
 		return (false);
-	if (flags->flags.bits.u && !(c == 'u' || c == 'U'))
+	if (options->u && !(c == 'u' || c == 'U'))
 		return (false);
-	if (flags->flags.bits.capital_u && (c == 'u' || c == 'U'))
+	if (options->capital_u && (c == 'u' || c == 'U'))
 		return (false);
 	return (true);
 }
 
-void				nm_print_symbol(t_mach_o *file,
+void		print_symbol(t_mach_o *file,
 					t_symbol *symbol,
 					t_mach_o_processor *info,
 					t_options *options)
@@ -58,9 +58,9 @@ void				nm_print_symbol(t_mach_o *file,
 		c = '?';
 	if (!should_print_symbol(symbol, info, options, c))
 		return ;
-	if (flags->flags.bits.j || flags->flags.bits.u)
+	if (flags->j || flags->u)
 		printf("%s\n", (char *)sym->string);
-	else if (flags->flags.bits.x)
+	else if (flags->x)
 		print_hexdump_symbol(symbol, info);
 	else if (c == 'u' || c == 'U')
 		print_undefined_symbol(symbol, info, c);

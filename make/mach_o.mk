@@ -16,7 +16,9 @@ LIB_SRC=src/lib/find_common_indexes.c \
 		src/lib/endian.c \
 		src/lib/map_loading_file.c \
 		src/lib/check_file_size.c \
-		src/lib/read_file_type.c
+		src/lib/check_file_size.c \
+		src/lib/read_segments_32.c \
+		src/lib/read_segments_64.c
 
 # Archive
 LIB_SRC+=src/lib/archive/check_archive_size.c \

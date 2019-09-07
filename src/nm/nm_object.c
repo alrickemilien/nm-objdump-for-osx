@@ -50,12 +50,12 @@ int32_t	init_processor_info(
 	if (file->mh)
 	{
 		info->secs = file_get_sections(file, &info->nsects);
-		info->segs = file_get_segments(file, &info->nsegs);
+		info->segs = read_segments_32(file, &info->nsegs);
 	}
 	else
 	{
 		info->secs_64 = file_get_sections_64(file, &info->nsects);
-		info->segs_64 = file_get_segments_64(file, &info->nsegs);
+		info->segs_64 = read_segments_64(file, &info->nsegs);
 	}
 	find_common_sections_indexes(info);
 	return (find_symbol_table(info, file));

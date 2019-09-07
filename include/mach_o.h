@@ -204,11 +204,15 @@ typedef struct			s_lc_integrity_check
 ** Accessors
 */
 
-void				*get_archive_member_starting_addr(t_mach_o *file);
-struct load_command	*find_load_command_by_command(
+void						*get_archive_member_starting_addr(t_mach_o *file);
+struct load_command			*find_load_command_by_command(
 	t_mach_o *mach_o,
 	uint32_t cmd);
-
+struct segment_command_64	**read_segments_64(
+	t_mach_o *file,
+	uint32_t *return_nsegs);
+struct segment_command		**read_segments_32(t_mach_o *file,
+											uint32_t *return_nsegs);
 /*
 ** Integrity checks
 */

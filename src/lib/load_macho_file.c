@@ -2,15 +2,14 @@
 
 
 typedef struct s_map_type_to_loaders {
-	bool			(*loader)(t_mach_o *ofile);
+	int32_t			(*loader)(t_mach_o *ofile, void *addr, size_t size);
 	uint32_t		type;
 }				t_map_type_to_loaders;
 
 static const t_map_type_to_loaders	g_file_loaders_map[] = {
 	{&load_archive_file, ARCHIVE_FILE},
-	{&load_fat_file, FAT_FILE},
+	{&load_fat_archive_file, FAT_FILE},
 	{&load_object_file, OBJECT_FILE},
-	{&is_unknown, UNKNOWN}
 };
 
 /*
@@ -38,12 +37,12 @@ int	load_macho_file(
 		file->arch_type = file->type;
 
 	i = 0;
-	while (i < sizeof(g_file_loaders_map) / sizeof(t_map_type_to_loaders))
+	while (i < SUPPORTED_FILE_TYPES)
 	{
-		if (g_file_loaders_map[i].loader(file))
+		if (g_file_loaders_map[i].loader(file, addr, file_size))
 			return (g_file_loaders_map[i].type);
 		i++;
 	}
 
-	return mach_o_error(MACH_O_ERROR_INVALID_FILE_TYPE);
+	return (mach_o_error(MACH_O_ERROR_INVALID_FILE_TYPE));
 }

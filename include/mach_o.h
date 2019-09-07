@@ -21,6 +21,11 @@
 # define STATIC_LIB_MAGIC "!<arch>\x0a"
 # define LONG_ARCHIVE_NAME_MAGIC "#1/"
 
+typedef enum				e_endian
+{
+	UNKNOWN_ENDIAN = 0,
+}							t_endian;
+
 /*
 ** List all files types handled
 ** WARNING
@@ -31,11 +36,11 @@
 
 typedef enum				e_mach_o_file_type
 {
-	MACH_O_FILE_UNKNOWN = 0U,
+	UNKNOWN_FILE = 0U,
 	ARCHIVE_FILE,
 	FAT_FILE,
 	OBJECT_FILE,
-	SUPPORTED_MACH_O_FILE_TYPES,
+	SUPPORTED_FILE_TYPES,
 }                   t_mach_o_file_type;
 
 typedef struct				s_archive_member_header
@@ -142,19 +147,31 @@ int						load_macho_file(
 	char *path,
 	void *addr,
 	uint64_t file_size);
+unsigned				read_file_type(t_mach_o *file);
 
 /*
 ** Parsing/Reading functions / Archive
 */
 
+int32_t					load_archive_file(
+							t_mach_o *file,
+							void *archive_addr,
+							size_t archive_size);
 int32_t					read_archive_header_members(t_mach_o *file);
 int32_t					read_archive_member_name(t_mach_o *file);
 int32_t					read_archive_symdef(t_mach_o *file);
 uint64_t				read_archive_nmembers(t_mach_o *file);
 
 /*
+** Parsing/Reading functions / Fat Archive
+*/
+
+int32_t					load_fat_archive_file(t_mach_o *file);
+
+/*
 ** Accessors
 */
+
 void				*get_archive_member_starting_addr(t_mach_o *file);
 struct load_command	*find_load_command_by_command(
 	t_mach_o *mach_o,

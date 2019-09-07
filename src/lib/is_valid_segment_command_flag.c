@@ -28,7 +28,7 @@ static const uint32_t g_segment_command_flag_map[] = {
 	(uint32_t)-1,
 };
 
-bool is_valid_flag(uint32_t flag)
+bool is_valid_segment_command_flag(uint32_t flag)
 {
 	int	i;
 

@@ -1,9 +1,9 @@
 #include "mach_o.h"
 
-static void	swap_fat_header(struct fat_header *fat_hdr)
+static void	swap_fat_header(struct fat_header *header)
 {
-	fat_hdr->magic = swap_int32(fat_hdr->magic);
-	fat_hdr->nfat_arch = swap_int32(fat_hdr->nfat_arch);
+	header->magic = swap_int32(header->magic);
+	header->nfat_arch = swap_int32(header->nfat_arch);
 }
 
 static void	swap_fat_arch_32(struct fat_arch *fat_arch)
@@ -42,7 +42,7 @@ static int32_t	swap_single_fat_archs_header(t_mach_o *file, uint32_t narch)
 	return (0);
 }
 
-int32_t				swap_fat_headers(t_mach_o *file)
+int32_t				swap_fat_archive_headers(t_mach_o *file)
 {
 	size_t	i;
 

@@ -16,7 +16,7 @@ void	swap_load_command_segment_32(struct load_command *lc)
 	sc->flags = swap_int32(sc->flags);
 	i = 0;
 	while (i < sc->nsects)
-		swap_section((struct section *)(sc + 1) + i++);
+		swap_section_32((struct section *)(sc + 1) + i++);
 }
 
 void	swap_load_command_segment_64(struct load_command *lc)

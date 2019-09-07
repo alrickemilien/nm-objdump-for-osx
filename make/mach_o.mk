@@ -13,7 +13,9 @@ LIB_SRC=src/lib/find_common_indexes.c \
 		src/lib/is_valid_symbol_type.c \
 		src/lib/load_macho_file.c \
 		src/lib/mach_o_error.c \
+		src/lib/endian.c \
 		src/lib/map_loading_file.c \
+		src/lib/check_file_size.c \
 		src/lib/read_file_type.c
 
 # Archive
@@ -25,6 +27,10 @@ LIB_SRC+=src/lib/archive/check_archive_size.c \
 		src/lib/archive/read_archive_nmembers.c \
 		src/lib/archive/read_archive_symdef.c \
 		src/lib/archive/read_nth_object_from_archive.c
+
+# Fat Archive
+LIB_SRC+=src/lib/fat_archive/load_fat_archive_file.c \
+		src/lib/fat_archive/find_fat_archive_architecture.c
 
 # Object
 LIB_SRC+=src/lib/object/check_mach_header_integrity.c \
@@ -39,15 +45,14 @@ LIB_SRC+=src/lib/object/check_mach_header_integrity.c \
 
 # Swap
 LIB_SRC+=src/lib/endian_swap/swap_section.c \
-		src/lib/endian_swap/swap_load_command_symtab.c \
-		src/lib/endian_swap/swap_fat_headers.c \
+		src/lib/endian_swap/swap_fat_archive_headers.c \
 		src/lib/endian_swap/swap_load_command_segment.c \
 		src/lib/endian_swap/swap_symtab.c \
 		src/lib/endian_swap/swap_object_header.c \
 		src/lib/endian_swap/swap_all_load_command.c \
-		src/lib/endian_swap/swap_symseg.c \
 		src/lib/endian_swap/swap_int.c \
-		src/lib/endian_swap/swap_load_command.c
+		src/lib/endian_swap/swap_load_command_symseg.c \
+		src/lib/endian_swap/swap_load_command_symtab.c
 
 # Utils
 LIB_SRC+=src/lib/utils/ato16u.c \

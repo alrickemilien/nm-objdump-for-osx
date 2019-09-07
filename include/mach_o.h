@@ -231,6 +231,18 @@ void					swap_object_header(t_mach_o *file);
 void					swap_symtab(t_mach_o *file);
 void					swap_section_32(struct section *section);
 void					swap_section_64(struct section_64 *section);
+void					swap_load_command_segment_32(struct load_command *lc);
+void					swap_load_command_segment_64(struct load_command *lc);
+void					swap_load_command_symtab(struct load_command *lc);
+void					swap_load_command_symseg(struct load_command *lc);
+int32_t					swap_fat_archive_headers(t_mach_o *file);
+
+typedef struct				s_lc_swapper
+{
+	void					(*f)(struct load_command *lc);
+	uint32_t				cmd;
+	uint32_t				pad;
+}							t_lc_swapper;
 
 /*
 ** Utils

@@ -2,9 +2,9 @@
 
 int32_t	check_file_addr(t_mach_o *file, void *addr)
 {
-	if (file->vm_addr <= addr
-		&& ((uint8_t*)file->vm_addr + file->file_size > (uint8_t*)addr
-			|| (((uint64_t)file->vm_addr + file->file_size - 1)
+	if (file->addr <= addr
+		&& ((uint8_t*)file->addr + file->file_size > (uint8_t*)addr
+			|| (((uint64_t)file->addr + file->file_size - 1)
 				& ~4095UL) == ((uint64_t)addr & ~4095UL)))
 		return (0);
 	return (-1);

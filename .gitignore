@@ -9,3 +9,4 @@ ft_otool
 mach-o-builder
 lol.c
 *.out
+build/

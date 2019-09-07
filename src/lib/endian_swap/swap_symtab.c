@@ -21,7 +21,7 @@ void	swap_symtab(t_mach_o *file)
 	struct nlist_64			*nlist_64;
 	size_t					i;
 
-	if (!(sc = file_get_symbol_table_lc(file)))
+	if (!(sc = ((struct symtab_command *)find_load_command_by_command(file, LC_SYMTAB))))
 		return ;
 	i = 0;
 	nlist = (struct nlist *)(void *)((uint8_t*)file->o_addr + sc->symoff);

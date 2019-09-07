@@ -25,14 +25,17 @@ all: $(NM) $(OTOOL)
 
 $(MACHO_O_BUILDER): $(LIB_OBJ) $(MACHO_O_BUILDER_OBJ)
 	@make -C $(DIR_LIBFT)
+	@mkdir -p $(BUILD_DIR)
 	@gcc $^ -o $(BUILD_DIR)$@ $(LINK_LIBFT) $(CCFLAGS)
 
 $(NM): $(LIB_OBJ) $(NM_OBJ)
 	@make -C $(DIR_LIBFT)
+	@mkdir -p $(BUILD_DIR)
 	@gcc $^ -o $(BUILD_DIR)$@ $(LINK_LIBFT) $(CCFLAGS)
 
 $(OTOOL): $(LIB_OBJ) $(OTOOL_OBJ)
 	@make -C $(DIR_LIBFT)
+	@mkdir -p $(BUILD_DIR)
 	@gcc $^ -o $(BUILD_DIR)$@ $(LINK_LIBFT) $(CCFLAGS)
 
 %.o: %.c

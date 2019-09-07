@@ -1,6 +1,6 @@
 #include "mach_o.h"
 
-void	swap_lc_symtab(struct load_command *lc)
+void	swap_load_command_symtab(struct load_command *lc)
 {
 	struct symtab_command	*sc;
 

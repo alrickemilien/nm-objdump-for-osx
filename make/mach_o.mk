@@ -17,6 +17,8 @@ LIB_SRC=src/lib/find_common_indexes.c \
 		src/lib/map_loading_file.c \
 		src/lib/check_file_size.c \
 		src/lib/check_file_size.c \
+		src/lib/read_sections_32.c \
+		src/lib/read_sections_64.c \
 		src/lib/read_segments_32.c \
 		src/lib/read_segments_64.c
 

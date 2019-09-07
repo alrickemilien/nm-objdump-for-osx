@@ -30,5 +30,5 @@ uint32_t	find_section(
 			i++;
 		}
 	}
-	return (NO_SECT_FOUND);
+	return (MACH_O_ERROR_NO_SECTION_FOUND);
 }

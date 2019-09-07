@@ -213,6 +213,13 @@ struct segment_command_64	**read_segments_64(
 	uint32_t *return_nsegs);
 struct segment_command		**read_segments_32(t_mach_o *file,
 											uint32_t *return_nsegs);
+
+struct section				**read_sections_32(t_mach_o *file,
+											uint32_t *return_nsects);
+
+struct section_64			**read_sections_64(t_mach_o *file,
+											uint32_t *return_nsects);
+
 /*
 ** Integrity checks
 */

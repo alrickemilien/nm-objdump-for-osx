@@ -11,9 +11,11 @@ static int32_t	find_symbol_table(
 	t_mach_o_processor *info,
 	t_mach_o *file)
 {
-	if (NULL == (info->st_lc = file_get_symbol_table_lc(file)))
+	if (NULL == (info->st_lc =
+		((struct symtab_command *)find_load_command_by_command(file, LC_SYMTAB))))
 		return (-1);
-	info->dysym_lc = file_get_dynamic_symbol_table_lc(file);
+	info->dysym_lc =
+		(struct dysymtab_command *)find_load_command_by_command(file, LC_DYSYMTAB);
 	if (file->mh)
 	{
 		info->symtab = (struct nlist *)(void *)((uint8_t*)file->o_addr
@@ -49,12 +51,12 @@ int32_t	init_processor_info(
 		return (-1);
 	if (file->mh)
 	{
-		info->secs = file_get_sections(file, &info->nsects);
+		info->secs = read_sections_32(file, &info->nsects);
 		info->segs = read_segments_32(file, &info->nsegs);
 	}
 	else
 	{
-		info->secs_64 = file_get_sections_64(file, &info->nsects);
+		info->secs_64 = read_sections_64(file, &info->nsects);
 		info->segs_64 = read_segments_64(file, &info->nsegs);
 	}
 	find_common_sections_indexes(info);

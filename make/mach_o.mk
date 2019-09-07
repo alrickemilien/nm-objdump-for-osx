@@ -5,7 +5,7 @@
 # Lib
 LIB_SRC=src/lib/find_common_indexes.c \
 		src/lib/find_load_command_by_command.c \
-		src/lib/get_cpu_name.c \
+		src/lib/cpu_type_name.c \
 		src/lib/is_valid_cmd.c \
 		src/lib/is_valid_flag.c \
 		src/lib/is_valid_macho_filetype.c \
@@ -30,7 +30,8 @@ LIB_SRC+=src/lib/archive/check_archive_size.c \
 
 # Fat Archive
 LIB_SRC+=src/lib/fat_archive/load_fat_archive_file.c \
-		src/lib/fat_archive/find_fat_archive_architecture.c
+		src/lib/fat_archive/find_fat_archive_architecture.c \
+		src/lib/fat_archive/load_fat_archive_nth_arch.c
 
 # Object
 LIB_SRC+=src/lib/object/check_mach_header_integrity.c \

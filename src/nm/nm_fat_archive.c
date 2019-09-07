@@ -3,12 +3,12 @@
 
 int32_t			find_current_arch(t_mach_o *file, t_options *options)
 {
-	if (ofile->arch_ofile_type == OFILE_MACHO)
-		return (nm_process_obj(ofile, flags));
-	else if (ofile->arch_ofile_type == OFILE_FAT)
-		return (nm_handle_fat(ofile, flags));
-	else if (ofile->arch_ofile_type == OFILE_ARCHIVE)
-		return (nm_handle_archive(ofile, flags));
+	if (file->arch_type == OBJECT_FILE)
+		return (nm_object(file, options));
+	else if (file->arch_type == FAT_FILE)
+		return (nm_fat_archive(file, options));
+	else if (file->arch_type == ARCHIVE_FILE)
+		return (nm_archive(file, options));
 	return (-1);
 }
 
@@ -19,18 +19,18 @@ static int32_t	nm_all_fat_archs(t_mach_o *file, t_options *options)
 	i = 0;
 	while (i < file->fat_header->nfat_arch)
 	{
-		if (ofile_load_narch(file, i) == -1)
+		if (load_fat_archive_nth_arch(file, i) == -1)
 		{
 			i++;
 			continue ;
 		}
 		if (file->fat_header->nfat_arch != 1)
-			printf("\n%s (for architecture %s):\n", file->file_name,
-				get_cputype_name(file->fat_archs ? file->fat_archs[i].cputype
+			printf("\n%s (for architecture %s):\n", file->path,
+				cpu_type_name(file->fat_archs ? file->fat_archs[i].cputype
 									: file->fat_archs_64[i].cputype));
 		else
-			printf("%s:\n", file->file_name);
-		if (find_current_arch(file, flags) == -1)
+			printf("%s:\n", file->path);
+		if (find_current_arch(file, options) == -1)
 			return (-1);
 		i++;
 	}
@@ -43,13 +43,13 @@ int32_t			nm_fat_archive(t_mach_o *file, t_options *options)
 	const NXArchInfo	*host_arch;
 
 	host_arch = NXGetLocalArchInfo();
-	if (-1 == (narch_for_arch = ofile_fat_find_arch(ofile,
+	if (-1 == (narch_for_arch = find_fat_archive_architecture(file,
 		host_arch->cputype | CPU_ARCH_ABI64, host_arch->cpusubtype)))
-		return (nm_all_fat_archs(ofile, flags));
+		return (nm_all_fat_archs(file, options));
 	else
 	{
-		if (ofile_load_narch(file, (uint32_t)narch_for_arch) == -1)
+		if (load_fat_archive_nth_arch(file, (uint32_t)narch_for_arch) == -1)
 			return (-1);
-		return (find_current_arch(file, flags));
+		return (find_current_arch(file, options));
 	}
 }

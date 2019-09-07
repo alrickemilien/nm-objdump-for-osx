@@ -97,6 +97,7 @@ typedef struct 			s_mach_o {
 	// Mach O object
 	void					*o_addr;
 	uint64_t				o_size;
+	uint64_t				o_endian;
 	bool					must_be_swapped;
 	uint8_t					pad[3];
 	struct mach_header		*mh;
@@ -170,7 +171,13 @@ int32_t					load_fat_archive_file(
 							t_mach_o *file,
 							void *archive_addr,
 							uint64_t archive_size);
-
+int32_t					find_fat_archive_architecture(
+							t_mach_o *file,
+							cpu_type_t cputype,
+							cpu_subtype_t subtype);
+int32_t         		load_fat_archive_nth_arch(
+    						t_mach_o *file,
+    						uint32_t narch);
 /*
 ** Parsing/Reading functions / Object
 */
@@ -254,6 +261,7 @@ uint16_t		ato16u_base(
 	const char *base);
 int64_t		ato64(const char *str);
 uint64_t	endian(void);
+const char	*cpu_type_name(cpu_type_t cpu_type);
 
 /*
 ** MACH O ERROR

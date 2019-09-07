@@ -16,12 +16,10 @@ int	nm(t_options *options, const char *path)
 	t_mach_o	file;
 
 	// 1) Load the files
-	if ((ptr = map_loading_file(path, &file.file_size)) == NULL)
+	if ((file.addr = map_loading_file(path, &file.file_size)) == NULL)
 		return (EXIT_FAILURE);
 
-	if (!(file.addr = map_loading_file(path)))
-          return (0);
-	if (file->type == UNKNOWN_FILE)
+	if (file.type == UNKNOWN_FILE)
 	{
 		dprintf(2, "%s: %s %s\n", path, path,
 				MACH_O_ERROR_UNKKNOWN_FILE_FORMAT_STR);
@@ -29,8 +27,8 @@ int	nm(t_options *options, const char *path)
 	}
 	// if (nm_flags->nbr_files > 1)
 	// 	printf("\n%s:\n", path);
-	dispatch(&file, nm_flags);
-	if (map_unloading_file(&file))
+	dispatch(&file, options);
+	if (map_unloading_file(file.addr, file.file_size))
 		return (EXIT_FAILURE);
 	return (0);
 }

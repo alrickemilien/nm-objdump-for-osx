@@ -37,7 +37,7 @@ static int32_t			check_single_load_command_integrity(
 	return (0);
 }
 
-int32_t					check_object_load_commands_integrity(t_mach_o *file)
+int32_t					check_load_commands_integrity(t_mach_o *file)
 {
 	size_t              i;
 	struct mach_header	*hdr;
@@ -68,8 +68,8 @@ int32_t					check_object_load_commands_integrity(t_mach_o *file)
 
 int32_t					check_object_integrity(t_mach_o *file)
 {
-	if (check_object_mach_header_integrity(file) == -1
-		|| check_object_load_commands_integrity(file) == -1)
+	if (check_mach_header_integrity(file) == -1
+		|| check_load_commands_integrity(file) == -1)
 		return (-1);
 	return (0);
 }

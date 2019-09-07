@@ -29,39 +29,43 @@ static void	swap_fat_arch_64(struct fat_arch_64 *fat_arch_64)
 	fat_arch_64->reserved = swap_int32(fat_arch_64->reserved);
 }
 
-static void	swap_fat_archs_header(t_mach_o *ofile, uint32_t narch)
+static int32_t	swap_single_fat_archs_header(t_mach_o *file, uint32_t narch)
 {
-	assert(ofile->fat_archs || ofile->fat_archs_64);
-	assert(sizeof(ofile->fat_archs->cputype) == sizeof(int32_t));
-	assert(sizeof(ofile->fat_archs->cpusubtype) == sizeof(int32_t));
-	if (ofile->fat_archs)
-		swap_fat_arch_32(&ofile->fat_archs[narch]);
+	if (!file->fat_archs || !file->fat_archs_64
+		|| sizeof(file->fat_archs->cputype) != sizeof(int32_t)
+		|| sizeof(file->fat_archs->cpusubtype) != sizeof(int32_t))
+		return (-1);
+	if (file->fat_archs)
+		swap_fat_arch_32(&file->fat_archs[narch]);
 	else
-		swap_fat_arch_64(&ofile->fat_archs_64[narch]);
+		swap_fat_arch_64(&file->fat_archs_64[narch]);
+	return (0);
 }
 
-int32_t				ofile_swap_fat_headers(t_mach_o *ofile)
+int32_t				swap_fat_headers(t_mach_o *file)
 {
-	uint32_t	i;
+	size_t	i;
 
-	assert(ofile->fat_header);
-	assert(ofile->fat_archs || ofile->fat_archs_64);
-	swap_fat_header(ofile->fat_header);
+	if (!file->fat_header || !file->fat_archs || !file->fat_archs_64)
+		return (-1);
+	swap_fat_header(file->fat_header);
 	i = 0;
-	while (i < ofile->fat_header->nfat_arch)
+	while (i < file->fat_header->nfat_arch)
 	{
-		if ((ofile->fat_archs
-			&& -1 == ofile_file_check_addr_size(ofile, ofile->fat_archs + i,
-												sizeof(struct fat_arch)))
-			|| (ofile->fat_archs_64
-			&& -1 == ofile_file_check_addr_size(ofile, ofile->fat_archs_64 + i,
-												sizeof(struct fat_arch_64))))
+		if ((file->fat_archs
+			&& check_file_addr_size(file,
+										file->fat_archs + i,
+										sizeof(struct fat_arch)) == -1)
+			|| (file->fat_archs_64
+			&& check_file_addr_size(file,
+										file->fat_archs_64 + i,
+										sizeof(struct fat_arch_64) == -1)))
 		{
 			dprintf(2, "%s: %s",
-					ofile->file_name, ERR_UNKNOWN_FILE_FORMAT);
+				file->path, MACH_O_ERROR_UNKKNOWN_FILE_FORMAT_STR);
 			return (-1);
 		}
-		swap_fat_archs_hdr(ofile, i);
+		swap_single_fat_archs_header(file, i);
 		i++;
 	}
 	return (0);

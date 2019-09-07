@@ -27,11 +27,27 @@ LIB_SRC+=src/lib/archive/check_archive_size.c \
 		src/lib/archive/read_nth_object_from_archive.c
 
 # Object
-LIB_SRC+=src/lib/object/read_object_endian.c \
+LIB_SRC+=src/lib/object/check_mach_header_integrity.c \
+		src/lib/object/read_object_endian.c \
 		src/lib/object/read_object_header.c \
 		src/lib/object/load_object_file.c \
 		src/lib/object/read_object_load_commands.c \
-		src/lib/object/check_object_integrity.c
+		src/lib/object/check_lc_segment_64_integrity.c \
+		src/lib/object/check_lc_segment_integrity.c \
+		src/lib/object/check_object_integrity.c \
+		src/lib/object/check_lc_symtab_integrity.c
+
+# Swap
+LIB_SRC+=src/lib/endian_swap/swap_section.c \
+		src/lib/endian_swap/swap_load_command_symtab.c \
+		src/lib/endian_swap/swap_fat_headers.c \
+		src/lib/endian_swap/swap_load_command_segment.c \
+		src/lib/endian_swap/swap_symtab.c \
+		src/lib/endian_swap/swap_object_header.c \
+		src/lib/endian_swap/swap_all_load_command.c \
+		src/lib/endian_swap/swap_symseg.c \
+		src/lib/endian_swap/swap_int.c \
+		src/lib/endian_swap/swap_load_command.c
 
 # Utils
 LIB_SRC+=src/lib/utils/ato16u.c \

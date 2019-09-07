@@ -204,23 +204,33 @@ struct load_command	*find_load_command_by_command(
 ** Integrity checks
 */
 
-int32_t	check_file_addr_size(t_mach_o *ofile,
+int32_t	check_file_addr_size(t_mach_o *file,
 								void *addr,
 								uint64_t size);
-int32_t	check_file_addr(t_mach_o *ofile, void *addr);
+int32_t	check_file_addr(t_mach_o *file, void *addr);
 
-int32_t	check_archive_addr_size(t_mach_o *ofile,
+int32_t	check_archive_addr_size(t_mach_o *file,
 								void *addr,
 								uint64_t size);
-int32_t	check_archive_addr(t_mach_o *ofile, void *addr);
+int32_t	check_archive_addr(t_mach_o *file, void *addr);
+int32_t check_mach_header_integrity(t_mach_o *file);
+int32_t	check_lc_symtab_integrity(t_mach_o *file,
+									struct load_command *lc);
+int32_t	check_lc_segment_64_integrity(t_mach_o *file, struct load_command *lc);
+int32_t	check_lc_segment_integrity(t_mach_o *file, struct load_command *lc);
 
 /*
 ** Swaps utilities
 */
 
+uint16_t				swap_int16(uint16_t v);
+uint32_t				swap_int32(uint32_t v);
+uint64_t				swap_int64(uint64_t v);
 int32_t					swap_all_load_commands(t_mach_o *file);
 void					swap_object_header(t_mach_o *file);
 void					swap_symtab(t_mach_o *file);
+void					swap_section_32(struct section *section);
+void					swap_section_64(struct section_64 *section);
 
 /*
 ** Utils
@@ -284,5 +294,8 @@ int							mach_o_error(int code);
 
 # define MACH_O_ERROR_HEADER_TRUNCATED 10
 # define MACH_O_ERROR_HEADER_TRUNCATED_STR "Malformed fat file : the fat header extends past the file"
+
+# define MACH_O_ERROR_UNKKNOWN_FILE_FORMAT 11
+# define MACH_O_ERROR_UNKKNOWN_FILE_FORMAT_STR "The file was not recognized as a valid object file"
 
 #endif

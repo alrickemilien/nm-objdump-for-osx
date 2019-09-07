@@ -5,28 +5,28 @@
 */
 
 /*
-** This function loop over section
+** This function loops over section
 ** and returns the adress of the corresponding section
 ** with given segment_name and section_name
 */
 
-uint32_t    find_section_index(t_nm_process_info *nm_info,
+uint32_t    find_section_index(t_mach_o_processor *mach_o,
                         char *segment_name,
                         char *section_name)
 {
 	uint32_t	i;
 
-	// assert(nm_info->secs || nm_info->secs_64);
+	// assert(mach_o->secs || mach_o->secs_64);
 
 	i = 0;
 
  	// 32 bits
-	if (nm_info->secs)
+	if (mach_o->secs)
 	{
-		while (i < nm_info->nsects)
+		while (i < mach_o->nsects)
 		{
-			if (ft_strequ(seg_name, nm_info->secs[i]->segname)
-				&& ft_strequ(sec_name, nm_info->secs[i]->sectname))
+			if (ft_strequ(segment_name, mach_o->secs[i]->segname)
+				&& ft_strequ(section_name, mach_o->secs[i]->sectname))
 				return (i);
 			i++;
 		}
@@ -35,10 +35,10 @@ uint32_t    find_section_index(t_nm_process_info *nm_info,
  	// 64 bits
 	else
 	{
-		while (i < nm_info->nsects)
+		while (i < mach_o->nsects)
 		{
-			if (ft_strequ(seg_name, nm_info->secs_64[i]->segname)
-				&& ft_strequ(sec_name, nm_info->secs_64[i]->sectname))
+			if (ft_strequ(segment_name, mach_o->secs_64[i]->segname)
+				&& ft_strequ(section_name, mach_o->secs_64[i]->sectname))
 				return (i);
 			i++;
 		}
@@ -54,58 +54,58 @@ uint32_t    find_section_index(t_nm_process_info *nm_info,
 ** __BSS section
 */
 
-void		find_common_sections_indexes()
+void		find_common_sections_indexes(t_mach_o_processor *mach_o)
 {
-	nm_info->text_nsect = find_section_index(nm_info, SEG_TEXT, SECT_TEXT);
-	nm_info->data_nsect = find_section_index(nm_info, SEG_DATA, SECT_DATA);
-	nm_info->bss_nsect = find_section_index(nm_info, SEG_DATA, SECT_BSS);
+	mach_o->text_nsect = find_section_index(mach_o, SEG_TEXT, SECT_TEXT);
+	mach_o->data_nsect = find_section_index(mach_o, SEG_DATA, SECT_DATA);
+	mach_o->bss_nsect = find_section_index(mach_o, SEG_DATA, SECT_BSS);
 }
 
-static struct symtab_command	*find_symbol_table_load_command(t_ofile *ofile)
+static struct symtab_command	*find_symbol_table_load_command(t_mach_o *file)
 {
 	return
-  ((struct symtab_command *)find_load_command_by_command(ofile, LC_SYMTAB));
+  ((struct symtab_command *)find_load_command_by_command(file, LC_SYMTAB));
 }
 
-static struct dysymtab_command	*find_dsymtab_load_command(t_ofile *ofile)
+static struct dysymtab_command	*find_dsymtab_load_command(t_mach_o *file)
 {
 	return
-  ((struct dysymtab_command *)find_load_command_by_command(ofile, LC_DYSYMTAB));
+  ((struct dysymtab_command *)find_load_command_by_command(file, LC_DYSYMTAB));
 }
 
 /*
 ** This function finds the start of the symbol table in a mach o file
 */
 
-static uint32_t	find_symbol_table_index(t_nm_process_info *nm_info,
-										t_ofile *ofile)
+uint32_t	find_symbol_table_index(t_mach_o_processor *mach_o,
+										t_mach_o *file)
 {
-	if (NULL == (nm_info->st_lc = find_symbol_table_load_command(ofile)))
+	if ((mach_o->st_lc = find_symbol_table_load_command(file)) == NULL)
 		return (-1);
 
- 	nm_info->dysym_lc = find_dsymtab_load_command(ofile);
+ 	mach_o->dysym_lc = find_dsymtab_load_command(file);
 
  	// 32 bits structure
- 	if (ofile->mh)
+ 	if (file->mh)
  	{
-		nm_info->symtab = (struct nlist *)(void *)((uint8_t*)ofile->object_addr
-										+ nm_info->st_lc->symoff);
+		mach_o->symtab = (struct nlist *)(void *)((uint8_t*)file->o_addr
+										+ mach_o->st_lc->symoff);
 
     	// Find the associated string table index
-    	nm_info->string_table = (uint8_t*)((uint8_t*)ofile->object_addr
-										+ nm_info->st_lc->stroff);
+    	mach_o->string_table = (uint8_t*)((uint8_t*)file->o_addr
+										+ mach_o->st_lc->stroff);
 	}
 
  	// 64 bits structure
  	else
 	{
-		nm_info->symtab_64 = (struct nlist_64 *)(void *)(
-										(uint8_t*)ofile->object_addr
-										+ nm_info->st_lc->symoff);
+		mach_o->symtab_64 = (struct nlist_64 *)(void *)(
+										(uint8_t*)file->o_addr
+										+ mach_o->st_lc->symoff);
 
     	// Find the associated string table index
-    	nm_info->string_table = (uint8_t*)((uint8_t*)ofile->object_addr
-										+ nm_info->st_lc->stroff);
+    	mach_o->string_table = (uint8_t*)((uint8_t*)file->o_addr
+										+ mach_o->st_lc->stroff);
 	}
 
  	return (0);

@@ -5,7 +5,9 @@
 ** that corresponds to the uint32_t cmd given as parameter
 */
 
-struct load_command	*find_load_command_by_command(t_mach_o *mach_o, uint32_t cmd)
+struct load_command	*find_load_command_by_command(
+	t_mach_o *mach_o,
+	uint32_t cmd)
 {
 	uint32_t             i;
 	uint32_t             ncmds;
@@ -24,10 +26,10 @@ struct load_command	*find_load_command_by_command(t_mach_o *mach_o, uint32_t cmd
 	cursor_load_command = mach_o->load_commands;
 	while (i < ncmds)
 	{
-		if (-1 == ofile_object_check_addr_size(mach_o, cursor_load_command,
-									sizeof(struct load_command))
-			|| -1 == ofile_object_check_addr_size(mach_o, cursor_load_command,
-									cursor_load_command->cmdsize))
+		if (check_file_addr_size(mach_o, cursor_load_command,
+								sizeof(struct load_command) == -1)
+			|| check_file_addr_size(mach_o, cursor_load_command,
+								cursor_load_command->cmdsize) == -1)
 			return (NULL);
 
   	if (cmd == cursor_load_command->cmd

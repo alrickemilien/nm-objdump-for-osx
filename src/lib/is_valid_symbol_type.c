@@ -11,26 +11,21 @@
 
 static const uint32_t g_symbol_type_map[] = {
 	N_UNDF,
-
 	N_ABS,
-
 	N_SECT,
-
 	N_PBUD,
-
 	N_INDR,
-
 	(uint32_t)-1,
 };
 
 bool is_valid_symbol_type(uint8_t n_type)
 {
-	int	i;
+	size_t	i;
 
 	i = 0;
-	while (g_segment_command_flag_map[i] != (uint32_t)-1)
+	while (g_symbol_type_map[i] != (uint32_t)-1)
 	{
-		if (g_segment_command_flag_map[i] == n_type)
+		if (g_symbol_type_map[i] == n_type)
 			return (true);
 		i++;
 	}

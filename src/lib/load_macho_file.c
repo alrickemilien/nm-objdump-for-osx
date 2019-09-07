@@ -1,16 +1,16 @@
 #include "mach_o.h"
 
 
-typedef struct s_map_file_type_loaders {
+typedef struct s_map_type_to_loaders {
 	bool			(*loader)(t_mach_o *ofile);
-	t_file_type		file_type;
-}				t_map_file_type_loaders;
+	uint32_t		type;
+}				t_map_type_to_loaders;
 
-static const t_map_file_type_checkers		g_file_loaders_map[SUPPORTED_OFILE_TYPES] = {
+static const t_map_type_to_loaders	g_file_loaders_map[] = {
 	{&load_archive_file, ARCHIVE_FILE},
 	{&load_fat_file, FAT_FILE},
 	{&load_object_file, OBJECT_FILE},
-	{&is_unknown, UNKNOWN},
+	{&is_unknown, UNKNOWN}
 };
 
 /*
@@ -21,27 +21,27 @@ static const t_map_file_type_checkers		g_file_loaders_map[SUPPORTED_OFILE_TYPES]
 */
 
 int	load_macho_file(
-	t_mach_o *ofile,
+	t_mach_o *file,
 	char *path,
 	void *addr,
 	uint64_t file_size)
 {
-	uint32_t						i;
+	size_t					i;
 	
-	ofile->addr = addr;
-	ofile->file_size = file_size;
-	ofile->path = path;
+	file->addr = addr;
+	file->file_size = file_size;
+	file->path = path;
 	
-	ofile->file_type = read_file_type(ofile);
+	file->type = read_file_type(file);
 	
-	if (ofile->fat_header)
-		ofile->arch_ofile_type = ofile->ofile_type;
+	if (file->fat_header)
+		file->arch_type = file->type;
 
 	i = 0;
-	while (i < SUPPORTED_OFILE_TYPES)
+	while (i < sizeof(g_file_loaders_map) / sizeof(t_map_type_to_loaders))
 	{
-		if (g_types_map[i].checker(ofile))
-			return (g_types_map[i].file_type);
+		if (g_file_loaders_map[i].loader(file))
+			return (g_file_loaders_map[i].type);
 		i++;
 	}
 

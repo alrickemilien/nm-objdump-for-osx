@@ -59,11 +59,12 @@ typedef struct 			s_mach_o {
 	// Path to the file
 	char				*path;
 	uint64_t			file_size;
+	uint32_t			type;
+	uint32_t			arch_type;
 
 	// Adresse o map loaded file into memory
 	void				*addr;
 	
-	t_mach_o_file_type	file_type;
 	uint32_t			magic;
 	uint32_t			endian;
 
@@ -97,6 +98,28 @@ typedef struct 			s_mach_o {
 	struct mach_header_64	*mh_64;
 	struct load_command		*load_commands;
 }						t_mach_o;
+
+typedef struct	s_mach_o_processor
+{
+	uint32_t					nsects;
+	uint32_t					nsegs;
+	struct section				**secs;
+	struct section_64			**secs_64;
+	struct segment_command_64	**segs_64;
+	struct segment_command		**segs;
+
+	struct symtab_command		*st_lc;
+	struct nlist				*symtab;
+	struct nlist_64				*symtab_64;
+	uint8_t						*string_table;
+
+	struct dysymtab_command		*dysym_lc;
+
+	uint32_t					text_nsect;
+	uint32_t					data_nsect;
+	uint32_t					bss_nsect;
+	uint8_t						pad[4];
+}				t_mach_o_processor;
 
 /*
 ** Main
@@ -132,8 +155,10 @@ uint64_t				read_archive_nmembers(t_mach_o *file);
 /*
 ** Accessors
 */
-void		*get_archive_member_starting_addr(t_mach_o *file);
-
+void				*get_archive_member_starting_addr(t_mach_o *file);
+struct load_command	*find_load_command_by_command(
+	t_mach_o *mach_o,
+	uint32_t cmd);
 /*
 ** Integrity checks
 */

@@ -1,10 +1,7 @@
 #include "nm.h"
 
 /*
-** This map regroups all options
-*/
-
-/*
+** This map regroups all options :
 **  -a     Display all symbol table entries, including those inserted for use by debuggers.
 **  -g     Display only global (external) symbols.
 **  -n     Sort numerically rather than alphabetically.
@@ -24,7 +21,7 @@
 **  -P     Write information in a portable output format.
 */
 
-static t_options_map options_map[OPTIONS_MAP_LENGTH] = {
+static t_options_map options_map[] = {
 		{
 			"a",
 			ALL_SYMBOL,
@@ -85,6 +82,10 @@ static t_options_map options_map[OPTIONS_MAP_LENGTH] = {
 			"P",
 			DISPLAY_PORTABLE,
 		},
+		{
+			NULL,
+			0,
+		},
 };
 
 /*
@@ -92,7 +93,8 @@ static t_options_map options_map[OPTIONS_MAP_LENGTH] = {
 ** Return 0 when the argument name is an option like --reverse
 */
 
-static inline bool is_a_multi_option(const char *name) {
+static bool is_a_multi_option(const char *name)
+{
 	if (name[0] == '-' && name[1] != '-')
 		return (1);
 
@@ -104,7 +106,8 @@ static inline bool is_a_multi_option(const char *name) {
 ** Return 0 when the argument name is an option like -l or -lR
 */
 
-static inline bool is_a_single_option(const char *name) {
+static bool is_a_single_option(const char *name)
+{
 	if (name[0] == '-' && name[1] == '-')
 		return (1);
 
@@ -115,7 +118,8 @@ static inline bool is_a_single_option(const char *name) {
 ** Return 0 othrwise
 */
 
-static inline bool is_a_end_arguments_string(const char *name) {
+static bool is_a_end_arguments_string(const char *name)
+{
 	if (name[0] == '-' && name[1] == '-' && name[2] == 0)
 		return (1);
 
@@ -130,8 +134,8 @@ static inline bool is_a_end_arguments_string(const char *name) {
 */
 
 static int handle_multi_option(t_options *options, const char *name) {
-	int i;
-	int j;
+	size_t i;
+	size_t j;
 
 	i = 1;
 	while (name[i])
@@ -164,10 +168,10 @@ static int handle_multi_option(t_options *options, const char *name) {
 */
 
 static int handle_single_option(t_options *options, const char *name) {
-	int j;
+	size_t j;
 
 	j = 0;
-	while (j < OPTIONS_MAP_LENGTH)
+	while (options_map[j].name != NULL)
 	{
 		if (!ft_strcmp(name + 2, options_map[j].name)) {
 			((int*)options)[options_map[j].offset] = 1;
@@ -189,8 +193,8 @@ static int handle_single_option(t_options *options, const char *name) {
 */
 
 int read_options_arguments(int ac, char **av, t_options *options) {
-	int						i;
-	int						ret;
+	int	i;
+	int	ret;
 
 	ft_bzero(options, sizeof(t_options));
 

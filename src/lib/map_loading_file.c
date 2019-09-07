@@ -13,7 +13,7 @@ int		map_unloading_file(void *ptr, uint64_t file_size)
 ** 3 - Use mmap to load the file
 */
 
-void	*map_loading_file(char *filename, uint64_t *file_size)
+void	*map_loading_file(const char *filename, uint64_t *file_size)
 {
 	int			     fd;
 	void		     *map;

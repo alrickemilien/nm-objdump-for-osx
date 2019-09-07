@@ -19,9 +19,11 @@
 
 # define EXIT_FAILURE 1
 
-/*
-** Main
-*/
+int     read_options_arguments(int ac, char **av, t_options *options);
+int     nm(t_options *options, const char *path);
+int32_t	nm_object(t_mach_o *file, t_options *options);
+int32_t nm_fat_archive(t_mach_o *file, t_options *options);
+int32_t	nm_archive(t_mach_o *file, t_options *options);
 
 /*
 **   __________________  ___________  ______

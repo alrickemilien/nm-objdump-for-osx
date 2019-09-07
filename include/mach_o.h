@@ -130,7 +130,7 @@ typedef struct	s_mach_o_processor
 ** Main
 */
 
-void						*map_loading_file(char *filename, uint64_t *file_size);
+void						*map_loading_file(const char *filename, uint64_t *file_size);
 int							map_unloading_file(void *ptr, uint64_t file_size);
 
 bool						is_valid_filetype(uint32_t filetype);

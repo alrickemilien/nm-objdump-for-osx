@@ -28,13 +28,9 @@ typedef struct s_map_symbol_type_to_printable {
 
 static const uint32_t g_symbol_type_map[] = {
 	{N_UNDF, 'U'},
-
 	{N_ABS, 'A'},
-
 	{N_PBUD, 'u'},
-
 	{N_INDR, 'I'},
-
 	{(uint8_t)-1, 0},
 };
 

@@ -11,6 +11,7 @@ NM_SRC=src/nm/main.c \
 	src/nm/nm.c \
 	src/nm/nm_fat_archive.c \
 	src/nm/nm_archive.c \
-	src/nm/nm_object.c
+	src/nm/nm_object.c \
+	src/nm/sort_symbols.c
 
 NM_OBJ=$(NM_SRC:.c=.o)

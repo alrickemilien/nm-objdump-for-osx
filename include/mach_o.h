@@ -162,7 +162,9 @@ int32_t					read_archive_header_members(t_mach_o *file);
 int32_t					read_archive_member_name(t_mach_o *file);
 int32_t					read_archive_symdef(t_mach_o *file);
 uint64_t				read_archive_nmembers(t_mach_o *file);
-
+int32_t					load_archive_nth_member(t_mach_o *file,
+											uint64_t n_member,
+											bool *error);
 /*
 ** Parsing/Reading functions / Fat Archive
 */

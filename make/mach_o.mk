@@ -26,7 +26,7 @@ LIB_SRC+=src/lib/archive/check_archive_size.c \
 		src/lib/archive/read_archive_member_name.c \
 		src/lib/archive/read_archive_nmembers.c \
 		src/lib/archive/read_archive_symdef.c \
-		src/lib/archive/read_nth_object_from_archive.c
+		src/lib/archive/load_archive_nth_member.c
 
 # Fat Archive
 LIB_SRC+=src/lib/fat_archive/load_fat_archive_file.c \

@@ -1,53 +1,53 @@
 #include "mach_o.h"
 
-static int32_t	set_file_mh_values(t_ofile *ofile)
+static int32_t	read_object(t_mach_o *file)
 {
-	ofile->endian = get_macho_byte_sex(
-		((struct mach_header *)ofile->object_addr));
-	if (ofile->endian == UNKNOWN_BYTE_SEX)
+	file->endian = read_object_endian(
+		((struct mach_header *)file->o_addr));
+	if (file->endian == UNKNOWN_ENDIAN)
 	{
-		ft_dprintf(2, "Unknown endian found for mach-o object, aborting...\n");
+		dprintf(2, "Unknown endian found for mach-o object, aborting...\n");
 		return (-1);
 	}
-	if (ofile->endian != endian())
-		ofile->must_be_swapped = true;
+	if (file->endian != endian())
+		file->must_be_swapped = true;
 	else
-		ofile->must_be_swapped = false;
-	if (set_ofile_mh(ofile) == NULL)
+		file->must_be_swapped = false;
+	if (read_object_header(file) == NULL)
 	{
-		ft_dprintf(2, "Malformed object file, "
+		dprintf(2, "Malformed object file, "
 				"the mach-o header is truncated or non-existant\n");
 		return (-1);
 	}
-	if (set_ofile_load_commands(ofile) == NULL)
+	if (read_object_load_commands(file) == NULL)
 	{
-		ft_dprintf(2, "Malformed object file, there are no load commands\n");
+		dprintf(2, "Malformed object file, there are no load commands\n");
 		return (-1);
 	}
 	return (0);
 }
 
-int32_t			load_macho_ofile(t_ofile *ofile,
+int32_t			load_object_file(t_mach_o *file,
 						void *object_addr,
 						uint64_t object_size)
 {
-	ofile->object_addr = object_addr;
-	ofile->object_size = object_size;
-	if (-1 == ofile_file_check_addr_size(ofile,
-										ofile->object_addr,
-										ofile->object_size))
+	file->o_addr = object_addr;
+	file->o_size = object_size;
+	if (-1 == check_file_addr_size(file,
+						file->o_addr,
+						file->o_size))
 		return (-1);
-	if (set_ofile_mh_values(ofile) == -1)
+	if (read_object(file) == -1)
 		return (-1);
-	if (ofile->must_be_swapped)
+	if (file->must_be_swapped)
 	{
-		ofile_swap_macho_hdr(ofile);
-		if (-1 == ofile_swap_macho_load_commands(ofile))
+		swap_object_header(file);
+		if (swap_all_load_commands(file) == -1)
 			return (-1);
 	}
-	if (ofile_check_object_integrity(ofile) == -1)
+	if (check_object_integrity(file) == -1)
 		return (-1);
-	if (ofile->must_be_swapped)
-		ofile_swap_macho_symtab(ofile);
+	if (file->must_be_swapped)
+		swap_symtab(file);
 	return (0);
 }

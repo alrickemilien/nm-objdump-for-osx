@@ -17,14 +17,21 @@ LIB_SRC=src/lib/find_common_indexes.c \
 		src/lib/read_file_type.c
 
 # Archive
-LIB_SRC+=src/lib/archive//check_archive_size.c \
-		src/lib/archive//get_archive_member_starting_addr.c \
-		src/lib/archive//load_archive_file.c \
-		src/lib/archive//read_archive_header_members.c \
-		src/lib/archive//read_archive_member_name.c \
-		src/lib/archive//read_archive_nmembers.c \
-		src/lib/archive//read_archive_symdef.c \
-		src/lib/archive//read_nth_object_from_archive.c
+LIB_SRC+=src/lib/archive/check_archive_size.c \
+		src/lib/archive/get_archive_member_starting_addr.c \
+		src/lib/archive/load_archive_file.c \
+		src/lib/archive/read_archive_header_members.c \
+		src/lib/archive/read_archive_member_name.c \
+		src/lib/archive/read_archive_nmembers.c \
+		src/lib/archive/read_archive_symdef.c \
+		src/lib/archive/read_nth_object_from_archive.c
+
+# Object
+LIB_SRC+=src/lib/object/read_object_endian.c \
+		src/lib/object/read_object_header.c \
+		src/lib/object/load_object_file.c \
+		src/lib/object/read_object_load_commands.c \
+		src/lib/object/check_object_integrity.c
 
 # Utils
 LIB_SRC+=src/lib/utils/ato16u.c \

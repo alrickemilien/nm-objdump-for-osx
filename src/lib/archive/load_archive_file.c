@@ -2,7 +2,7 @@
 
 int32_t	load_archive_file(t_mach_o *file,
 						void *archive_addr,
-						size_t archive_size)
+						uint64_t archive_size)
 {
 	file->archive_start_addr = archive_addr;
 

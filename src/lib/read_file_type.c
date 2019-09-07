@@ -11,7 +11,7 @@
 
 typedef struct s_map_type_to_checkers {
 	bool			(*checker)(t_mach_o *file);
-	t_file_type		file_type;
+	int				file_type;
 }				t_map_type_to_checkers;
 
 static bool		is_archive_file(t_mach_o *file)
@@ -67,11 +67,11 @@ static bool		is_unknown(t_mach_o *file)
 	return (true);
 }
 
-static const t_map_file_type_checkers		g_types_map[] = {
+static const t_map_type_to_checkers		g_types_map[] = {
 	{&is_archive_file, ARCHIVE_FILE},
 	{&is_fat_file, FAT_FILE},
 	{&is_macho_file, OBJECT_FILE},
-	{&is_unknown, UNKNOWN},
+	{&is_unknown, UNKNOWN_FILE},
 };
 
 /*
@@ -93,5 +93,5 @@ unsigned	read_file_type(t_mach_o *file)
 		i++;
 	}
 
-	return (OFILE_UNKNOWN);
+	return (UNKNOWN_FILE);
 }

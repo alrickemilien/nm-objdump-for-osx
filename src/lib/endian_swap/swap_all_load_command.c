@@ -1,7 +1,7 @@
 
 #define NBR_SUPPORTED_LC 4
 
-static inline int32_t	check_lc_bound(t_ofile *ofile,
+static int32_t	check_lc_bound(t_ofile *ofile,
 									struct load_command *cur_lc)
 {
 	if (-1 == ofile_object_check_addr_size(ofile, cur_lc,
@@ -53,11 +53,11 @@ int32_t					swap_all_load_commands(t_ofile *ofile)
 		hdr = ofile->mh;
 	else
 		hdr = (struct mach_header *)ofile->mh_64;
-	assert(hdr);
+	// assert(hdr);
 	cur_lc = ofile->load_commands;
 	while (i < hdr->ncmds)
 	{
-		if (-1 == swap_load_command(ofile, cur_lc))
+		if (swap_load_command(ofile, cur_lc) == -1)
 			return (-1);
 		cur_lc = (struct load_command *)(void *)((uint8_t*)cur_lc
 												+ cur_lc->cmdsize);

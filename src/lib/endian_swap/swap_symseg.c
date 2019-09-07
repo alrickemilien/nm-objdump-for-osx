@@ -1,3 +1,5 @@
+#include "mach_o.h"
+
 void		swap_lc_symseg(struct load_command *lc)
 {
 	struct symseg_command	*sc;

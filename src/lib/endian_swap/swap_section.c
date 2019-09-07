@@ -1,3 +1,5 @@
+#include "mach_o.h"
+
 void	swap_section_32(struct section *section)
 {
 	section->addr = swap_int32(section->addr);

@@ -1,11 +1,12 @@
+#include "mach_o.h"
 
-inline static void	swap_fat_header(struct fat_header *fat_hdr)
+static void	swap_fat_header(struct fat_header *fat_hdr)
 {
 	fat_hdr->magic = swap_int32(fat_hdr->magic);
 	fat_hdr->nfat_arch = swap_int32(fat_hdr->nfat_arch);
 }
 
-inline static void	swap_fat_arch_32(struct fat_arch *fat_arch)
+static void	swap_fat_arch_32(struct fat_arch *fat_arch)
 {
 	fat_arch->cputype = (cpu_type_t)swap_int32(
 		(uint32_t)fat_arch->cputype);
@@ -16,7 +17,7 @@ inline static void	swap_fat_arch_32(struct fat_arch *fat_arch)
 	fat_arch->align = swap_int32(fat_arch->align);
 }
 
-inline static void	swap_fat_arch_64(struct fat_arch_64 *fat_arch_64)
+static void	swap_fat_arch_64(struct fat_arch_64 *fat_arch_64)
 {
 	fat_arch_64->cputype = (cpu_type_t)swap_int32(
 		(uint32_t)fat_arch_64->cputype);
@@ -28,7 +29,7 @@ inline static void	swap_fat_arch_64(struct fat_arch_64 *fat_arch_64)
 	fat_arch_64->reserved = swap_int32(fat_arch_64->reserved);
 }
 
-inline static void	swap_fat_archs_header(t_mach_o *ofile, uint32_t narch)
+static void	swap_fat_archs_header(t_mach_o *ofile, uint32_t narch)
 {
 	assert(ofile->fat_archs || ofile->fat_archs_64);
 	assert(sizeof(ofile->fat_archs->cputype) == sizeof(int32_t));

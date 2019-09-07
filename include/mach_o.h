@@ -156,7 +156,7 @@ unsigned				read_file_type(t_mach_o *file);
 int32_t					load_archive_file(
 							t_mach_o *file,
 							void *archive_addr,
-							size_t archive_size);
+							uint64_t archive_size);
 int32_t					read_archive_header_members(t_mach_o *file);
 int32_t					read_archive_member_name(t_mach_o *file);
 int32_t					read_archive_symdef(t_mach_o *file);
@@ -166,7 +166,30 @@ uint64_t				read_archive_nmembers(t_mach_o *file);
 ** Parsing/Reading functions / Fat Archive
 */
 
-int32_t					load_fat_archive_file(t_mach_o *file);
+int32_t					load_fat_archive_file(
+							t_mach_o *file,
+							void *archive_addr,
+							uint64_t archive_size);
+
+/*
+** Parsing/Reading functions / Object
+*/
+
+int32_t					load_object_file(
+								t_mach_o *file,
+								void *object_addr,
+								uint64_t object_size);
+uint32_t				read_object_endian(struct mach_header *header);
+void					*read_object_header(t_mach_o *file);
+struct load_command		*read_object_load_commands(t_mach_o *file);
+int32_t					check_object_integrity(t_mach_o *file);
+
+typedef struct			s_lc_integrity_check
+{
+	int32_t				(*f)(t_mach_o *file, struct load_command *lc);
+	uint32_t			cmd;
+	uint32_t			pad;
+}						t_lc_integrity_check;
 
 /*
 ** Accessors
@@ -176,6 +199,7 @@ void				*get_archive_member_starting_addr(t_mach_o *file);
 struct load_command	*find_load_command_by_command(
 	t_mach_o *mach_o,
 	uint32_t cmd);
+
 /*
 ** Integrity checks
 */
@@ -191,13 +215,23 @@ int32_t	check_archive_addr_size(t_mach_o *ofile,
 int32_t	check_archive_addr(t_mach_o *ofile, void *addr);
 
 /*
+** Swaps utilities
+*/
+
+int32_t					swap_all_load_commands(t_mach_o *file);
+void					swap_object_header(t_mach_o *file);
+void					swap_symtab(t_mach_o *file);
+
+/*
 ** Utils
 */
+
 uint16_t	ato16u(const char *str);
 uint16_t		ato16u_base(
 	const char *str,
 	const char *base);
 int64_t		ato64(const char *str);
+uint64_t	endian(void);
 
 /*
 ** MACH O ERROR

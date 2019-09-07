@@ -1,3 +1,5 @@
+#include "mach_o.h"
+
 void	swap_load_command_segment_32(struct load_command *lc)
 {
 	struct segment_command	*sc;

@@ -2,7 +2,7 @@
 
 
 typedef struct s_map_type_to_loaders {
-	int32_t			(*loader)(t_mach_o *ofile, void *addr, size_t size);
+	int32_t			(*loader)(t_mach_o *ofile, void *addr, uint64_t size);
 	uint32_t		type;
 }				t_map_type_to_loaders;
 

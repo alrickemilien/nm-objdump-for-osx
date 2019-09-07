@@ -1,3 +1,4 @@
+#include "mach_o.h"
 
 void	swap_nlist(struct nlist *nlist)
 {
@@ -13,20 +14,20 @@ void	swap_nlist_64(struct nlist_64 *nlist)
 	nlist->n_value = swap_int64(nlist->n_value);
 }
 
-void	ofile_swap_macho_symtab(t_ofile *ofile)
+void	swap_symtab(t_mach_o *file)
 {
 	struct symtab_command	*sc;
 	struct nlist			*nlist;
 	struct nlist_64			*nlist_64;
-	uint32_t				i;
+	size_t					i;
 
-	if (!(sc = ofile_get_symbol_table_lc(ofile)))
+	if (!(sc = file_get_symbol_table_lc(file)))
 		return ;
 	i = 0;
-	nlist = (struct nlist *)(void *)((uint8_t*)ofile->object_addr + sc->symoff);
-	nlist_64 = (struct nlist_64*)(void *)((uint8_t*)ofile->object_addr
+	nlist = (struct nlist *)(void *)((uint8_t*)file->o_addr + sc->symoff);
+	nlist_64 = (struct nlist_64*)(void *)((uint8_t*)file->o_addr
 										+ sc->symoff);
-	if (ofile->mh)
+	if (file->mh)
 		while (i < sc->nsyms)
 			swap_nlist(nlist + i++);
 	else

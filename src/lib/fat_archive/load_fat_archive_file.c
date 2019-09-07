@@ -1,5 +1,9 @@
-int32_t	load_fat_archive_file(t_mach_o *file)
+int32_t	load_fat_archive_file(t_mach_o *file,
+						void *object_addr,
+						uint64_t object_size)
 {
+    (void)object_addr;
+    (void)object_size;
     if (!file->vm_addr || ((struct fat_header *)file->vm_addr)->magic == FAT_MAGIC
 			|| ((struct fat_header *)file->vm_addr)->magic == FAT_MAGIC_64
 			|| ((struct fat_header *)file->vm_addr)->magic == FAT_CIGAM

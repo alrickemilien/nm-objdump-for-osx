@@ -1,10 +1,12 @@
-void	swap_object_header(t_mach_o *ofile)
+#include "mach_o.h"
+
+void	swap_object_header(t_mach_o *file)
 {
 	struct mach_header	*mh;
 
-	mh = ofile->mh;
-	if (!ofile->mh) 
-		mh = (struct mach_header *)ofile->mh_64;
+	mh = file->mh;
+	if (!file->mh) 
+		mh = (struct mach_header *)file->mh_64;
 	
 	assert(mh);
 	

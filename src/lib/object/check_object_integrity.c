@@ -6,7 +6,7 @@ static const t_lc_integrity_check	g_map_lc_checkers[] = {
 		{check_lc_symtab_integrity, LC_SYMTAB, 0},
 };
 
-static int32_t	check_lc_bound(t_mach_o *file,
+static int	check_lc_bound(t_mach_o *file,
 									struct load_command *cur_lc)
 {
 	if (check_file_addr_size(file, cur_lc,
@@ -17,7 +17,7 @@ static int32_t	check_lc_bound(t_mach_o *file,
 	return (0);
 }
 
-static int32_t			check_single_load_command_integrity(
+static int			check_single_load_command_integrity(
     t_mach_o *file,
 	struct load_command *lc)
 {
@@ -37,7 +37,7 @@ static int32_t			check_single_load_command_integrity(
 	return (0);
 }
 
-int32_t					check_load_commands_integrity(t_mach_o *file)
+int					check_load_commands_integrity(t_mach_o *file)
 {
 	size_t              i;
 	struct mach_header	*hdr;
@@ -68,6 +68,7 @@ int32_t					check_load_commands_integrity(t_mach_o *file)
 
 int32_t					check_object_integrity(t_mach_o *file)
 {
+	printf("check_object_integrity \n");
 	if (check_mach_header_integrity(file) == -1
 		|| check_load_commands_integrity(file) == -1)
 		return (-1);

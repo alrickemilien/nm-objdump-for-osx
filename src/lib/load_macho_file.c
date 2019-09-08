@@ -21,11 +21,11 @@ static const t_map_type_to_loaders	g_file_loaders_map[] = {
 
 int	load_macho_file(
 	t_mach_o *file,
-	char *path,
+	const char *path,
 	void *addr,
 	uint64_t file_size)
 {
-	size_t					i;
+	size_t	i;
 	
 	file->addr = addr;
 	file->file_size = file_size;
@@ -39,8 +39,8 @@ int	load_macho_file(
 	i = 0;
 	while (i < SUPPORTED_FILE_TYPES)
 	{
-		if (g_file_loaders_map[i].loader(file, addr, file_size))
-			return (g_file_loaders_map[i].type);
+		if (file->type == g_file_loaders_map[i].type)
+			return (g_file_loaders_map[i].loader(file, addr, file_size));
 		i++;
 	}
 

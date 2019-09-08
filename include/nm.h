@@ -7,6 +7,8 @@
 # include "nm_options.h"
 # include "libft.h"
 
+# define LOGDEBUG(f_, ...) printf((f_), __VA_ARGS__)
+
 /*
 ** All ok
 */
@@ -124,5 +126,7 @@ void					sort(
 void print_error_on_option(const char *msg, const char *option);
 
 # define USAGE "./ft_nm <object file>"
+
+# define NOT_RECOGNIZED_VALID_FILE_EXIT_CODE 1
 
 #endif

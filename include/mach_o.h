@@ -62,7 +62,7 @@ typedef struct				s_archive_member_header
 
 typedef struct 			s_mach_o {
 	// Path to the file
-	char				*path;
+	const char			*path;
 	uint64_t			file_size;
 	uint32_t			type;
 	uint32_t			arch_type;
@@ -145,7 +145,7 @@ bool						is_valid_symbol_type(uint8_t n_type);
 
 int						load_macho_file(
 	t_mach_o *ofile,
-	char *path,
+	const char *path,	
 	void *addr,
 	uint64_t file_size);
 unsigned				read_file_type(t_mach_o *file);

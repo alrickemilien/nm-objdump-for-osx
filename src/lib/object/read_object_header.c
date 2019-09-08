@@ -6,6 +6,7 @@ void	*read_object_header(t_mach_o *file)
 
 	file->mh = NULL;
 	file->mh_64 = NULL;
+	printf("JE SUIS LA\n");
 	if (check_file_addr_size(file,
 							file->o_addr,
 							sizeof(struct mach_header_64)) == -1)

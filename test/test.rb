@@ -16,8 +16,8 @@ def pipe(cmd, options = [])
 			end
 	  	end
 	  	# Don't exit until the external process is done
-		  external.join
-			puts data[:err]
+		external.join
+		puts data[:err]
 		return data[:out], data[:err], external.value
 	end
 end
@@ -135,7 +135,7 @@ class TestNm < Test::Unit::TestCase
 
 	def test_simple
 		file = Dir["#{__dir__}/samples/*.out"][0]
-		diff("nm #{file}", "./bin/ft_nm #{file}")
+		diff("nm #{file}", "./build/ft_nm #{file}")
 	end
 
 	def test_no_read_rights

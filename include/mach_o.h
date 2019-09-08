@@ -287,6 +287,8 @@ typedef struct	s_mach_o_error {
 ** Error functionnalities
 */
 
+# define MAX_ERROR_BUFFER PATH_MAX + 512
+
 int							mach_o_error(int code);
 
 /*

@@ -1,29 +1,29 @@
 #include "nm.h"
 
 static const t_print_symbol_predicate	g_predicates[NCHARS_SYMBOLS] = {
-		{is_symbol_unknown, 'U', {0}}, {is_symbol_common, 'C', {0}},
-		{is_symbol_extern_data, 'D', {0}}, {is_symbol_extern_text, 'T', {0}},
-		{is_symbol_extern_bss, 'B', {0}}, {is_symbol_stab, '-', {0}},
-		{is_symbol_extern_arbitrary_sect, 'S', {0}},
-		{is_symbol_extern_indirect, 'I', {0}},
-		{is_symbol_extern_absolute, 'A', {0}}, {is_symbol_unknown, 'u', {0}},
-		{is_symbol_common, 'c', {0}}, {is_symbol_data, 'd', {0}},
-		{is_symbol_text, 't', {0}}, {is_symbol_bss, 'b', {0}},
-		{is_symbol_arbitrary_sect, 's', {0}}, {is_symbol_indirect, 'i', {0}},
-		{is_symbol_absolute, 'a', {0}},
+		{is_symbol_extern_unknown, 'U'}, {is_symbol_common, 'C'},
+		{is_symbol_extern_data, 'D'}, {is_symbol_extern_text, 'T'},
+		{is_symbol_extern_bss, 'B'}, {is_symbol_stab, '-'},
+		{is_symbol_extern_arbitrary_sect, 'S'},
+		{is_symbol_extern_indirect, 'I'},
+		{is_symbol_extern_absolute, 'A'}, {is_symbol_unknown, 'u'},
+		{is_symbol_common, 'c'}, {is_symbol_data, 'd'},
+		{is_symbol_text, 't'}, {is_symbol_bss, 'b'},
+		{is_symbol_arbitrary_sect, 's'}, {is_symbol_indirect, 'i'},
+		{is_symbol_absolute, 'a'},
 };
 
-static char	get_symbol_char(t_symbol *symbol,
-								t_mach_o_processor *info)
+static char	read_symbol_char(
+	t_symbol *symbol,
+	t_mach_o_processor *info)
 {
-
 	size_t  i;
 
 	i = 0;
-	while (i < sizeof(g_predicates) / sizeof(*g_predicates))
+	while (i < NCHARS_SYMBOLS)
 	{
 		if (g_predicates[i].predicate(symbol, info))
-			return ((char)g_predicates[i].c);
+			return (g_predicates[i].c);
 		i++;
 	}
 	return ((char)-1);
@@ -53,7 +53,9 @@ void		print_symbol(t_mach_o *file,
 	char	c;
 
 	(void)file;
-	c = get_symbol_char(symbol, info);
+	// printf("=> 1>\n");
+	c = read_symbol_char(symbol, info);
+	// printf("=> 2>\n");
 	if (!((char)-1 != c))
 		c = '?';
 	if (!is_print_symbol_required(symbol, info, options, c))

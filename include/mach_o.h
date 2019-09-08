@@ -99,7 +99,6 @@ typedef struct 			s_mach_o {
 	uint64_t				o_size;
 	uint64_t				o_endian;
 	bool					must_be_swapped;
-	uint8_t					pad[3];
 	struct mach_header		*mh;
 	struct mach_header_64	*mh_64;
 	struct load_command		*load_commands;
@@ -124,7 +123,6 @@ typedef struct	s_mach_o_processor
 	uint32_t					text_nsect;
 	uint32_t					data_nsect;
 	uint32_t					bss_nsect;
-	uint8_t						pad[4];
 }				t_mach_o_processor;
 
 /*

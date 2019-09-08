@@ -196,7 +196,7 @@ int read_options_arguments(int ac, char **av, t_options *options) {
 	int	i;
 	int	ret;
 
-	ft_bzero(options, sizeof(t_options));
+	ft_memset(options, 0, sizeof(t_options));
 
 	i = 1;
 	while (i < ac)

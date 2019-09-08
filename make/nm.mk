@@ -32,7 +32,7 @@ NM_SRC+=src/nm/symbols/is_symbol_absolute.c \
 	src/nm/symbols/is_symbol_extern_data.c \
 	src/nm/symbols/is_symbol_extern_indirect.c \
 	src/nm/symbols/is_symbol_extern_text.c \
-	src/nm/symbols/is_symbol_extern_undefined.c \
+	src/nm/symbols/is_symbol_extern_unknown.c \
 	src/nm/symbols/is_symbol_indirect.c \
 	src/nm/symbols/is_symbol_local.c \
 	src/nm/symbols/is_symbol_stab.c \

@@ -72,6 +72,12 @@ typedef struct s_options {
 	int x;
 	int g;
 	int f;
+	int j;
+	int u;
+	int capital_u;
+	int p;
+	int r;
+	int n;
 } t_options;
 
 int read_options_arguments(int ac, char **av, t_options *opt);

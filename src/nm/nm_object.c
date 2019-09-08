@@ -71,7 +71,7 @@ int32_t	nm_object(t_mach_o *file, t_options *options)
 
 	if (init_processor_info(file, &info) == -1)
 		return (0);
-	if ((symbols = get_symbols(file, &info)) == NULL)
+	if ((symbols = read_symbols(file, &info)) == NULL)
 		return (-1);
 	sort_symbols(symbols, info.st_lc->nsyms, options);
 	i = 0;

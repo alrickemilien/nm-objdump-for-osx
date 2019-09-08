@@ -1,12 +1,12 @@
 #include "nm.h"
 
 static const t_print_symbol_predicate	g_predicates[NCHARS_SYMBOLS] = {
-		{is_symbol_extern_undefined, 'U', {0}}, {is_symbol_common, 'C', {0}},
+		{is_symbol_unknown, 'U', {0}}, {is_symbol_common, 'C', {0}},
 		{is_symbol_extern_data, 'D', {0}}, {is_symbol_extern_text, 'T', {0}},
 		{is_symbol_extern_bss, 'B', {0}}, {is_symbol_stab, '-', {0}},
 		{is_symbol_extern_arbitrary_sect, 'S', {0}},
 		{is_symbol_extern_indirect, 'I', {0}},
-		{is_symbol_extern_absolute, 'A', {0}}, {is_symbol_undefined, 'u', {0}},
+		{is_symbol_extern_absolute, 'A', {0}}, {is_symbol_unknown, 'u', {0}},
 		{is_symbol_common, 'c', {0}}, {is_symbol_data, 'd', {0}},
 		{is_symbol_text, 't', {0}}, {is_symbol_bss, 'b', {0}},
 		{is_symbol_arbitrary_sect, 's', {0}}, {is_symbol_indirect, 'i', {0}},
@@ -29,7 +29,7 @@ static char	get_symbol_char(t_symbol *symbol,
 	return ((char)-1);
 }
 
-static bool	should_print_symbol(t_symbol *symbol,
+static bool	is_print_symbol_required(t_symbol *symbol,
 								t_mach_o_processor *info,
 								t_options *options,
 								char c)
@@ -56,14 +56,14 @@ void		print_symbol(t_mach_o *file,
 	c = get_symbol_char(symbol, info);
 	if (!((char)-1 != c))
 		c = '?';
-	if (!should_print_symbol(symbol, info, options, c))
+	if (!is_print_symbol_required(symbol, info, options, c))
 		return ;
-	if (flags->j || flags->u)
-		printf("%s\n", (char *)sym->string);
-	else if (flags->x)
-		print_hexdump_symbol(symbol, info);
+	if (options->j || options->u)
+		printf("%s\n", (char *)symbol->string);
+	else if (options->x)
+		print_hex_dump_symbol(symbol, info);
 	else if (c == 'u' || c == 'U')
-		print_undefined_symbol(symbol, info, c);
+		print_default_symbol(symbol, info, c);
 	else
-		default_print_symbol(symbol, info, c);
+		print_default_symbol(symbol, info, c);
 }

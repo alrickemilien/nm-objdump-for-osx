@@ -54,10 +54,10 @@ static void		quicksort(void *tab, uint64_t start, A_ type_size)
 	if (start < last)
 	{
 		pivot = (rand() % (last - start + 1)) + start;
-		pivot = partitioning(tab, start, pivot, last, compar, type_size);
+		pivot = partitioning(tab, start, pivot, last, cmp, type_size);
 		if (pivot > 0)
-			quicksort(tab, start, pivot - 1, compar, type_size);
-		quicksort(tab, pivot + 1, last, compar, type_size);
+			quicksort(tab, start, pivot - 1, cmp, type_size);
+		quicksort(tab, pivot + 1, last, cmp, type_size);
 	}
 }
 

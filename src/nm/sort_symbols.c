@@ -42,13 +42,13 @@ void			sort_symbols(t_symbol *symbols,
 								const uint64_t symbols_number,
 								const t_options *options)
 {
-	if (options->flags.bits.p)
+	if (options->p)
 		return ;
-	if (options->flags.bits.r)
+	if (options->r)
 		g_reverse_flag = 1;
 	else
 		g_reverse_flag = 0;
-	if (options->flags.bits.n)
+	if (options->n)
 		sort((void *)symbols,
 			symbols_number,
 			sizeof(t_symbol),

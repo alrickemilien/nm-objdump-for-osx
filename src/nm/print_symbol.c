@@ -53,9 +53,7 @@ void		print_symbol(t_mach_o *file,
 	char	c;
 
 	(void)file;
-	// printf("=> 1>\n");
 	c = read_symbol_char(symbol, info);
-	// printf("=> 2>\n");
 	if (!((char)-1 != c))
 		c = '?';
 	if (!is_print_symbol_required(symbol, info, options, c))
@@ -65,7 +63,7 @@ void		print_symbol(t_mach_o *file,
 	else if (options->x)
 		print_hex_dump_symbol(symbol, info);
 	else if (c == 'u' || c == 'U')
-		print_default_symbol(symbol, info, c);
+		print_unknown_symbol(symbol, info, c);
 	else
 		print_default_symbol(symbol, info, c);
 }

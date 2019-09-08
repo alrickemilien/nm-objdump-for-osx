@@ -68,7 +68,6 @@ int					check_load_commands_integrity(t_mach_o *file)
 
 int32_t					check_object_integrity(t_mach_o *file)
 {
-	printf("check_object_integrity \n");
 	if (check_mach_header_integrity(file) == -1
 		|| check_load_commands_integrity(file) == -1)
 		return (-1);

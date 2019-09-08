@@ -32,17 +32,14 @@ int32_t			load_object_file(t_mach_o *file,
 {
 	file->o_addr = object_addr;
 	file->o_size = object_size;
-	printf("JEJJHIDHIU\n");
 
 	if (check_file_addr_size(file,
 					file->o_addr,
 					file->o_size) == -1)
 		return (-1);
 	
-	printf("ZEZEZEZE\n");
 	if (read_object(file) == -1)
 		return (-1);
-	printf("READ DONE\n");
 	if (file->must_be_swapped)
 	{
 		swap_object_header(file);
@@ -51,7 +48,6 @@ int32_t			load_object_file(t_mach_o *file,
 	}
 	if (check_object_integrity(file) == -1)
 		return (-1);
-	printf("CHECINTEGRITY OK DONE\n");
 	if (file->must_be_swapped)
 		swap_symtab(file);
 	return (0);

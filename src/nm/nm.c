@@ -40,6 +40,5 @@ int	nm(t_options *options, const char *path)
 	error = dispatch(&file, options);
 	if (map_unloading_file(file.addr, file.file_size))
 		return (EXIT_FAILURE);
-	printf("DONE for %s with error code %d\n", path, error);
 	return (error);
 }

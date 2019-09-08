@@ -6,12 +6,12 @@ static int	find_common_sections_indexes(t_mach_o_processor *info)
 	info->data_nsect = find_section(info, SEG_DATA, SECT_DATA);
 	info->bss_nsect = find_section(info, SEG_DATA, SECT_BSS);
 
-	LOGDEBUG("info->text_nsect offset : %d\n"
-		"info->data_nsect offset : %d\n"
-		"info->bss_nsect offset : %d\n", 
-		info->text_nsect,
-		info->data_nsect,
-		info->bss_nsect);
+	// LOGDEBUG("info->text_nsect offset : %d\n"
+	// 	"info->data_nsect offset : %d\n"
+	// 	"info->bss_nsect offset : %d\n", 
+	// 	info->text_nsect,
+	// 	info->data_nsect,
+	// 	info->bss_nsect);
 
 	if (info->text_nsect == (uint32_t)-1
 		|| info->data_nsect == (uint32_t)-1
@@ -25,11 +25,11 @@ static int	find_symbol_table(
 	t_mach_o_processor *info,
 	t_mach_o *file)
 {
-	printf(" JE SUIS LLLKKLKLKJL\n");
+	// printf(" JE SUIS LLLKKLKLKJL\n");
 	if ((info->st_lc =
 		((struct symtab_command *)find_load_command_by_command(file, LC_SYMTAB))) == NULL)
 		return (-1);
-	printf("kakajsjdd\n");
+	// printf("kakajsjdd\n");
 	info->dysym_lc =
 		(struct dysymtab_command *)find_load_command_by_command(file, LC_DYSYMTAB);
 	if (file->mh)
@@ -68,13 +68,13 @@ int	init_processor_info(
 
 	if (file->mh)
 	{
-		LOGDEBUG("=> %d\n", 32);
+		// LOGDEBUG("=> %d\n", 32);
 		info->secs = read_sections_32(file, &info->nsects);
 		info->segs = read_segments_32(file, &info->nsegs);
 	}
 	else
 	{
-		LOGDEBUG("=> %d\n", 64);
+		// LOGDEBUG("=> %d\n", 64);
 		info->secs_64 = read_sections_64(file, &info->nsects);
 		info->segs_64 = read_segments_64(file, &info->nsegs);
 	}
@@ -99,11 +99,10 @@ int32_t	nm_object(t_mach_o *file, t_options *options)
 		return (-1);
 	sort_symbols(symbols, info.st_lc->nsyms, options);
 	i = 0;
-	LOGDEBUG("info.st_lc->nsyms : %d\n", info.st_lc->nsyms);
+	// LOGDEBUG("info.st_lc->nsyms : %d\n", info.st_lc->nsyms);
 	while (i < info.st_lc->nsyms)
 		print_symbol(file, symbols + i++, &info, options);
 	free(symbols);
-	printf("CLEANU\n");
 	cleanup_processor_info(&info);
 	return (0);
 }

@@ -12,7 +12,7 @@ void	print_default_symbol(
 		printf("%016llx %c %s\n", symbol->sym_entry.n_value, c, (char *)symbol->string);
 }
 
-void	print_undefined_symbol(
+void	print_unknown_symbol(
 	t_symbol *symbol,
 	t_mach_o_processor *info,
 	char c)

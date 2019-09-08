@@ -67,7 +67,7 @@ void	print_default_symbol(
 	t_symbol *symbol,
 	t_mach_o_processor *info,
 	char c);
-void	print_undefined_symbol(
+void	print_unknown_symbol(
 	t_symbol *symbol,
 	t_mach_o_processor *info,
 	char c);

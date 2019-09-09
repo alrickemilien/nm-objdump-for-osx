@@ -26,7 +26,16 @@ int			main(int ac, char **av)
 	// Read every arg
 	while (i < ac)
 	{
-		if (nm(&options, av[i]) == EXIT_FAILURE)
+		// Handle case when -- is set and do not handle as options all after --
+		if (options.end_index != 0 &&  && nm(&options, av[i]) == EXIT_FAILURE)
+		{
+			if (i < options.end_index && !is_an_option(av[i]) && nm(&options, av[i]) == EXIT_FAILURE)
+				exit_value = EXIT_FAILURE;
+			else if (i >= options.end_index && nm(&options, av[i]) == EXIT_FAILURE)
+				exit_value = EXIT_FAILURE;
+		}
+		// Regular case without --
+		else if (options.end_index == 0 && !is_an_option(av[i]) && nm(&options, av[i]) == EXIT_FAILURE)
 			exit_value = EXIT_FAILURE;
 		i++;
 	}

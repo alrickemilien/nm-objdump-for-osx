@@ -5,7 +5,6 @@
 NM=ft_nm
 
 NM_SRC=src/nm/main.c \
-	src/nm/read_options_arguments.c \
 	src/nm/error.c \
 	src/nm/nm.c \
 	src/nm/nm_fat_archive.c \
@@ -37,5 +36,10 @@ NM_SRC+=src/nm/symbols/is_symbol_absolute.c \
 	src/nm/symbols/is_symbol_stab.c \
 	src/nm/symbols/is_symbol_text.c \
 	src/nm/symbols/is_symbol_unknown.c
+
+# Options
+NM_SRC+=src/nm/options/read_options_arguments.c
+	src/nm/options/help.c \
+	src/nm/options/utils.c
 
 NM_OBJ=$(NM_SRC:.c=.o)

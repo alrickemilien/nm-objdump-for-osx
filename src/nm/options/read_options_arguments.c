@@ -18,169 +18,46 @@
 **  -f     For nm-classic(1) this displays the symbol table of a dynamic library flat (as one file not separate modules).  This is obsolete and  not  supported
 **  			with llvm-nm(1).
 **  -A     Write the pathname or library name of an object on each line.
-**  -P     Write information in a portable output format.
+**  -P     Write information in a portable output forma
 */
 
 static t_options_map options_map[] = {
-		{
-			"a",
-			ALL_SYMBOL,
-		},
-		{
-			"g",
-			ONLY_GLOBAL_SYMBOL,
-		},
-		{
-			"n",
-			SORT_NUMERIC,
-		},
-		{
-			"o",
-			PREPEND_FILE_ARCHIVE_NAME,
-		},
-		{
-			"p",
-			DO_NOT_SORT,
-		},
-		{
-			"r",
-			REVERSE_SORT,
-		},
-		{
-			"u",
-			ONLY_UNDEFINED_SYMBOL,
-		},
-		{
-			"U",
-			DO_NOT_DISPLAY_UNDEFINED_SYMBOL,
-		},
-		{
-			"m",
-			DISPLAY_NSECT,
-		},
-		{
-			"x",
-			DISPLAY_HEXA,
-		},
-		{
-			"j",
-			ONLY_SYMBOL_NAME,
-		},
-		{
-			"l",
-			LIST_PSEUDO_SYMBOL,
-		},
-		{
-			"f",
-			DISPLAY_DYNAMIC_LIB_SYMBOL,
-		},
-		{
-			"A",
-			DISPLAY_PATH_NAME,
-		},
-		{
-			"P",
-			DISPLAY_PORTABLE,
-		},
-		{
-			"arch"
-			ARCH_TYPE,
-			true,
-		},
-		{
-			"s"
-			SEGMENT_SECTION,
-			true,
-		},
-		{
-			"print-size"
-			PRINT_SIZE,
-			false
-		},
-		{
-			"dynamic",
-			ONLY_DYNAMIC,
-			false
-		},
-		{
-			"size-sort",
-			SORT_SIZE,
-			false
-		},
-		{
-			"print-file-name"
-			PRINT_FILE_NAME,
-			false
-		},
-		{
-			"undefined-only",
-			ONLY_UNDEFINED_SYMBOL,
-			false,
-		},
-		{
-			"no-sort"
-			DO_NOT_SORT,
-			false
-		},
-		{
-			"print-after-all"
-			PRINT_AFTER_ALL,
-			false
-		},
-				{
-			"print-before-all"
-			PRINT_BEFORE_ALL,
-			false
-		},
-		{
-			"just-symbol-name"
-			ONLY_SYMBOL_NAME,
-			false
-		},
-		{
-			NULL,
-			0,
-			false
-		},
+		{ "a", ALL_SYMBOL, false },
+		{ "g", ONLY_GLOBAL_SYMBOL, false },
+		{ "n", SORT_NUMERIC, false },
+		{ "o", PREPEND_FILE_ARCHIVE_NAME, false },
+		{ "p", DO_NOT_SORT, false },
+		{ "r", REVERSE_SORT, false },
+		{ "u", ONLY_UNDEFINED_SYMBOL, false },
+		{ "U", DO_NOT_DISPLAY_UNDEFINED_SYMBOL, false },
+		{ "m", DISPLAY_NSECT, false },
+		{ "x", DISPLAY_HEXA, false },
+		{ "j", ONLY_SYMBOL_NAME, false },
+		{ "l", LIST_PSEUDO_SYMBOL, false },
+		{ "f", DISPLAY_DYNAMIC_LIB_SYMBOL, false },
+		{ "A", DISPLAY_PATH_NAME, false },
+		{ "P", DISPLAY_PORTABLE, false },
+		{ "t", RADIX, true },
+		{ "p", DO_NOT_SORT, false },
+		{ "D", ONLY_DYNAMIC, false },
+		{ "arch" ARCH_TYPE, true, },
+		{ "s" SEGMENT_SECTION, true, },
+		{ "print-size" PRINT_SIZE, false },
+		{ "dynamic", ONLY_DYNAMIC, false },
+		{ "size-sort", SORT_SIZE, false },
+		{ "print-file-name" PREPEND_FILE_ARCHIVE_NAME, false },
+		{ "undefined-only", ONLY_UNDEFINED_SYMBOL, false, },
+		{ "no-sort" DO_NOT_SORT, false },
+		{ "reverse-sort" REVERSE_SORT, false },
+		{ "print-after-all" PRINT_AFTER_ALL, false },
+		{ "print-before-all" PRINT_BEFORE_ALL, false },
+		{ "just-symbol-name" ONLY_SYMBOL_NAME, false },
+		{ "extern-only" ONLY_GLOBAL_SYMBOL, false },
+		{ "defined-only" DEFINED_ONLY, false },
+		{ "synthetic" DEFINED_ONLY, false },
+		{ "radix", RADIX, true },
+		{ NULL, 0, false },
 };
-
-/*
-** Return 1 when the argument name is an option like -l or -lR
-** Return 0 when the argument name is an option like --reverse
-*/
-
-static bool is_a_multi_option(const char *name)
-{
-	if (name[0] == '-' && name[1] != '-')
-		return (1);
-
-	return (0);
-}
-
-/*
-** Return 1 when the argument name is an option like --reverse
-** Return 0 when the argument name is an option like -l or -lR
-*/
-
-static bool is_a_single_option(const char *name)
-{
-	if (name[0] == '-' && name[1] == '-')
-		return (1);
-
-	return (0);
-}
-/*
-** Return 1 when the argument name is --
-** Return 0 othrwise
-*/
-
-static bool is_a_end_arguments_string(const char *name)
-{
-	if (name[0] == '-' && name[1] == '-' && name[2] == 0)
-		return (1);
-
-	return (0);
-}
 
 /*
 ** Read each option of multi_options like -l or -la
@@ -189,7 +66,8 @@ static bool is_a_end_arguments_string(const char *name)
 ** to  avoid comparing -r and --recursive first letter, which are two different options
 */
 
-static int handle_multi_option(t_options *options, const char *name) {
+static int handle_multi_option(t_options *options, const char *name)
+{
 	size_t i;
 	size_t j;
 
@@ -198,7 +76,8 @@ static int handle_multi_option(t_options *options, const char *name) {
 	{
 		j = 0;
 		while (j < OPTIONS_MAP_LENGTH) {
-			if (options_map[j].name[1] == 0 && name[i] == options_map[j].name[0]) {
+			if (options_map[j].name[1] == 0 && name[i] == options_map[j].name[0])
+			{
 				((int*)options)[options_map[j].offset] = 1;
 				break;
 			}
@@ -223,7 +102,8 @@ static int handle_multi_option(t_options *options, const char *name) {
 ** When the option does not exist print error and return 0
 */
 
-static int handle_single_option(t_options *options, const char *name) {
+static int handle_single_option(t_options *options, const char *name)
+{
 	size_t j;
 
 	j = 0;
@@ -248,7 +128,8 @@ static int handle_single_option(t_options *options, const char *name) {
 ** list is the list of files passed as parameter
 */
 
-int read_options_arguments(int ac, char **av, t_options *options) {
+int read_options_arguments(int ac, char **av, t_options *options)
+{
 	int	i;
 	int	ret;
 
@@ -261,15 +142,15 @@ int read_options_arguments(int ac, char **av, t_options *options) {
 
 		// When the argument is '--', it means end arguments
 		if (is_a_end_arguments_string(av[i]))
+		{
+			options->end_options_index = i;
 			return (ret);
+		}
 		else if (is_a_single_option(av[i])) {
 			ret = handle_single_option(options, av[i]);
 		} else if (is_a_multi_option(av[i])) {
 			ret = handle_multi_option(options, av[i]);
 		}
-
-		if (ret == EXIT_FAILURE)
-			return (EXIT_FAILURE);
 
 		i++;
 	}

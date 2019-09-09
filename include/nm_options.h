@@ -45,6 +45,7 @@ enum {
 	DISPLAY_PORTABLE,
 };
 
+# define MAX_ALLOWED_VALUE_SIZE 215
 
 /*
 ** Map used to handle each option :
@@ -55,6 +56,7 @@ enum {
 typedef struct 	s_options_map {
 	char		*name;
 	int			offset;
+	bool		waiting_for_value;
 }				t_options_map;
 
 /*
@@ -78,6 +80,7 @@ typedef struct s_options {
 	int p;
 	int r;
 	int n;
+	int help;
 } t_options;
 
 int read_options_arguments(int ac, char **av, t_options *opt);

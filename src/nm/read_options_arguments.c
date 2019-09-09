@@ -83,8 +83,64 @@ static t_options_map options_map[] = {
 			DISPLAY_PORTABLE,
 		},
 		{
+			"arch"
+			ARCH_TYPE,
+			true,
+		},
+		{
+			"s"
+			SEGMENT_SECTION,
+			true,
+		},
+		{
+			"print-size"
+			PRINT_SIZE,
+			false
+		},
+		{
+			"dynamic",
+			ONLY_DYNAMIC,
+			false
+		},
+		{
+			"size-sort",
+			SORT_SIZE,
+			false
+		},
+		{
+			"print-file-name"
+			PRINT_FILE_NAME,
+			false
+		},
+		{
+			"undefined-only",
+			ONLY_UNDEFINED_SYMBOL,
+			false,
+		},
+		{
+			"no-sort"
+			DO_NOT_SORT,
+			false
+		},
+		{
+			"print-after-all"
+			PRINT_AFTER_ALL,
+			false
+		},
+				{
+			"print-before-all"
+			PRINT_BEFORE_ALL,
+			false
+		},
+		{
+			"just-symbol-name"
+			ONLY_SYMBOL_NAME,
+			false
+		},
+		{
 			NULL,
 			0,
+			false
 		},
 };
 

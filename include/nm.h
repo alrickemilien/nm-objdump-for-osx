@@ -122,7 +122,9 @@ void					sort(
 **      \/                               \/
 */
 
-void print_error_on_option(const char *msg, const char *option);
+void	print_error_on_option(const char *msg, const char *option);
+
+int		exit_with_help(void);
 
 # define USAGE "./ft_nm <object file>"
 

@@ -50,6 +50,7 @@ enum {
 	PRINT_BEFORE_ALL,
 	DEFINED_ONLY,
 	RADIX,
+	HELP,
 	OPTIONS_NUMBER,
 };
 
@@ -108,8 +109,9 @@ typedef struct s_options {
 	int DEFINED_ONLY;
 	int RADIX;
 	int OPTIONS_NUMBER;
+	int HELP;
 
-	int	end_options_index;
+	int	end_index;
 } t_options;
 
 /*

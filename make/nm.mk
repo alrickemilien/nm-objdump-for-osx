@@ -38,7 +38,7 @@ NM_SRC+=src/nm/symbols/is_symbol_absolute.c \
 	src/nm/symbols/is_symbol_unknown.c
 
 # Options
-NM_SRC+=src/nm/options/read_options_arguments.c
+NM_SRC+=src/nm/options/read_options_arguments.c \
 	src/nm/options/help.c \
 	src/nm/options/utils.c
 

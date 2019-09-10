@@ -17,8 +17,8 @@ int			main(int ac, char **av)
 
 	exit_value = read_options_arguments(ac, av, &options);
 
-	if (options.help)
-		return (exit_with_help(void));
+	if (options.HELP)
+		return (exit_with_help());
 
 	if (exit_value)
 		return (exit_with_usage(exit_value));
@@ -27,7 +27,7 @@ int			main(int ac, char **av)
 	while (i < ac)
 	{
 		// Handle case when -- is set and do not handle as options all after --
-		if (options.end_index != 0 &&  && nm(&options, av[i]) == EXIT_FAILURE)
+		if (options.end_index != 0)
 		{
 			if (i < options.end_index && !is_an_option(av[i]) && nm(&options, av[i]) == EXIT_FAILURE)
 				exit_value = EXIT_FAILURE;

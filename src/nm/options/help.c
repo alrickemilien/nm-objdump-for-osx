@@ -63,6 +63,5 @@ static const char *help =
 
 int exit_with_help(void)
 {
-  write(1, help, sizeof(help));
-  return (0);
+  return write(1, help, sizeof(help));
 }

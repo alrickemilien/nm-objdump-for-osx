@@ -5,6 +5,8 @@ int32_t	nm_archive(t_mach_o *file, t_options *options)
 	size_t  i;
 	bool    error;
 
+	printf ("NM ARCHIVE\n");
+
 	i = 0;
 	error = 0;
 	while (42)

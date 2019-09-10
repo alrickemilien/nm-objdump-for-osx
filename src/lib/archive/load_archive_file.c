@@ -6,11 +6,15 @@ int32_t	load_archive_file(t_mach_o *file,
 {
 	file->archive_start_addr = archive_addr;
 
+	printf("A1\n");
+
 	file->archive_size = (uint64_t)archive_size;
 
 	// Set a cursor on the first archive member header
 	file->archive_member_header_addr = (void *)
 		((uint8_t*)file->archive_start_addr + sizeof(STATIC_LIB_MAGIC) - 1);
+
+	printf("A2\n");
 
 	file->symdef_addr = NULL;
 	file->members = NULL;
@@ -19,6 +23,7 @@ int32_t	load_archive_file(t_mach_o *file,
 
 	if (read_archive_header_members(file) == -1)
 		return (-1);
+	printf("A3\n");
 
 	file->members = file->archive_member_header_addr;
 
@@ -27,8 +32,12 @@ int32_t	load_archive_file(t_mach_o *file,
 		(uint64_t)file->archive_member_header.st_size) == -1)
 		return (-1);
 
+	printf("A4\n");
+
 	if (read_archive_symdef(file) == -1)
 		return (-1);
+
+	printf("A5\n");
 
 	return (0);
 }

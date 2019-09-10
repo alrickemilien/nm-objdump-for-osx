@@ -36,11 +36,11 @@ static bool	is_print_symbol_required(t_symbol *symbol,
 {
 	if (c == '-')
 		return (false);
-	if (options->g && !is_symbol_extern(symbol, info))
+	if (options->ONLY_GLOBAL_SYMBOL && !is_symbol_extern(symbol, info))
 		return (false);
-	if (options->u && !(c == 'u' || c == 'U'))
+	if (options->ONLY_UNDEFINED_SYMBOL && !(c == 'u' || c == 'U'))
 		return (false);
-	if (options->capital_u && (c == 'u' || c == 'U'))
+	if (options->DO_NOT_DISPLAY_UNDEFINED_SYMBOL && (c == 'u' || c == 'U'))
 		return (false);
 	return (true);
 }
@@ -58,9 +58,9 @@ void		print_symbol(t_mach_o *file,
 		c = '?';
 	if (!is_print_symbol_required(symbol, info, options, c))
 		return ;
-	if (options->j || options->u)
+	if (options->ONLY_SYMBOL_NAME || options->ONLY_UNDEFINED_SYMBOL)
 		printf("%s\n", (char *)symbol->string);
-	else if (options->x)
+	else if (options->DISPLAY_HEXA)
 		print_hex_dump_symbol(symbol, info);
 	else if (c == 'u' || c == 'U')
 		print_unknown_symbol(symbol, info, c);

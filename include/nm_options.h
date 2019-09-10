@@ -64,6 +64,7 @@ enum {
 ** Map used to handle each option :
 ** name : Char* value
 ** offset: offset in the structure s_options
+** waiting_for_value: is option waiting for argument
 */
 
 typedef struct 	s_options_map {
@@ -82,6 +83,8 @@ typedef struct 	s_options_map {
 ** Options in struct s_options must be in the same order
 ** that the enum
 */
+
+# pragma pack(push, 1)
 
 typedef struct s_options {
 	int ALL_SYMBOL;
@@ -108,11 +111,12 @@ typedef struct s_options {
 	int PRINT_BEFORE_ALL;
 	int DEFINED_ONLY;
 	int RADIX;
-	int OPTIONS_NUMBER;
 	int HELP;
 
 	int	end_index;
 } t_options;
+
+# pragma pack(pop)
 
 /*
 ** Options utils

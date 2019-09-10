@@ -1,4 +1,6 @@
-static const char *help = 
+#include <unistd.h>
+
+static const char help[] = 
 "OVERVIEW: llvm symbol table dumper\n\n"
 "USAGE: nm [options] <input files> --s Dump only symbols from this segment and section name, Mach-O only\n\n"
 "OPTIONS:\n\n"
@@ -63,5 +65,7 @@ static const char *help =
 
 int exit_with_help(void)
 {
-  return write(1, help, sizeof(help));
+  if (write(1, help, sizeof(help)) < 0)
+    return (-1);
+  return (0);
 }

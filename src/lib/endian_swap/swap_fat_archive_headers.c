@@ -31,7 +31,7 @@ static void	swap_fat_arch_64(struct fat_arch_64 *fat_arch_64)
 
 static int32_t	swap_single_fat_archs_header(t_mach_o *file, uint32_t narch)
 {
-	if (!file->fat_archs || !file->fat_archs_64
+	if ((!file->fat_archs && !file->fat_archs_64)
 		|| sizeof(file->fat_archs->cputype) != sizeof(int32_t)
 		|| sizeof(file->fat_archs->cpusubtype) != sizeof(int32_t))
 		return (-1);
@@ -46,18 +46,16 @@ int32_t				swap_fat_archive_headers(t_mach_o *file)
 {
 	size_t	i;
 
-	if (!file->fat_header || !file->fat_archs || !file->fat_archs_64)
+	if (!file->fat_header || (!file->fat_archs && !file->fat_archs_64))
 		return (-1);
 	swap_fat_header(file->fat_header);
 	i = 0;
 	while (i < file->fat_header->nfat_arch)
 	{
-		if ((file->fat_archs
-			&& check_file_addr_size(file,
+		if ((file->fat_archs && check_file_addr_size(file,
 										file->fat_archs + i,
 										sizeof(struct fat_arch)) == -1)
-			|| (file->fat_archs_64
-			&& check_file_addr_size(file,
+			|| (file->fat_archs_64 && check_file_addr_size(file,
 										file->fat_archs_64 + i,
 										sizeof(struct fat_arch_64) == -1)))
 		{
@@ -65,7 +63,8 @@ int32_t				swap_fat_archive_headers(t_mach_o *file)
 				file->path, MACH_O_ERROR_UNKKNOWN_FILE_FORMAT_STR);
 			return (-1);
 		}
-		swap_single_fat_archs_header(file, i);
+		if (swap_single_fat_archs_header(file, i) < 0)
+			return (-1);
 		i++;
 	}
 	return (0);

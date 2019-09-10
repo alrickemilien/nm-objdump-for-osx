@@ -59,42 +59,27 @@ static t_options_map options_map[] = {
 		{ NULL, 0, NULL },
 };
 
-/*
-** Read each option of multi_options like -l or -la
-** Starts at 1 the index i to skip the - from -la for example
-** Check if options_map[j].name[1] == 0 means that we want only a letter string
-** to  avoid comparing -r and --recursive first letter, which are two different options
-*/
 
-static int handle_multi_option(t_options *options, const char *name)
-{
-	size_t i;
-	size_t j;
+// static int handle_option_waiting_value(t_options *options, const char *name)
+// {
+// 	size_t j;
 
-	i = 1;
-	while (name[i])
-	{
-		j = 0;
-		while (j < OPTIONS_MAP_LENGTH) {
-			if (options_map[j].name[1] == 0 && name[i] == options_map[j].name[0])
-			{
-				((int*)options)[options_map[j].offset] = 1;
-				break;
-			}
+// 	j = 0;
+// 	while (options_map[j].name != NULL)
+// 	{
+// 		if (!ft_strcmp(name + 2, options_map[j].name)) {
+// 			((int*)options)[options_map[j].offset] = 1;
 
-			j++;
-		}
+// 			return (EXIT_OK);
+// 		}
 
-		if (j == OPTIONS_MAP_LENGTH) {
-			print_error_on_option("nm: invalid option -- ", name);
-			return (EXIT_FAILURE);
-		}
+// 		j++;
+// 	}
 
-		i++;
-	}
+// 	print_error_on_option("nm: unrecognized option ", name);
 
-	return (EXIT_OK);
-}
+// 	return (EXIT_FAILURE);
+// }
 
 /*
 ** Read option like -- or --reverse
@@ -102,15 +87,63 @@ static int handle_multi_option(t_options *options, const char *name)
 ** When the option does not exist print error and return 0
 */
 
-static int handle_single_option(t_options *options, const char *name)
+int print_error_duplicated_option(const char *data)
+{
+    size_t len;
+    char error_buffer[MAX_ERROR_BUFFER];
+
+    memset(error_buffer, 0, sizeof(char) * MAX_ERROR_BUFFER);
+
+	len = 0;
+
+	// for the part
+    memcpy(error_buffer + len, "nm: for the -", ft_strlen("nm: for the -") * sizeof(char));
+    len += ft_strlen("nm: for the -");
+
+	// option part
+	if (data)
+    {
+    	memcpy(error_buffer + len,
+			data,
+			ft_strlen(data) * sizeof(char));
+    	len += ft_strlen(data);
+	}
+
+	memcpy(error_buffer + len,
+		" option: may only occur zero or one times!\n",
+		ft_strlen(" option: may only occur zero or one times!\n") * sizeof(char));
+    len += ft_strlen(" option: may only occur zero or one times!\n");
+
+    write(2, error_buffer, len * sizeof(char));
+
+    return (1);
+}
+
+static int handle_option(
+	t_options *options,
+	t_options_map **last,
+	const char *name)
 {
 	size_t j;
+	size_t len;
+	int error;
 
+	len = ft_strlen(name);
 	j = 0;
 	while (options_map[j].name != NULL)
 	{
-		if (!ft_strcmp(name + 2, options_map[j].name)) {
-			((int*)options)[options_map[j].offset] = 1;
+		if (!ft_strcmp(name, options_map[j].name)
+			&& len == ft_strlen(options_map[j].name))
+		{
+			if (((int*)options)[options_map[j].offset] == 1)
+				return (print_error_duplicated_option(options_map[j].name));
+			
+			if (!options_map[j].waiting_for_value)
+				((int*)options)[options_map[j].offset] = 1;
+
+			// Handle value option lika --arch x86_64
+			else
+				*last = options_map[j];
 
 			return (EXIT_OK);
 		}
@@ -118,7 +151,7 @@ static int handle_single_option(t_options *options, const char *name)
 		j++;
 	}
 
-	print_error_on_option("nm: unrecognized option ", name);
+	print_error_on_option("nm: Unknown command line argument ", name);
 
 	return (EXIT_FAILURE);
 }
@@ -132,28 +165,45 @@ int read_options_arguments(int ac, char **av, t_options *options)
 {
 	int	i;
 	int	ret;
+	int	error;
+	t_options_map *last;
 
 	ft_memset(options, 0, sizeof(t_options));
 
+	error = 0;
+	options->file_count = 0;
+	last = NULL;
 	i = 1;
 	while (i < ac)
 	{
 		ret = EXIT_OK;
 
-		// When the argument is '--', it means end arguments
-		if (is_a_end_arguments_string(av[i]))
+		// Handle when the arg before was waiting for value
+		if (last)
 		{
-			options->end_options_index = i;
+			ret = last->waiting_for_value(options, name);
+			last = NULL;
+		}
+		
+		// When the argument is '--', it means end arguments
+		else if (is_a_end_arguments_string(av[i]))
+		{
+			options->end_index = i;
 			return (ret);
 		}
-		else if (is_a_single_option(av[i])) {
-			ret = handle_single_option(options, av[i]);
-		} else if (is_a_multi_option(av[i])) {
-			ret = handle_multi_option(options, av[i]);
-		}
+		// Handle option like -p -dynamic or --dynamic
+		else if (is_a_single_option(av[i]))
+			ret = handle_option(options, &last, av[i] + 1);
+		else if (is_a_multi_option(av[i]))
+			ret = handle_option(options, &last, av[i] + 2);
+		else
+			options->file_count += 1;
+
+		if (ret != 0)
+			error = ret;
 
 		i++;
 	}
 
-	return (EXIT_OK);
+	return (error);
 }

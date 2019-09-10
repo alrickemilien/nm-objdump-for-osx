@@ -1,9 +1,9 @@
 #include "mach_o.h"
 
 static const t_lc_integrity_check	g_map_lc_checkers[] = {
-		{check_lc_segment_integrity, LC_SEGMENT, 0},
-		{check_lc_segment_64_integrity, LC_SEGMENT_64, 0},
-		{check_lc_symtab_integrity, LC_SYMTAB, 0},
+		{check_lc_segment_integrity, LC_SEGMENT},
+		{check_lc_segment_64_integrity, LC_SEGMENT_64},
+		{check_lc_symtab_integrity, LC_SYMTAB},
 };
 
 static int	check_lc_bound(t_mach_o *file,

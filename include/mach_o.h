@@ -11,6 +11,8 @@
 # include <sys/mman.h>
 # include <unistd.h>
 # include <stdbool.h>
+#include <errno.h>
+#include <limits.h>
 
 # include "libft.h"
 
@@ -53,7 +55,6 @@ typedef struct				s_archive_member_header
 	gid_t		st_gid;
 	mode_t		st_mode;
 	bool		long_name;
-	uint8_t		pad[5];
 }							t_member_header;
 
 /*
@@ -195,7 +196,6 @@ typedef struct			s_lc_integrity_check
 {
 	int32_t				(*f)(t_mach_o *file, struct load_command *lc);
 	uint32_t			cmd;
-	uint32_t			pad;
 }						t_lc_integrity_check;
 
 /*
@@ -259,7 +259,6 @@ typedef struct				s_lc_swapper
 {
 	void					(*f)(struct load_command *lc);
 	uint32_t				cmd;
-	uint32_t				pad;
 }							t_lc_swapper;
 
 /*
@@ -289,7 +288,7 @@ typedef struct	s_mach_o_error {
 
 # define MAX_ERROR_BUFFER PATH_MAX + 512
 
-int							mach_o_error(int code);
+int							mach_o_error(int code, const char *data);
 
 /*
 ** List each error of parsing a macho file

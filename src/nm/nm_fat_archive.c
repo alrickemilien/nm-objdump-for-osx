@@ -42,6 +42,8 @@ int32_t			nm_fat_archive(t_mach_o *file, t_options *options)
 	int32_t				narch_for_arch;
 	const NXArchInfo	*host_arch;
 
+	printf ("NM FAT ARCHIVE\n");
+
 	host_arch = NXGetLocalArchInfo();
 	if (-1 == (narch_for_arch = find_fat_archive_architecture(file,
 		host_arch->cputype | CPU_ARCH_ABI64, host_arch->cpusubtype)))

@@ -68,7 +68,7 @@ enum {
 typedef struct 	s_options_map {
 	char		*name;
 	int			offset;
-	bool		waiting_for_value;
+	int 		(*waiting_for_value)(t_options *options, const char *value);
 }				t_options_map;
 
 /*
@@ -122,5 +122,11 @@ bool is_a_end_arguments_string(const char *name);
 bool is_an_option(const char *name);
 
 int read_options_arguments(int ac, char **av, t_options *opt);
+
+/*
+** Options with specifc values to handle
+*/
+
+int read_arch_option(t_options *options, const char *value);
 
 #endif

@@ -11,6 +11,8 @@
 # include <sys/mman.h>
 # include <unistd.h>
 # include <stdbool.h>
+#include <errno.h>
+#include <limits.h>
 
 # include "libft.h"
 

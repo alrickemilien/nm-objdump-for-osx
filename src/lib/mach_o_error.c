@@ -1,6 +1,4 @@
 #include "mach_o.h"
-#include <errno.h>
-#include <limits.h>
 
 static const t_mach_o_error g_macho_error[] = {
   {

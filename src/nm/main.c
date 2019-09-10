@@ -35,7 +35,10 @@ int			main(int ac, char **av)
 		else if (options.end_index == 0
 			&& !is_an_option(av[i])
 			&& nm(&options, av[i]) == EXIT_FAILURE)
+		{
 			exit_code = EXIT_FAILURE;
+		}
+
 		i++;
 	}
 

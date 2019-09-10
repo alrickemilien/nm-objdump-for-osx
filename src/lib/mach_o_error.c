@@ -81,6 +81,8 @@ int mach_o_error(int code, const char *data)
     (void)code;
     (void)g_macho_error;
 
+    memset(error_buffer, 0, sizeof(char) * MAX_ERROR_BUFFER);
+
     // No worry when error here, just path missing
     getcwd(error_buffer, MAX_ERROR_BUFFER);
 

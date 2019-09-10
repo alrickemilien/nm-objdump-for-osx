@@ -95,7 +95,16 @@ int mach_o_error(int code, const char *data)
       len += ft_strlen(data);
     }
 
-    perror(error_buffer);
+    if (errno == 0)
+    {
+      memcpy(error_buffer + len, ": The file was not recognized as a valid object file\n", ft_strlen(": The file was not recognized as a valid object file\n") * sizeof(char));
+      len += ft_strlen(": The file was not recognized as a valid object file\n");
+      write(2, error_buffer, len);
+    }
+    else
+    {
+      perror(error_buffer);
+    }
 
     return (-1);
 }

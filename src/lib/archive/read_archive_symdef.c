@@ -68,7 +68,7 @@ int32_t				read_archive_symdef(t_mach_o *file)
 	}
 	else
 	{
-		mach_o_error(MACH_O_ERROR_INVALID_SYMDEF, NULL);
+		mach_o_error(MACH_O_ERROR_INVALID_SYMDEF, file->path);
 		return (-1);
 	}
 	

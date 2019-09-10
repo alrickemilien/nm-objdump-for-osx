@@ -21,7 +21,7 @@ INCLUDE=-I include -I libft
 
 .PHONY: all clean fclean
 
-all: $(NM) $(OTOOL)
+all: $(NM) $(OTOOL) $(MACHO_O_BUILDER)
 
 $(MACHO_O_BUILDER): $(LIB_OBJ) $(MACHO_O_BUILDER_OBJ)
 	@make -C $(DIR_LIBFT)

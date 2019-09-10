@@ -16,7 +16,7 @@ int			main(int ac, char **av)
 	if (exit_code != 0)
 		return (exit_code);
 
-	exit_code = EXIT_SUCCESS;
+	exit_code = 0;
 
 	// Read every arg
 	while (i < ac)
@@ -26,17 +26,17 @@ int			main(int ac, char **av)
 		{
 			if (i < options.end_index
 				&& !is_an_option(av[i])
-				&& nm(&options, av[i]) == EXIT_FAILURE)
-				exit_code = EXIT_FAILURE;
-			else if (i >= options.end_index && nm(&options, av[i]) == EXIT_FAILURE)
-				exit_code = EXIT_FAILURE;
+				&& nm(&options, av[i]) < 0)
+				exit_code = 1;
+			else if (i >= options.end_index && nm(&options, av[i]) < 0)
+				exit_code = 1;
 		}
 		// Regular case without --
 		else if (options.end_index == 0
 			&& !is_an_option(av[i])
-			&& nm(&options, av[i]) == EXIT_FAILURE)
+			&& nm(&options, av[i]) < 0)
 		{
-			exit_code = EXIT_FAILURE;
+			exit_code = 1;
 		}
 
 		i++;

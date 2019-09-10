@@ -135,7 +135,7 @@ static int handle_option(t_options *options, const char *name)
 		{
 			if (((int*)options)[options_map[j].offset] == 1)
 				return (print_error_duplicated_option(options_map[j].name));
-			else
+			else if (!options_map[j].waiting_for_value)
 				((int*)options)[options_map[j].offset] = 1;
 
 			return (EXIT_OK);
@@ -163,6 +163,7 @@ int read_options_arguments(int ac, char **av, t_options *options)
 	ft_memset(options, 0, sizeof(t_options));
 
 	error = 0;
+	options->file_count = 0;
 	i = 1;
 	while (i < ac)
 	{
@@ -174,12 +175,19 @@ int read_options_arguments(int ac, char **av, t_options *options)
 			options->end_index = i;
 			return (ret);
 		}
-
 		// Handle option like -p -dynamic or --dynamic
 		else if (is_a_single_option(av[i]))
+		{
 			ret = handle_option(options, av[i] + 1);
+		}
 		else if (is_a_multi_option(av[i]))
+		{
 			ret = handle_option(options, av[i] + 2);
+		}
+		else
+		{
+			options->file_count += 1;
+		}
 
 		if (ret != 0)
 			error = ret;

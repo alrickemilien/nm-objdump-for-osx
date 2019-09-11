@@ -107,6 +107,7 @@ bool is_a_multi_option(const char *name);
 bool is_a_single_option(const char *name);
 bool is_a_end_arguments_string(const char *name);
 bool is_an_option(const char *name);
+bool is_a_waiting_value_option(const char *name);
 
 int read_options_arguments(int ac, char **av, t_options *opt);
 
@@ -115,5 +116,6 @@ int read_options_arguments(int ac, char **av, t_options *opt);
 */
 
 int read_arch_option(t_options *options, const char *value);
+int read_radix_option(t_options *options, const char *value);
 
 #endif

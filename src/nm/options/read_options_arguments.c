@@ -55,7 +55,7 @@ static t_options_map options_map[] = {
 		{ "extern-only", ONLY_GLOBAL_SYMBOL, NULL },
 		{ "defined-only", DEFINED_ONLY, NULL },
 		{ "synthetic", DEFINED_ONLY, NULL },
-		{ "radix", RADIX, NULL },// true
+		{ "radix", RADIX, &read_radix_option },
 		{ NULL, 0, NULL },
 };
 
@@ -177,8 +177,11 @@ int read_options_arguments(int ac, char **av, t_options *options)
 	{
 		ret = EXIT_OK;
 
+		if (options->end_index)
+			options->file_count += 1;
+
 		// Handle when the arg before was waiting for value
-		if (last)
+		else if (last)
 		{
 			ret = last->waiting_for_value(options, av[i]);
 			last = NULL;
@@ -186,10 +189,7 @@ int read_options_arguments(int ac, char **av, t_options *options)
 		
 		// When the argument is '--', it means end arguments
 		else if (is_a_end_arguments_string(av[i]))
-		{
 			options->end_index = i;
-			return (ret);
-		}
 		// Handle option like -p -dynamic or --dynamic
 		else if (is_a_single_option(av[i]))
 			ret = handle_option(options, &last, av[i] + 1);

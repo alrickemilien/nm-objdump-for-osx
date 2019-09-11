@@ -28,9 +28,9 @@ struct load_command	*find_load_command_by_command(
 	cursor_load_command = mach_o->load_commands;
 	while (i < ncmds)
 	{
-		if (check_file_addr_size(mach_o, cursor_load_command,
+		if (check_object_addr_size(mach_o, cursor_load_command,
 								sizeof(struct load_command) == -1)
-			|| check_file_addr_size(mach_o, cursor_load_command,
+			|| check_object_addr_size(mach_o, cursor_load_command,
 								cursor_load_command->cmdsize) == -1)
 			return (NULL);
 

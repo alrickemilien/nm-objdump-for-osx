@@ -6,17 +6,12 @@ static int	find_common_sections_indexes(t_mach_o_processor *info)
 	info->data_nsect = find_section(info, SEG_DATA, SECT_DATA);
 	info->bss_nsect = find_section(info, SEG_DATA, SECT_BSS);
 
-	// LOGDEBUG("info->text_nsect offset : %d\n"
-	// 	"info->data_nsect offset : %d\n"
-	// 	"info->bss_nsect offset : %d\n", 
-	// 	info->text_nsect,
-	// 	info->data_nsect,
-	// 	info->bss_nsect);
-
-	if (info->text_nsect == (uint32_t)-1
-		|| info->data_nsect == (uint32_t)-1
-		|| info->bss_nsect == (uint32_t)-1)
-		return (-1);
+	LOGDEBUG("info->text_nsect offset : %d\n"
+		"info->data_nsect offset : %d\n"
+		"info->bss_nsect offset : %d\n", 
+		info->text_nsect,
+		info->data_nsect,
+		info->bss_nsect);
 
 	return (0);
 }
@@ -72,7 +67,7 @@ int	init_processor_info(
 	{
 		printf("OI 3\n");
 
-		// LOGDEBUG("=> %d\n", 32);
+		LOGDEBUG("=> %d\n", 32);
 		info->secs = read_sections_32(file, &info->nsects);
 		info->segs = read_segments_32(file, &info->nsegs);
 	}
@@ -80,7 +75,7 @@ int	init_processor_info(
 	{
 		printf("OI 4\n");
 
-		// LOGDEBUG("=> %d\n", 64);
+		LOGDEBUG("=> %d\n", 64);
 		info->secs_64 = read_sections_64(file, &info->nsects);
 		info->segs_64 = read_segments_64(file, &info->nsegs);
 	}
@@ -88,7 +83,7 @@ int	init_processor_info(
 	
 	if (find_common_sections_indexes(info))
 		return (-1);
-	printf("OI 5\n");
+	printf("OI 6\n");
 	return (find_symbol_table(info, file));
 }
 
@@ -112,7 +107,7 @@ int32_t	nm_object(t_mach_o *file, t_options *options)
 	sort_symbols(symbols, info.st_lc->nsyms, options);
 	printf("O4\n");
 	i = 0;
-	// LOGDEBUG("info.st_lc->nsyms : %d\n", info.st_lc->nsyms);
+	LOGDEBUG("info.st_lc->nsyms : %d\n", info.st_lc->nsyms);
 	while (i < info.st_lc->nsyms)
 		print_symbol(file, symbols + i++, &info, options);
 	free(symbols);

@@ -15,7 +15,7 @@ int32_t	check_file_addr_size(t_mach_o *file,
 	uint64_t size)
 {
 	if (check_file_addr(file, addr) == 0
-	&& (size == 0 || check_file_addr(file, (uint8_t*)addr + size - 1) == 0))
+		&& (size == 0 || check_file_addr(file, (uint8_t*)addr + size - 1) == 0))
 		return (0);
 	return (-1);
 }

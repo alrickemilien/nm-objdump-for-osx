@@ -191,6 +191,11 @@ uint32_t				read_object_endian(struct mach_header *header);
 void					*read_object_header(t_mach_o *file);
 struct load_command		*read_object_load_commands(t_mach_o *file);
 int32_t					check_object_integrity(t_mach_o *file);
+int32_t					check_object_addr(t_mach_o *file, void *addr);
+int32_t					check_object_addr_size(
+							t_mach_o *file,
+							void *addr,
+							uint64_t size);
 
 typedef struct			s_lc_integrity_check
 {

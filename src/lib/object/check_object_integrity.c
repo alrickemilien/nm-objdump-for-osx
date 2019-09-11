@@ -9,9 +9,9 @@ static const t_lc_integrity_check	g_map_lc_checkers[] = {
 static int	check_lc_bound(t_mach_o *file,
 									struct load_command *cur_lc)
 {
-	if (check_file_addr_size(file, cur_lc,
+	if (check_object_addr_size(file, cur_lc,
 								sizeof(struct load_command)) == -1
-		|| check_file_addr_size(file, cur_lc,
+		|| check_object_addr_size(file, cur_lc,
 								cur_lc->cmdsize) == -1)
 		return (-1);
 	return (0);

@@ -33,6 +33,8 @@ int32_t			load_object_file(t_mach_o *file,
 	file->o_addr = object_addr;
 	file->o_size = object_size;
 
+	printf("load_object_file\n");
+
 	if (check_file_addr_size(file,
 					file->o_addr,
 					file->o_size) == -1)

@@ -45,7 +45,8 @@ LIB_SRC+=src/lib/object/check_mach_header_integrity.c \
 		src/lib/object/check_lc_segment_64_integrity.c \
 		src/lib/object/check_lc_segment_integrity.c \
 		src/lib/object/check_object_integrity.c \
-		src/lib/object/check_lc_symtab_integrity.c
+		src/lib/object/check_lc_symtab_integrity.c \
+		src/lib/object/check_object_size.c
 
 # Swap
 LIB_SRC+=src/lib/endian_swap/swap_section.c \

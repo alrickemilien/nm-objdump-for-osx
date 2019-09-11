@@ -74,7 +74,6 @@ bool is_a_waiting_value_option(const char *name)
 	len = ft_strlen(name + off);
 	while (g_waiting_value_options[j].name)
 	{
-		printf("name : %s - g_waiting_value_options[j].name : %s\n", name, g_waiting_value_options[j].name);
 		if (!ft_strcmp(name + off, g_waiting_value_options[j].name)
 			&& len == ft_strlen(g_waiting_value_options[j].name))
 			return (true);

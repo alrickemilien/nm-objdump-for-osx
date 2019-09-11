@@ -7,11 +7,17 @@ int32_t					read_archive_header_members(t_mach_o *file)
 
 	member_header_addr = (uint8_t *)file->archive_member_header_addr;
 	
-	if (-1 == check_archive_addr_size(file, member_header_addr, 60))
+	if (check_archive_addr_size(file, member_header_addr, 60) == -1)
+	{
+		printf("JI UN BLEM LALLALA\n");
 		return (-1);
+	}
 	
-	if (-1 == read_archive_member_name(file))
+	if (read_archive_member_name(file) == -1)
+	{
+		printf("JI UN BLEM ICI\n");
 		return (-1);
+	}
 	
 	file->archive_member_header.st_time = (uint8_t*)(member_header_addr + 16);
 	

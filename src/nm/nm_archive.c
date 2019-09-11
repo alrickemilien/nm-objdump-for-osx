@@ -28,4 +28,6 @@ int32_t	nm_archive(t_mach_o *file, t_options *options)
 		
         i++;
 	}
+
+	return (0);
 }

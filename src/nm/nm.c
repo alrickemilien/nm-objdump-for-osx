@@ -38,6 +38,7 @@ int	nm(t_options *options, const char *path)
 	if (options->file_count > 1)
 		printf("\n%s:\n", path);
 	error = dispatch(&file, options);
+	printf("error : %d - file_type : %d\n", error, file.type);
 	if (map_unloading_file(file.addr, file.file_size))
 		return (-1);
 	return (error);

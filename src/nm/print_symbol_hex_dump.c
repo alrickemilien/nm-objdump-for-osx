@@ -28,7 +28,7 @@ void	print_hex_dump_symbol(
 	t_mach_o_processor *info)
 {
 	if (info->symtab)
-		printf("%08" PRIx64 " %02x %02x %04x %08x %s\n",
+		printf("%08llx %02x %02x %04x %08x %s\n",
 				symbol->sym_entry.n_value,
 				symbol->sym_entry.n_type,
 				symbol->sym_entry.n_sect,

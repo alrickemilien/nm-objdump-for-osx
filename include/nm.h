@@ -108,6 +108,7 @@ bool			is_symbol_unknown(t_symbol *symbol, t_mach_o_processor *info);
 /*
 ** Utils
 */
+
 void					sort(
     void *tab,
     size_t elem_nbr,

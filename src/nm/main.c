@@ -5,6 +5,7 @@ int			main(int ac, char **av)
 	int			i;
 	int			exit_code;
 	t_options	options;
+	int 		last;
 
 	i = 1;
 
@@ -17,26 +18,38 @@ int			main(int ac, char **av)
 		return (exit_code);
 
 	exit_code = 0;
-
+	last = 0;
 	// Read every arg
 	while (i < ac)
 	{
 		// Handle case when -- is set and do not handle as options all after --
-		if (options.end_index != 0 && i != options.end_index)
+		if (options.end_index != 0)
 		{
-			if (i < options.end_index
+			// Handle --arch x86_64
+			if (i <= options.end_index && !last && is_a_waiting_value_option(av[i]))
+				last = 1;
+			// Handle x86_64 part of --arch x86_64
+			else if (i < options.end_index && last)
+				last = 0;
+			else if (i < options.end_index
 				&& !is_an_option(av[i])
 				&& nm(&options, av[i]) < 0)
 				exit_code = 1;
-			else if (i >= options.end_index && nm(&options, av[i]) < 0)
+			else if (i > options.end_index && nm(&options, av[i]) < 0)
 				exit_code = 1;
 		}
 		// Regular case without --
-		else if (options.end_index == 0
-			&& !is_an_option(av[i])
-			&& nm(&options, av[i]) < 0)
+		else
 		{
-			exit_code = 1;
+			// printf("LQ\n");
+			// Handle --arch x86_64
+			if (!last && is_a_waiting_value_option(av[i]))
+				last = 1;
+			// Handle x86_64 part of --arch x86_64
+			else if (last)
+				last = 0;
+			else if (!is_an_option(av[i]) && nm(&options, av[i]) < 0)
+				exit_code = 1;
 		}
 
 		i++;

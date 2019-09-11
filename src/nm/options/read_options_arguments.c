@@ -22,42 +22,41 @@
 */
 
 static t_options_map options_map[] = {
-		{ "a", ALL_SYMBOL, false },
-		{ "g", ONLY_GLOBAL_SYMBOL, false },
-		{ "n", SORT_NUMERIC, false },
-		{ "o", PREPEND_FILE_ARCHIVE_NAME, false },
-		{ "p", DO_NOT_SORT, false },
-		{ "r", REVERSE_SORT, false },
-		{ "u", ONLY_UNDEFINED_SYMBOL, false },
-		{ "U", DO_NOT_DISPLAY_UNDEFINED_SYMBOL, false },
-		{ "m", DISPLAY_NSECT, false },
-		{ "x", DISPLAY_HEXA, false },
-		{ "j", ONLY_SYMBOL_NAME, false },
-		{ "l", LIST_PSEUDO_SYMBOL, false },
-		{ "f", DISPLAY_DYNAMIC_LIB_SYMBOL, false },
-		{ "A", DISPLAY_PATH_NAME, false },
-		{ "P", DISPLAY_PORTABLE, false },
-		{ "t", RADIX, true },
-		{ "p", DO_NOT_SORT, false },
-		{ "D", ONLY_DYNAMIC, false },
-		{ "arch", ARCH_TYPE, true, },
-		{ "s", SEGMENT_SECTION, true, },
-		{ "print-size", PRINT_SIZE, false },
-		{ "dynamic", ONLY_DYNAMIC, false },
-		{ "size-sort", SORT_SIZE, false },
-		{ "print-file-name", PREPEND_FILE_ARCHIVE_NAME, false },
-		{ "undefined-only", ONLY_UNDEFINED_SYMBOL, false, },
-		{ "no-sort", DO_NOT_SORT, false },
-		{ "reverse-sort", REVERSE_SORT, false },
-		{ "print-after-all", PRINT_AFTER_ALL, false },
-		{ "print-before-all", PRINT_BEFORE_ALL, false },
-		{ "just-symbol-name", ONLY_SYMBOL_NAME, false },
-		{ "extern-only", ONLY_GLOBAL_SYMBOL, false },
-		{ "defined-only", DEFINED_ONLY, false },
-		{ "synthetic", DEFINED_ONLY, false },
-		{ "radix", RADIX, true },
-		{ "help", HELP, true },
-		{ NULL, 0, false },
+		{ "a", ALL_SYMBOL, NULL },
+		{ "g", ONLY_GLOBAL_SYMBOL, NULL },
+		{ "n", SORT_NUMERIC, NULL },
+		{ "o", PREPEND_FILE_ARCHIVE_NAME, NULL },
+		{ "p", DO_NOT_SORT, NULL },
+		{ "r", REVERSE_SORT, NULL },
+		{ "u", ONLY_UNDEFINED_SYMBOL, NULL },
+		{ "U", DO_NOT_DISPLAY_UNDEFINED_SYMBOL, NULL },
+		{ "m", DISPLAY_NSECT, NULL },
+		{ "x", DISPLAY_HEXA, NULL },
+		{ "j", ONLY_SYMBOL_NAME, NULL },
+		{ "l", LIST_PSEUDO_SYMBOL, NULL },
+		{ "f", DISPLAY_DYNAMIC_LIB_SYMBOL, NULL },
+		{ "A", DISPLAY_PATH_NAME, NULL },
+		{ "P", DISPLAY_PORTABLE, NULL },
+		{ "t", RADIX, NULL },// true
+		{ "p", DO_NOT_SORT, NULL },
+		{ "D", ONLY_DYNAMIC, NULL },
+		{ "arch", ARCH_TYPE, &read_arch_option, },
+		{ "s", SEGMENT_SECTION, NULL, },// true
+		{ "print-size", PRINT_SIZE, NULL },
+		{ "dynamic", ONLY_DYNAMIC, NULL },
+		{ "size-sort", SORT_SIZE, NULL },
+		{ "print-file-name", PREPEND_FILE_ARCHIVE_NAME, NULL },
+		{ "undefined-only", ONLY_UNDEFINED_SYMBOL, NULL, },
+		{ "no-sort", DO_NOT_SORT, NULL },
+		{ "reverse-sort", REVERSE_SORT, NULL },
+		{ "print-after-all", PRINT_AFTER_ALL, NULL },
+		{ "print-before-all", PRINT_BEFORE_ALL, NULL },
+		{ "just-symbol-name", ONLY_SYMBOL_NAME, NULL },
+		{ "extern-only", ONLY_GLOBAL_SYMBOL, NULL },
+		{ "defined-only", DEFINED_ONLY, NULL },
+		{ "synthetic", DEFINED_ONLY, NULL },
+		{ "radix", RADIX, &read_radix_option },
+		{ NULL, 0, NULL },
 };
 
 
@@ -120,13 +119,15 @@ int print_error_duplicated_option(const char *data)
     return (1);
 }
 
-static int handle_option(t_options *options, const char *name)
+static int handle_option(
+	t_options *options,
+	t_options_map **last,
+	const char *name)
 {
 	size_t j;
 	size_t len;
 
 	len = ft_strlen(name);
-
 	j = 0;
 	while (options_map[j].name != NULL)
 	{
@@ -135,8 +136,13 @@ static int handle_option(t_options *options, const char *name)
 		{
 			if (((int*)options)[options_map[j].offset] == 1)
 				return (print_error_duplicated_option(options_map[j].name));
-			else if (!options_map[j].waiting_for_value)
+			
+			if (!options_map[j].waiting_for_value)
 				((int*)options)[options_map[j].offset] = 1;
+
+			// Handle value option lika --arch x86_64
+			else
+				*last = &options_map[j];
 
 			return (EXIT_OK);
 		}
@@ -159,35 +165,38 @@ int read_options_arguments(int ac, char **av, t_options *options)
 	int	i;
 	int	ret;
 	int	error;
+	t_options_map *last;
 
 	ft_memset(options, 0, sizeof(t_options));
 
 	error = 0;
 	options->file_count = 0;
+	last = NULL;
 	i = 1;
 	while (i < ac)
 	{
 		ret = EXIT_OK;
 
-		// When the argument is '--', it means end arguments
-		if (is_a_end_arguments_string(av[i]))
+		if (options->end_index)
+			options->file_count += 1;
+
+		// Handle when the arg before was waiting for value
+		else if (last)
 		{
-			options->end_index = i;
-			return (ret);
+			ret = last->waiting_for_value(options, av[i]);
+			last = NULL;
 		}
+		
+		// When the argument is '--', it means end arguments
+		else if (is_a_end_arguments_string(av[i]))
+			options->end_index = i;
 		// Handle option like -p -dynamic or --dynamic
 		else if (is_a_single_option(av[i]))
-		{
-			ret = handle_option(options, av[i] + 1);
-		}
+			ret = handle_option(options, &last, av[i] + 1);
 		else if (is_a_multi_option(av[i]))
-		{
-			ret = handle_option(options, av[i] + 2);
-		}
+			ret = handle_option(options, &last, av[i] + 2);
 		else
-		{
 			options->file_count += 1;
-		}
 
 		if (ret != 0)
 			error = ret;

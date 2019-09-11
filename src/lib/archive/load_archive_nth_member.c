@@ -34,6 +34,7 @@ int32_t				load_archive_nth_member(t_mach_o *file,
 	file->archive_member_header_addr = NULL;
 	ft_bzero(&file->archive_member_header, sizeof(t_member_header));
 	file->archive_member_header_addr = find_archive_member(file, n_member);
+	printf("file->archive_member_header_addr : %p\n", file->archive_member_header_addr);
 	if (read_archive_header_members(file) == -1 || !(file->archive_member_header.st_size > 0))
 	{
 		printf("WUUUT\n");

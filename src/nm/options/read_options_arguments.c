@@ -40,21 +40,21 @@ static t_options_map options_map[] = {
 		{ "t", RADIX, NULL },// true
 		{ "p", DO_NOT_SORT, NULL },
 		{ "D", ONLY_DYNAMIC, NULL },
-		{ "arch" ARCH_TYPE, &read_arch_option, },
-		{ "s" SEGMENT_SECTION, NULL, },// true
-		{ "print-size" PRINT_SIZE, NULL },
+		{ "arch", ARCH_TYPE, &read_arch_option, },
+		{ "s", SEGMENT_SECTION, NULL, },// true
+		{ "print-size", PRINT_SIZE, NULL },
 		{ "dynamic", ONLY_DYNAMIC, NULL },
 		{ "size-sort", SORT_SIZE, NULL },
-		{ "print-file-name" PREPEND_FILE_ARCHIVE_NAME, NULL },
+		{ "print-file-name", PREPEND_FILE_ARCHIVE_NAME, NULL },
 		{ "undefined-only", ONLY_UNDEFINED_SYMBOL, NULL, },
-		{ "no-sort" DO_NOT_SORT, NULL },
-		{ "reverse-sort" REVERSE_SORT, NULL },
-		{ "print-after-all" PRINT_AFTER_ALL, NULL },
-		{ "print-before-all" PRINT_BEFORE_ALL, NULL },
-		{ "just-symbol-name" ONLY_SYMBOL_NAME, NULL },
-		{ "extern-only" ONLY_GLOBAL_SYMBOL, NULL },
-		{ "defined-only" DEFINED_ONLY, NULL },
-		{ "synthetic" DEFINED_ONLY, NULL },
+		{ "no-sort", DO_NOT_SORT, NULL },
+		{ "reverse-sort", REVERSE_SORT, NULL },
+		{ "print-after-all", PRINT_AFTER_ALL, NULL },
+		{ "print-before-all", PRINT_BEFORE_ALL, NULL },
+		{ "just-symbol-name", ONLY_SYMBOL_NAME, NULL },
+		{ "extern-only", ONLY_GLOBAL_SYMBOL, NULL },
+		{ "defined-only", DEFINED_ONLY, NULL },
+		{ "synthetic", DEFINED_ONLY, NULL },
 		{ "radix", RADIX, NULL },// true
 		{ NULL, 0, NULL },
 };
@@ -126,7 +126,6 @@ static int handle_option(
 {
 	size_t j;
 	size_t len;
-	int error;
 
 	len = ft_strlen(name);
 	j = 0;
@@ -143,7 +142,7 @@ static int handle_option(
 
 			// Handle value option lika --arch x86_64
 			else
-				*last = options_map[j];
+				*last = &options_map[j];
 
 			return (EXIT_OK);
 		}
@@ -181,7 +180,7 @@ int read_options_arguments(int ac, char **av, t_options *options)
 		// Handle when the arg before was waiting for value
 		if (last)
 		{
-			ret = last->waiting_for_value(options, name);
+			ret = last->waiting_for_value(options, av[i]);
 			last = NULL;
 		}
 		

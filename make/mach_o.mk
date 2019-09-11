@@ -3,8 +3,7 @@
 #
 
 # Lib
-LIB_SRC=src/lib/find_common_indexes.c \
-		src/lib/find_load_command_by_command.c \
+LIB_SRC=src/lib/find_load_command_by_command.c \
 		src/lib/cpu_type_name.c \
 		src/lib/is_valid_cmd.c \
 		src/lib/is_valid_flag.c \

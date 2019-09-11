@@ -3,10 +3,10 @@
 #define NBR_SUPPORTED_LC 4
 
 static const t_lc_swapper	g_swappers[NBR_SUPPORTED_LC] = {
-	{swap_load_command_segment_32, LC_SEGMENT, 0},
-	{swap_load_command_segment_64, LC_SEGMENT_64, 0},
-	{swap_load_command_symtab, LC_SYMTAB, 0},
-	{swap_load_command_symseg, LC_SYMSEG, 0},
+	{swap_load_command_segment_32, LC_SEGMENT},
+	{swap_load_command_segment_64, LC_SEGMENT_64},
+	{swap_load_command_symtab, LC_SYMTAB},
+	{swap_load_command_symseg, LC_SYMSEG},
 };
 
 static int32_t	check_lc_bound(t_mach_o *file,

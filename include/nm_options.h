@@ -41,19 +41,6 @@ enum {
 # define MAX_ALLOWED_VALUE_SIZE 215
 
 /*
-** Map used to handle each option :
-** name : Char* value
-** offset: offset in the structure s_options
-** waiting_for_value: is option waiting for argument
-*/
-
-typedef struct 	s_options_map {
-	char		*name;
-	int			offset;
-	int 		(*waiting_for_value)(t_options *options, const char *value);
-}				t_options_map;
-
-/*
 ** Structure filled with options passed to program
 ** The handled options are currently -l, -R, -a, -r et -t
 ** None ls option used in the code :
@@ -98,6 +85,19 @@ typedef struct s_options {
 } t_options;
 
 # pragma pack(pop)
+
+/*
+** Map used to handle each option :
+** name : Char* value
+** offset: offset in the structure s_options
+** waiting_for_value: is option waiting for argument
+*/
+
+typedef struct 	s_options_map {
+	char		*name;
+	int			offset;
+	int 		(*waiting_for_value)(t_options *options, const char *value);
+}				t_options_map;
 
 /*
 ** Options utils

@@ -17,6 +17,9 @@ int			main(int ac, char **av)
 	if (exit_code != 0)
 		return (exit_code);
 
+	if (options.file_count == 0)
+		return (nm(&options, "a.out") < 0 ? 1 : 0);
+
 	exit_code = 0;
 	last = 0;
 	// Read every arg

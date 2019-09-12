@@ -7,6 +7,7 @@ int32_t	check_file_addr(t_mach_o *file, void *addr)
 
 	printf("(uint8_t*)file->addr + file->file_size %p\n", (uint8_t*)file->addr + file->file_size);
 	printf("(uint8_t*)file->addr + file->file_size > (uint8_t*)addr : %d\n", (uint8_t*)file->addr + file->file_size > (uint8_t*)addr);
+	printf("file->addr <= addr : %d\n", file->addr <= addr);
 
 	if (file->addr <= addr
 		&& ((uint8_t*)file->addr + file->file_size > (uint8_t*)addr

@@ -26,6 +26,7 @@ int32_t	load_archive_file(t_mach_o *file,
 	printf("A3\n");
 
 	file->members = file->archive_member_header_addr;
+	printf("ile->members : %p\n", file->members);
 
 	if (check_archive_addr_size(file,
 		get_archive_member_starting_addr(file),

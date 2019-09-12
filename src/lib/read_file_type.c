@@ -21,7 +21,7 @@ static bool		is_archive_file(t_mach_o *file)
 	}
 	
 	if (!memcmp(
-			file->addr,
+			file->o_addr,
 			STATIC_LIB_MAGIC,
 			sizeof(STATIC_LIB_MAGIC) - 1)) {
 		return (true);
@@ -34,7 +34,7 @@ static bool		is_fat_file(t_mach_o *file)
 {
 	struct fat_header	*fat_header;
 
-	fat_header = file->addr;
+	fat_header = file->o_addr;
 	
 	if (file->file_size <= sizeof(fat_header->magic))
 		return (false);
@@ -50,8 +50,8 @@ static bool		is_macho_file(t_mach_o *file)
 	struct mach_header		*header;
 	struct mach_header_64	*header_64;
 
-	header = file->addr;
-	header_64 = file->addr;
+	header = file->o_addr;
+	header_64 = file->o_addr;
 	
 	if (file->file_size <= sizeof(header->magic)
 		|| file->file_size <= sizeof(header_64->magic))

@@ -6,7 +6,7 @@ int32_t					read_archive_header_members(t_mach_o *file)
 	uint8_t			*member_header_addr;
 
 	member_header_addr = (uint8_t *)file->archive_member_header_addr;
-	
+
 	if (check_archive_addr_size(file, member_header_addr, 60) == -1)
 	{
 		printf("JI UN BLEM LALLALA\n");

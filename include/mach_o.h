@@ -293,7 +293,7 @@ typedef struct	s_mach_o_error {
 
 # define MAX_ERROR_BUFFER PATH_MAX + 512
 
-int							mach_o_error(int code, const char *data);
+int							mach_o_error(int code, const char *fmt, ...);
 
 /*
 ** List each error of parsing a macho file

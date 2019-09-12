@@ -15,7 +15,7 @@ int32_t	check_archive_addr_size(t_mach_o *file,
 								void *addr,
 								uint64_t size)
 {
-	printf("\n =>>>>>>>>>>>>> addr is %p\n", addr);
+	printf("\n check_archive_addr_size =>>>>>>>>>>>>> addr is %p\n", addr);
 
 	printf("check_file_addr_size(file, addr, size) : %d\n", check_file_addr_size(file, addr, size));
 	printf("check_archive_addr(file, addr) : %d\n", check_file_addr_size(file, addr, size));

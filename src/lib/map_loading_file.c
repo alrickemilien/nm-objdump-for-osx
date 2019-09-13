@@ -21,7 +21,7 @@ void	*map_loading_file(const char *filename, uint64_t *file_size)
 
 	if ((fd = open(filename, O_RDONLY)) == -1)
 	{
-		mach_o_error(-1, "%s: No such file or directory\n", filename);
+		mach_o_error(-1, "%s: No such file or directory.\n", filename);
 		return (NULL);
 	}
 

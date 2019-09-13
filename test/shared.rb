@@ -32,18 +32,19 @@ class Shared
         end
 
         @c_archs = [
-            'arm-none-eabi',
-            'armv7a-none-eabi',
-            'arm-linux-gnueabihf',
-            'arm-none-linux-gnueabi',
-            'i386-pc-linux-gnu',
-            'x86_64-apple-darwin10',
-            'i686-w64-windows-gnu', # same as i686-w64-mingw32
-            'x86_64-pc-linux-gnu', # from ubuntu 64 bit
-            'x86_64-unknown-windows-cygnus', # cygwin 64-bit
-            'x86_64-w64-windows-gnu', # same as x86_64-w64-mingw32
-            'i686-pc-windows-gnu', # MSVC
-            'x86_64-pc-windows-gnu', # MSVC 64-BIT
+#            'arm-none-eabi',
+#            'armv7a-none-eabi',
+#            'arm-linux-gnueabihf',
+#            'arm-none-linux-gnueabi',
+#            'i386-pc-linux-gnu',
+#            'x86_64-apple-darwin10',
+#            'i686-w64-windows-gnu', # same as i686-w64-mingw32
+#            'x86_64-pc-linux-gnu', # from ubuntu 64 bit
+#            'x86_64-unknown-windows-cygnus', # cygwin 64-bit
+#            'x86_64-w64-windows-gnu', # same as x86_64-w64-mingw32
+#            'i686-pc-windows-gnu', # MSVC
+#            'x86_64-pc-windows-gnu', # MSVC 64-BIT
+            'x86_64'
         ]
 
         # .o

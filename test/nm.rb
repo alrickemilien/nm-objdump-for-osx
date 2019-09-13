@@ -18,6 +18,11 @@ class TestNm < Test::Unit::TestCase
     def diff(cmd_1, cmd_2)
        	out_1, err_1, code_1 = Shared.pipe(cmd_1)
        	out_2, err_2, code_2 = Shared.pipe(cmd_2)
+
+       	# Substract /path/to/nm part of stderr
+  		err_1 = err_1.sub /^\/.*\/nm:/, '' if err_1 
+       	err_2 = err_2.sub /^\/.*\/nm:/, '' if err_2 
+
    	   	assert_equal(code_1, code_2)
    	   	assert_equal(out_1, out_2)
    	   	assert_equal(err_1, err_2)
@@ -33,11 +38,11 @@ class TestNm < Test::Unit::TestCase
 	end
 
 	def test_no_read_rights
-		file = Dir["#{__dir__}/samples/*.out"][0]
+		file = "#{__dir__}/samples/to_remove.o"
+		FileUtils.touch file
 		FileUtils.chmod("-r", file)
-		ret, err = pipe("nm #{file}")
+		diff("nm #{file}", "./build/ft_nm #{file}")
 		FileUtils.chmod("+r", file)
-		puts ret, err
 	end
 end
 

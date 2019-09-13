@@ -26,9 +26,6 @@ int	nm(t_options *options, const char *path)
 	if (load_macho_file(&file, path, file.addr, file.file_size) < 0)
 		return (-1);
 
-	// printf("file.mh : %x\n", file.mh);
-	// printf("file.mh_64 : %x\n", file.mh_64);
-
 	if (file.type == UNKNOWN_FILE)
 	{
 		dprintf(2, "%s: %s %s\n", path, path,
@@ -38,7 +35,6 @@ int	nm(t_options *options, const char *path)
 	if (options->file_count > 1)
 		printf("\n%s:\n", path);
 	error = dispatch(&file, options);
-	printf("error : %d - file_type : %d\n", error, file.type);
 	if (map_unloading_file(file.addr, file.file_size))
 		return (-1);
 	return (error);

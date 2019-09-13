@@ -20,8 +20,6 @@ struct load_command	*find_load_command_by_command(
 
   i = 0;
 
-	// printf("AAAAAAAAA\n");
-
   // Read ncmds from 32 or 64 bits structure, according to mh
   ncmds = mach_o->mh ? mach_o->mh->ncmds : mach_o->mh_64->ncmds;
 

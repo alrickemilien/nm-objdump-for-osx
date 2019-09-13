@@ -20,11 +20,9 @@ static int	find_symbol_table(
 	t_mach_o_processor *info,
 	t_mach_o *file)
 {
-	// printf(" JE SUIS LLLKKLKLKJL\n");
 	if ((info->st_lc =
 		((struct symtab_command *)find_load_command_by_command(file, LC_SYMTAB))) == NULL)
 		return (-1);
-	// printf("kakajsjdd\n");
 	info->dysym_lc =
 		(struct dysymtab_command *)find_load_command_by_command(file, LC_DYSYMTAB);
 	if (file->mh)

@@ -11,13 +11,13 @@ int32_t	nm_archive(t_mach_o *file, t_options *options)
 	error = 0;
 	while (42)
 	{
-		printf ("---- nm_archive loop number %ld\n", i);
+		LOGDEBUG ("---- nm_archive loop number %ld\n", i);
 
 		if (load_archive_nth_member(file, i, &error) == -1)
 		{
 			if (error)
 				return (0);
-			printf("Failed to load member\n");
+			LOGDEBUG("%s", "Failed to load member\n");
 			i++;
 			continue ;
 		}

@@ -1,5 +1,5 @@
-#ifndef mach_o_H
-#define mach_o_H
+#ifndef MACH_O_H
+#define MACH_O_H
 
 # include <mach-o/loader.h>
 # include <mach-o/nlist.h>
@@ -13,6 +13,12 @@
 # include <stdbool.h>
 #include <errno.h>
 #include <limits.h>
+
+# ifdef DEBUG
+#  define LOGDEBUG(f_, ...) printf((f_), ##__VA_ARGS__)
+# else
+#  define LOGDEBUG(f_, ...) (void)(f_);
+# endif
 
 # include "libft.h"
 

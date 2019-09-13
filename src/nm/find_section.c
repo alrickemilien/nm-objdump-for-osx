@@ -14,11 +14,9 @@ uint32_t	find_section(
 	{
 		while (i < info->nsects)
 		{
-			printf("JE SUIS OOOOOO\n");
-			printf("seg_name : %s / info->secs[i]->segname : %s\n",
+			LOGDEBUG("INFO x32 / seg_name : %s / info->secs[i]->segname : %s\n",
 				seg_name,
 				info->secs[i]->segname);
-			printf("JE SUIS BBBBBBBB\n");
 			
 			if (ft_strequ(seg_name, info->secs[i]->segname)
 				&& ft_strequ(sec_name, info->secs[i]->sectname))
@@ -30,11 +28,9 @@ uint32_t	find_section(
 	{
 		while (i < info->nsects)
 		{
-			printf("JE SUIS WWWWWWWW\n");
-			printf("seg_name : %s / info->secs[i]->segname : %s\n",
+			LOGDEBUG("INFO x64 / seg_name : %s / info->secs[i]->segname : %s\n",
 				seg_name,
 				info->secs_64[i]->segname);
-			printf("JE SUIS LLLLLLLLL\n");
 			
 			if (ft_strequ(seg_name, info->secs_64[i]->segname)
 				&& ft_strequ(sec_name, info->secs_64[i]->sectname))

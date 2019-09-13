@@ -57,15 +57,15 @@ int	init_processor_info(
 	t_mach_o *file,
 	t_mach_o_processor *info)
 {
-	printf("OI 1\n");
+	LOGDEBUG("%s", "OI 1\n");
 	ft_memset(info, 0, sizeof(t_mach_o_processor));
 	if (!file->mh && !file->mh_64)
 		return (-1);
-	printf("OI 2\n");
+	LOGDEBUG("%s", "OI 2\n");
 
 	if (file->mh)
 	{
-		printf("OI 3\n");
+		LOGDEBUG("%s", "OI 3\n");
 
 		LOGDEBUG("=> %d\n", 32);
 		info->secs = read_sections_32(file, &info->nsects);
@@ -73,17 +73,17 @@ int	init_processor_info(
 	}
 	else
 	{
-		printf("OI 4\n");
+		LOGDEBUG("%s", "OI 4\n");
 
 		LOGDEBUG("=> %d\n", 64);
 		info->secs_64 = read_sections_64(file, &info->nsects);
 		info->segs_64 = read_segments_64(file, &info->nsegs);
 	}
-	printf("OI 5\n");
+	LOGDEBUG("%s", "OI 5\n");
 	
 	if (find_common_sections_indexes(info))
 		return (-1);
-	printf("OI 6\n");
+	LOGDEBUG("%s", "OI 6\n");
 	return (find_symbol_table(info, file));
 }
 
@@ -97,15 +97,15 @@ int32_t	nm_object(t_mach_o *file, t_options *options)
 	size_t  			i;
 	t_symbol			*symbols;
 
-	printf("O1\n");
+	LOGDEBUG("%s", "O1\n");
 	if (init_processor_info(file, &info) == -1)
 		return (-1);
-	printf("O2\n");
+	LOGDEBUG("%s", "O2\n");
 	if ((symbols = read_symbols(file, &info)) == NULL)
 		return (-1);
-	printf("O3\n");
+	LOGDEBUG("%s", "O3\n");
 	sort_symbols(symbols, info.st_lc->nsyms, options);
-	printf("O4\n");
+	LOGDEBUG("%s", "O4\n");
 	i = 0;
 	LOGDEBUG("info.st_lc->nsyms : %d\n", info.st_lc->nsyms);
 	while (i < info.st_lc->nsyms)

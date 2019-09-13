@@ -2,7 +2,7 @@
 
 int32_t	check_file_addr(t_mach_o *file, void *addr)
 {
-	printf("###### check_file_addr\n"
+	LOGDEBUG("###### check_file_addr\n"
 		"file->addr %p\n"
 		"file->file_size %lld\n"
 		"addr %p\n"
@@ -21,10 +21,11 @@ int32_t	check_file_addr_size(t_mach_o *file,
 	void *addr,
 	uint64_t size)
 {
-	printf("##### check_file_addr_size with size at %lld\n", size);
+	printf("JE SYUIS LA\n");
+	LOGDEBUG("##### check_file_addr_size with size at %lld\n", size);
 	if (check_file_addr(file, addr) == 0
 		&& (size == 0 || check_file_addr(file, (uint8_t*)addr + size - 1) == 0))
 		return (0);
-	printf("check_file_addr_size return -1\n");
+	LOGDEBUG("%s", "check_file_addr_size return -1\n");
 	return (-1);
 }

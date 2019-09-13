@@ -7,7 +7,6 @@
 # include "nm_options.h"
 # include "libft.h"
 
-# define LOGDEBUG(f_, ...) printf((f_), __VA_ARGS__)
 
 /*
 ** All ok

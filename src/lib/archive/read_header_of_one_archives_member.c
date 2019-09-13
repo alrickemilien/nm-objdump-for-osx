@@ -5,19 +5,19 @@ int32_t					read_header_of_one_archives_member(t_mach_o *file)
 	// The adrress of the header of a member of the archive
 	uint8_t			*member_header_addr;
 
-	printf("---- read_header_of_one_archives_member\n");
+	LOGDEBUG("---- read_header_of_one_archives_member\n");
 
 	member_header_addr = (uint8_t *)file->archive_member_header_addr;
 
 	if (check_archive_addr_size(file, member_header_addr, 60) == -1)
 	{
-		printf("JI UN BLEM LALLALA\n");
+		LOGDEBUG("JI UN BLEM LALLALA\n");
 		return (-1);
 	}
 	
 	if (read_archive_member_name(file) == -1)
 	{
-		printf("JI UN BLEM ICI\n");
+		LOGDEBUG("JI UN BLEM ICI\n");
 		return (-1);
 	}
 	

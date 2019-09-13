@@ -6,7 +6,7 @@ int32_t	load_archive_file(t_mach_o *file,
 {
 	file->archive_start_addr = archive_addr;
 
-	printf("A1\n");
+	LOGDEBUG("A1\n");
 
 	file->archive_size = (uint64_t)archive_size;
 
@@ -14,7 +14,7 @@ int32_t	load_archive_file(t_mach_o *file,
 	file->archive_member_header_addr = (void *)
 		((uint8_t*)file->archive_start_addr + sizeof(STATIC_LIB_MAGIC) - 1);
 
-	printf("A2\n");
+	LOGDEBUG("A2\n");
 
 	file->symdef_addr = NULL;
 	file->members = NULL;
@@ -25,23 +25,23 @@ int32_t	load_archive_file(t_mach_o *file,
 	if (read_header_of_one_archives_member(file) == -1)
 		return (-1);
 
-	printf("A3\n");
+	LOGDEBUG("A3\n");
 
 	file->members = file->archive_member_header_addr;
-	printf("INFO file->members adresse : %p\n", file->members);
-	printf("INFO file->archive_member_header_addr : %p\n", file->archive_member_header_addr);
+	LOGDEBUG("INFO file->members adresse : %p\n", file->members);
+	LOGDEBUG("INFO file->archive_member_header_addr : %p\n", file->archive_member_header_addr);
 
 	if (check_archive_addr_size(file,
 		get_archive_member_starting_addr(file),
 		(uint64_t)file->archive_member_header.st_size) == -1)
 		return (-1);
 
-	printf("A4\n");
+	LOGDEBUG("A4\n");
 
 	if (read_archive_symdef(file) == -1)
 		return (-1);
 
-	printf("A5\n");
+	LOGDEBUG("A5\n");
 
 	return (0);
 }

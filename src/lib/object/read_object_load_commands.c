@@ -12,7 +12,7 @@ struct load_command	*read_object_load_commands(t_mach_o *file)
 		    				file->load_commands,
 							sizeof(struct load_command)) == -1)
 	{
-		printf("WTF\n");
+		LOGDEBUG("WTF\n");
 		file->load_commands = NULL;
 		return (NULL);
 	}

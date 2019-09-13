@@ -4,16 +4,16 @@ static void	*find_archive_member(t_mach_o *file, uint64_t n_member)
 {
 	size_t	i;
 
-	printf("------- find_archive_member\n");
+	LOGDEBUG("------- find_archive_member\n");
 
 	file->archive_member_header_addr = file->members;
 	i = 0;
 	while (i < n_member + 1)
 	{
-		printf("------- find_archive_member iter number %ld\n", i);
+		LOGDEBUG("------- find_archive_member iter number %ld\n", i);
 		if (read_header_of_one_archives_member(file) == -1)
 		{
-			printf("i: %ld - %s\n", i, " JE RETURN NUL YAAAAAAA");
+			LOGDEBUG("i: %ld - %s\n", i, " JE RETURN NUL YAAAAAAA");
 			return (NULL);
 		}
 		file->archive_member_header_addr = (void *)((uint8_t *)
@@ -29,9 +29,9 @@ int32_t				load_archive_nth_member(t_mach_o *file,
 											uint64_t n_member,
 											bool *error)
 {
-	printf("------ load_archive_nth_member\n");
+	LOGDEBUG("------ load_archive_nth_member\n");
 
-	printf("INFO file->nmembers : %lld\n", file->nmembers);
+	LOGDEBUG("INFO file->nmembers : %lld\n", file->nmembers);
     if (!file->symdef_addr || (!file->ranlibs && !file->ranlibs_64))
 	{
         return (-1);
@@ -41,18 +41,18 @@ int32_t				load_archive_nth_member(t_mach_o *file,
 	file->archive_member_header_addr = NULL;
 	ft_bzero(&file->archive_member_header, sizeof(t_member_header));
 	file->archive_member_header_addr = find_archive_member(file, n_member);
-	printf("INFO file->archive_member_header_addr : %p at n_member %lld\n", 
+	LOGDEBUG("INFO file->archive_member_header_addr : %p at n_member %lld\n", 
 		file->archive_member_header_addr,
 		n_member);
 	if (read_header_of_one_archives_member(file) == -1 || !(file->archive_member_header.st_size > 0))
 	{
-		printf("WUUUT\n");
-		printf("read_header_of_one_archives_member(file) : %d\n", read_header_of_one_archives_member(file));
-		printf("file->archive_member_header.st_size > 0 : %d\n", file->archive_member_header.st_size > 0);
+		LOGDEBUG("WUUUT\n");
+		LOGDEBUG("read_header_of_one_archives_member(file) : %d\n", read_header_of_one_archives_member(file));
+		LOGDEBUG("file->archive_member_header.st_size > 0 : %d\n", file->archive_member_header.st_size > 0);
 
 		return (-1);
 	}
-	printf("INFO file->archive_member_header.st_size : %lld\n"
+	LOGDEBUG("INFO file->archive_member_header.st_size : %lld\n"
 		"INFO archive_member_starting_addr : %p\n"
 		, file->archive_member_header.st_size, get_archive_member_starting_addr(file));
 	return (load_macho_file(file,

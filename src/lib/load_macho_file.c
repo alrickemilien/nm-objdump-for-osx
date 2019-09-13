@@ -43,5 +43,6 @@ int	load_macho_file(
 			return (g_file_loaders_map[i].loader(file, addr, file_size));
 		i++;
 	}
-	return (mach_o_error(-1, "Invalid file type for file %s." , file->path));
+	// Invalid file type
+	return (mach_o_error(-1, DEFAULT_MACHO_ERROR, file->path));
 }

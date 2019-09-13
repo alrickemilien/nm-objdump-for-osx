@@ -45,6 +45,24 @@ class TestNm < Test::Unit::TestCase
 		diff("nm /bin/dd", "./build/ft_nm /bin/dd")
 	end
 
+	# This test is not triggered because the real nm loops on /dev/random
+	#def test_on_dev_zero
+	#	diff("nm /dev/zero", "./build/ft_nm /dev/zero")
+	#end
+
+	def test_on_dev_null
+		diff("nm /dev/null", "./build/ft_nm /dev/null")
+	end
+
+	# This test is not triggered because the real nm loops on /dev/random
+	#def test_on_dev_random
+	#	diff("nm /dev/random", "./build/ft_nm /dev/random")
+	#end
+
+	def test_on_text_file
+		diff("nm #{__dir__}/nm.rb", "./build/ft_nm #{__dir__}/nm.rb")
+	end
+
 	def test_no_read_rights
 		file = "#{__dir__}/samples/to_remove.o"
 		FileUtils.touch file

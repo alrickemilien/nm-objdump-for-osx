@@ -1,46 +1,6 @@
 #include "mach_o.h"
 #include <stdarg.h>
 
-// static const t_mach_o_error g_macho_error[] = {
-//   {
-//     MACH_O_ERROR_INVALID_MAGICK,
-//     MACH_O_ERROR_INVALID_MAGICK_STR,
-//   },
-//   {
-//     MACH_O_ERROR_INVALID_FILE_SIZE,
-//     MACH_O_ERROR_INVALID_FILE_SIZE_STR,
-//   },
-//   {
-//     MACH_O_ERROR_INVALID_FILE,
-//     MACH_O_ERROR_INVALID_FILE_STR,
-//   },
-//   {
-//     MACH_O_ERROR_MAP_LOADING,
-//     MACH_O_ERROR_MAP_LOADING_STR,
-//   },
-//   {
-//     MACH_O_ERROR_INVALID_MACH_HEADER,
-//     MACH_O_ERROR_INVALID_MACH_HEADER_STR,
-//   },
-//   {
-//     MACH_O_ERROR_INVALID_FILETYPE,
-//     MACH_O_ERROR_INVALID_FILETYPE_STR,
-//   },
-//   {
-//     MACH_O_ERROR_INVALID_SYMBOL_TYPE,
-//     MACH_O_ERROR_INVALID_SYMBOL_TYPE_STR,
-//   },
-//   {
-//     MACH_O_ERROR_INVALID_FILE_TYPE,
-//     MACH_O_ERROR_INVALID_FILE_TYPE_STR,
-//   },
-//   {
-//     0,
-//     NULL,
-//   },
-// };
-
-
 static void out_buffer(const char *buffer, size_t *cursor, bool force)
 {
   if (!force && (*cursor == 0 || *cursor < MAX_ERROR_BUFFER))
@@ -71,23 +31,11 @@ int mach_o_error(int code, const char *fmt, ...)
     va_list arg;
     
     memset(error_buffer, 0, sizeof(char) * MAX_ERROR_BUFFER);
-    if (!fmt)
-    {
-      getcwd(error_buffer, MAX_ERROR_BUFFER);
-      if (errno == 0)
-      {
-        memcpy(error_buffer + ft_strlen(error_buffer),
-        ": The file was not recognized as a valid object file\n",
-        ft_strlen(": The file was not recognized as a valid object file\n") * sizeof(char));
-        write(2, error_buffer, ft_strlen(error_buffer) * sizeof(char));
-      }
-      else
-        perror(error_buffer);
-      return (code);
-    }
+    getcwd(error_buffer, MAX_ERROR_BUFFER);
+    memcpy(error_buffer + ft_strlen(error_buffer), "/nm: ", 5 * sizeof(char));
     va_start(arg, fmt);
     i = 0;
-    cursor = 0;
+    cursor = ft_strlen(error_buffer);
     while (fmt[i])
     {
       while (fmt[i] != '%' && fmt[i])
@@ -95,9 +43,9 @@ int mach_o_error(int code, const char *fmt, ...)
         error_buffer[cursor++] = fmt[i++];
         out_buffer(error_buffer, &cursor, false);
       }
-      if (fmt[++i] == 's' && i++)
+      if (fmt[i] && fmt[++i] == 's' && i++)
           str_to_buffer(error_buffer, va_arg(arg, char*), &cursor);
-      else
+      else if (fmt[i])
         error_buffer[cursor++] = fmt[i++];
     }
     out_buffer(error_buffer, &cursor, true);

@@ -23,6 +23,8 @@
 # define STATIC_LIB_MAGIC "!<arch>\x0a"
 # define LONG_ARCHIVE_NAME_MAGIC "#1/"
 
+# define DEFAULT_MACHO_ERROR "%s: The file was not recognized as a valid object file\n"
+
 typedef enum				e_endian
 {
 	UNKNOWN_ENDIAN = 0,

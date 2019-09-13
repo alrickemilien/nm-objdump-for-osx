@@ -62,6 +62,30 @@ class TestNm < Test::Unit::TestCase
 		diff("nm /usr/lib/liby.a", "./build/ft_nm /usr/lib/liby.a")
 	end
 
+	def test_simple_binary
+		diff("nm /sbin/reboot", "./build/ft_nm /sbin/reboot")
+	end
+
+	def test_multiple_valid_files
+		files = "/usr/lib/system/libc.dylib /usr/lib/liby.a /bin/grep"
+		diff("nm #{files}", "./build/ft_nm #{files}")
+	end
+
+	def test_multiple_valid_files_with_invalid
+		files = "/usr/lib/system/libc.dylib #{__dir__}/nm.rb /usr/lib/liby.a /bin/grep"
+		diff("nm #{files}", "./build/ft_nm #{files}")
+	end
+
+	def test_with_pipe
+		diff("nm | cat /bin/dd", "./build/ft_nm | cat /bin/dd")
+	end
+
+	def test_empty_file
+		file = "#{__dir__}/samples/empty.a"
+		FileUtils.touch file
+		diff("nm #{file}", "./build/ft_nm #{file}")
+	end
+
 	# This test is not triggered because the real nm loops on /dev/random
 	#def test_on_dev_random
 	#	diff("nm /dev/random", "./build/ft_nm /dev/random")

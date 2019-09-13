@@ -54,6 +54,14 @@ class TestNm < Test::Unit::TestCase
 		diff("nm /dev/null", "./build/ft_nm /dev/null")
 	end
 
+	def test_on_dir
+		diff("nm /usr", "./build/ft_nm /usr")
+	end
+
+	def test_simple_static_lib
+		diff("nm /usr/lib/liby.a", "./build/ft_nm /usr/lib/liby.a")
+	end
+
 	# This test is not triggered because the real nm loops on /dev/random
 	#def test_on_dev_random
 	#	diff("nm /dev/random", "./build/ft_nm /dev/random")

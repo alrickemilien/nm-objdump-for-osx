@@ -11,7 +11,7 @@ class Shared
           { :out => out, :err => err }.each do |key, stream|
              Thread.new do
                   until (line = stream.gets).nil? do
-                    data[key] = line
+                    (data[key] ||='') << line
                   end
                 end
             end

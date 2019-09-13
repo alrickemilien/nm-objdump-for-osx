@@ -32,9 +32,17 @@ class TestNm < Test::Unit::TestCase
 	# Tests
 	#
 
+	def test_no_file
+		diff("nm", "./build/ft_nm")
+	end
+
 	def test_simple
 		file = Dir["#{__dir__}/samples/*.out"][0]
 		diff("nm #{file}", "./build/ft_nm #{file}")
+	end
+
+	def test_on_dd
+		diff("nm /bin/dd", "./build/ft_nm /bin/dd")
 	end
 
 	def test_no_read_rights

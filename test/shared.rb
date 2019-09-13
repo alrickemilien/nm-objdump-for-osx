@@ -4,7 +4,7 @@ require "test/unit"
 class Shared
     def self.pipe(cmd, options = [])
         data = {}
-        puts cmd
+        # puts cmd
         Open3.popen3(cmd) do |stdin, out, err, external|
 
           # Create a thread to read from each stream
@@ -17,7 +17,7 @@ class Shared
             end
             # Don't exit until the external process is done
             external.join
-            puts data[:err]
+            # puts data[:err]
             return data[:out], data[:err], external.value
         end
     end
@@ -114,6 +114,6 @@ class Shared
 
     def self.shutdown()
         @trash = Dir["#{__dir__}/samples/*.a", "#{__dir__}/samples/*.o", "#{__dir__}/samples/*.so", "#{__dir__}/samples/*.out"]
-        @trash.each { |y| cmd = "rm -rf #{y}"; puts cmd; pipe(cmd) }
+        @trash.each { |y| cmd = "rm -rf #{y}"; pipe(cmd) }
     end
 end

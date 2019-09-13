@@ -43,6 +43,8 @@ int					check_load_commands_integrity(t_mach_o *file)
 	struct mach_header	*hdr;
 	struct load_command *cur_lc;
 
+	printf("---- check_load_commands_integrity\n");
+
 	i = 0;
 	if (file->mh)
 		hdr = file->mh;
@@ -57,6 +59,8 @@ int					check_load_commands_integrity(t_mach_o *file)
 				"(the load commands would go beyond the end of the file)\n");
 			return (-1);
 		}
+		printf("------ check_single_load_command_integrity %ld\n", i);
+
 		if (check_single_load_command_integrity(file, cur_lc) == -1)
 			return (-1);
 		cur_lc = (struct load_command *)(void *)((uint8_t*)cur_lc

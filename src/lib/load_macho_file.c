@@ -28,7 +28,7 @@ int	load_macho_file(
 	size_t	i;
 	
 	file->o_addr = addr;
-	file->file_size = file_size;
+	file->o_size = file_size;
 	file->path = path;
 	
 	file->type = read_file_type(file);

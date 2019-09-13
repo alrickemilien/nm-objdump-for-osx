@@ -12,12 +12,16 @@ static int	read_object(t_mach_o *file)
 		file->must_be_swapped = true;
 	else
 		file->must_be_swapped = false;
+	
+	printf("---- read_object_header\n");
 	if (read_object_header(file) == NULL)
 	{
 		dprintf(2, "Malformed object file, "
 				"the mach-o header is truncated or non-existant\n");
 		return (-1);
 	}
+
+	printf("---- read_object_load_commands\n");
 	if (read_object_load_commands(file) == NULL)
 	{
 		dprintf(2, "Malformed object file, there are no load commands\n");
@@ -33,24 +37,32 @@ int32_t			load_object_file(t_mach_o *file,
 	file->o_addr = object_addr;
 	file->o_size = object_size;
 
-	printf("load_object_file\n");
+	printf("---- load_object_file\n");
+	printf("---- file file_size %lld\n", file->file_size);
 
 	if (check_file_addr_size(file,
 					file->o_addr,
 					file->o_size) == -1)
 		return (-1);
 	
+	printf("---- read_object\n");
 	if (read_object(file) == -1)
 		return (-1);
 	if (file->must_be_swapped)
 	{
+		printf("---- swap_object_header\n");
 		swap_object_header(file);
+		printf("---- swap_all_load_commands\n");
 		if (swap_all_load_commands(file) == -1)
 			return (-1);
 	}
+	printf("---- check_object_integrity\n");
 	if (check_object_integrity(file) == -1)
 		return (-1);
 	if (file->must_be_swapped)
+	{
+		printf("---- swap_symtab\n");
 		swap_symtab(file);
+	}
 	return (0);
 }

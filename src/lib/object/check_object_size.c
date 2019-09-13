@@ -27,7 +27,7 @@ int32_t	check_object_addr_size(t_mach_o *file,
 											void *addr,
 											uint64_t size)
 {
-	printf("#### check_object_addr with size at %lld\n", size);
+	printf("#### check_object_addr_size with size at %lld\n", size);
 	if (check_file_addr_size(file, addr, size) == 0
 		&& check_object_addr(file, addr) == 0
 		&& (size == 0

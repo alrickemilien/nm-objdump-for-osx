@@ -41,7 +41,7 @@ int32_t				load_archive_nth_member(t_mach_o *file,
 	file->archive_member_header_addr = NULL;
 	ft_bzero(&file->archive_member_header, sizeof(t_member_header));
 	file->archive_member_header_addr = find_archive_member(file, n_member);
-	printf(" >>>file->archive_member_header_addr : %p - n_member is %lld <<<\\n", 
+	printf("INFO file->archive_member_header_addr : %p at n_member %lld\n", 
 		file->archive_member_header_addr,
 		n_member);
 	if (read_header_of_one_archives_member(file) == -1 || !(file->archive_member_header.st_size > 0))
@@ -52,7 +52,9 @@ int32_t				load_archive_nth_member(t_mach_o *file,
 
 		return (-1);
 	}
-	printf("file->archive_member_header.st_size : %lld\n", file->archive_member_header.st_size);
+	printf("INFO file->archive_member_header.st_size : %lld\n"
+		"INFO archive_member_starting_addr : %p\n"
+		, file->archive_member_header.st_size, get_archive_member_starting_addr(file));
 	return (load_macho_file(file,
                             file->path,
 							get_archive_member_starting_addr(file),

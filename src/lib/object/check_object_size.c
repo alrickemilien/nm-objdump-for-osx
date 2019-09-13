@@ -3,6 +3,14 @@
 
 int32_t	check_object_addr(t_mach_o *file, void *addr)
 {
+	printf("###### check_object_addr\n"
+			"file->addr %p\n"
+			"file->file_size %lld\n"
+			"file->o_addr %p\n"
+			"file->o_size %lld\n"
+			"addr %p\n"
+			, file->addr, file->file_size, file->o_addr, file->o_size, addr);
+
     if (file->o_addr == NULL)
         return (-1);
 	if (addr < file->o_addr
@@ -19,10 +27,12 @@ int32_t	check_object_addr_size(t_mach_o *file,
 											void *addr,
 											uint64_t size)
 {
+	printf("#### check_object_addr with size at %lld\n", size);
 	if (check_file_addr_size(file, addr, size) == 0
 		&& check_object_addr(file, addr) == 0
 		&& (size == 0
 		|| check_object_addr(file, (uint8_t*)addr + size - 1) == 0))
 		return (0);
+	printf("check_object_addr_size return -1\n");
 	return (-1);
 }

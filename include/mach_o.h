@@ -157,7 +157,7 @@ int32_t					load_archive_file(
 							t_mach_o *file,
 							void *archive_addr,
 							uint64_t archive_size);
-int32_t					read_archive_header_members(t_mach_o *file);
+int32_t					read_header_of_one_archives_member(t_mach_o *file);
 int32_t					read_archive_member_name(t_mach_o *file);
 int32_t					read_archive_symdef(t_mach_o *file);
 uint64_t				read_archive_nmembers(t_mach_o *file);

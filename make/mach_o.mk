@@ -25,7 +25,7 @@ LIB_SRC=src/lib/find_load_command_by_command.c \
 LIB_SRC+=src/lib/archive/check_archive_size.c \
 		src/lib/archive/get_archive_member_starting_addr.c \
 		src/lib/archive/load_archive_file.c \
-		src/lib/archive/read_archive_header_members.c \
+		src/lib/archive/read_header_of_one_archives_member.c \
 		src/lib/archive/read_archive_member_name.c \
 		src/lib/archive/read_archive_nmembers.c \
 		src/lib/archive/read_archive_symdef.c \

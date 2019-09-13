@@ -21,12 +21,15 @@ int32_t	load_archive_file(t_mach_o *file,
 	file->ranlibs = NULL;
 	file->ranlibs_64 = NULL;
 
-	if (read_archive_header_members(file) == -1)
+	// read archive info
+	if (read_header_of_one_archives_member(file) == -1)
 		return (-1);
+
 	printf("A3\n");
 
 	file->members = file->archive_member_header_addr;
-	printf("ile->members : %p\n", file->members);
+	printf("INFO file->members adresse : %p\n", file->members);
+	printf("INFO file->archive_member_header_addr : %p\n", file->archive_member_header_addr);
 
 	if (check_archive_addr_size(file,
 		get_archive_member_starting_addr(file),

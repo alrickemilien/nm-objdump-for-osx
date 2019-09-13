@@ -29,6 +29,8 @@
 # define STATIC_LIB_MAGIC "!<arch>\x0a"
 # define LONG_ARCHIVE_NAME_MAGIC "#1/"
 
+# define DEFAULT_MACHO_ERROR "%s: The file was not recognized as a valid object file\n"
+
 typedef enum				e_endian
 {
 	UNKNOWN_ENDIAN = 0,
@@ -299,7 +301,7 @@ typedef struct	s_mach_o_error {
 
 # define MAX_ERROR_BUFFER PATH_MAX + 512
 
-int							mach_o_error(int code, const char *data);
+int							mach_o_error(int code, const char *fmt, ...);
 
 /*
 ** List each error of parsing a macho file

@@ -68,8 +68,7 @@ int32_t				read_archive_symdef(t_mach_o *file)
 	}
 	else
 	{
-		mach_o_error(MACH_O_ERROR_INVALID_SYMDEF, file->path);
-		return (-1);
+		return (mach_o_error(-1, "Invalid symdef for file %s", file->path));
 	}
 	
 	return (0);

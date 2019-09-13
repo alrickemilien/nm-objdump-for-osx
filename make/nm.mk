@@ -5,7 +5,6 @@
 NM=ft_nm
 
 NM_SRC=src/nm/main.c \
-	src/nm/error.c \
 	src/nm/nm.c \
 	src/nm/nm_fat_archive.c \
 	src/nm/nm_archive.c \

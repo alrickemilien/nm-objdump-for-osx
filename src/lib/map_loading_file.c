@@ -21,32 +21,32 @@ void	*map_loading_file(const char *filename, uint64_t *file_size)
 
 	if ((fd = open(filename, O_RDONLY)) == -1)
 	{
-		mach_o_error(MACH_O_ERROR_MAP_LOADING, filename);
+		mach_o_error(-1, "%s: No such file or directory\n", filename);
 		return (NULL);
 	}
 
   if ((fstat(fd, &stats)) == -1) {
-    mach_o_error(MACH_O_ERROR_MAP_LOADING, filename);
+    mach_o_error(-1, DEFAULT_MACHO_ERROR, filename);
     return (NULL);
   }
 
   if (stats.st_size <= 0)
   {
-    mach_o_error(MACH_O_ERROR_INVALID_FILE_SIZE, filename);
+    mach_o_error(-1, DEFAULT_MACHO_ERROR, filename);
     return (NULL);
   }
 
   *file_size = (off_t)stats.st_size;
 
   if ((stats.st_mode & S_IFMT) != S_IFREG && (stats.st_mode & S_IFMT) != S_IFLNK) {
-    mach_o_error(MACH_O_ERROR_INVALID_FILE_TYPE, filename);
+    mach_o_error(-1, DEFAULT_MACHO_ERROR, filename);
     return (0);
   }
 
   if (MAP_FAILED == (map = mmap(NULL, *file_size,
 				PROT_READ | PROT_WRITE, MAP_PRIVATE, fd, 0)))
 	{
-    mach_o_error(MACH_O_ERROR_MAP_LOADING, filename);
+    mach_o_error(-1, DEFAULT_MACHO_ERROR, filename);
 		map = NULL;
 	}
 

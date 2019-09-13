@@ -87,38 +87,6 @@ static t_options_map options_map[] = {
 ** When the option does not exist print error and return 0
 */
 
-int print_error_duplicated_option(const char *data)
-{
-    size_t len;
-    char error_buffer[MAX_ERROR_BUFFER];
-
-    memset(error_buffer, 0, sizeof(char) * MAX_ERROR_BUFFER);
-
-	len = 0;
-
-	// for the part
-    memcpy(error_buffer + len, "nm: for the -", ft_strlen("nm: for the -") * sizeof(char));
-    len += ft_strlen("nm: for the -");
-
-	// option part
-	if (data)
-    {
-    	memcpy(error_buffer + len,
-			data,
-			ft_strlen(data) * sizeof(char));
-    	len += ft_strlen(data);
-	}
-
-	memcpy(error_buffer + len,
-		" option: may only occur zero or one times!\n",
-		ft_strlen(" option: may only occur zero or one times!\n") * sizeof(char));
-    len += ft_strlen(" option: may only occur zero or one times!\n");
-
-    write(2, error_buffer, len * sizeof(char));
-
-    return (1);
-}
-
 static int handle_option(
 	t_options *options,
 	t_options_map **last,
@@ -135,12 +103,14 @@ static int handle_option(
 			&& len == ft_strlen(options_map[j].name))
 		{
 			if (((int*)options)[options_map[j].offset] == 1)
-				return (print_error_duplicated_option(options_map[j].name));
+				return (mach_o_error(-1, 
+					"for the -%s option: may only occur zero or one times!\n",
+					options_map[j].name));
 			
 			if (!options_map[j].waiting_for_value)
 				((int*)options)[options_map[j].offset] = 1;
 
-			// Handle value option lika --arch x86_64
+			// Handle value option like --arch x86_64
 			else
 				*last = &options_map[j];
 
@@ -150,7 +120,7 @@ static int handle_option(
 		j++;
 	}
 
-	print_error_on_option("nm: Unknown command line argument ", name);
+	mach_o_error(-1, "Unknown command line argument '%s'\n", name);
 
 	return (EXIT_FAILURE);
 }

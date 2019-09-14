@@ -22,7 +22,13 @@ void	*map_loading_file(const char *filename, uint64_t *file_size)
 
 	if ((fd = open(filename, O_RDONLY)) == -1)
 	{
-		mach_o_error(-1, errno == EACCES ? "%s: Permission denied.\n" : "%s: No such file or directory.\n", filename);
+    if (errno == EACCES)
+		  mach_o_error(-1, "%s: Permission denied.\n", filename);
+    else if (errno == EAGAIN)
+		  mach_o_error(-1, "%s: Resource temporarily unavailable.\n", filename);
+    else
+		  mach_o_error(-1, "%s: No such file or directory.\n", filename);
+    
 		return (NULL);
 	}
 

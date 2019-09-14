@@ -111,6 +111,10 @@ class TestNm < Test::Unit::TestCase
 		diff("nm #{__dir__}/nm.rb", "./build/ft_nm #{__dir__}/nm.rb")
 	end
 
+	def test_on_tty
+		diff("nm /dev/ttyw0", "./build/ft_nm /dev/ttyw0")
+	end
+
 	def test_no_read_rights
 		file = "#{__dir__}/samples/to_remove.o"
 		FileUtils.touch file

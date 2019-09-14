@@ -55,11 +55,11 @@ int	init_processor_info(
 	t_mach_o *file,
 	t_mach_o_processor *info)
 {
-	LOGDEBUG("%s", "OI 1\n");
+	LOGDEBUG("OI 1\n");
 	ft_memset(info, 0, sizeof(t_mach_o_processor));
 	if (!file->mh && !file->mh_64)
 		return (-1);
-	LOGDEBUG("%s", "OI 2\n");
+	LOGDEBUG("OI 2\n");
 
 	if (file->mh)
 	{
@@ -77,11 +77,11 @@ int	init_processor_info(
 		info->secs_64 = read_sections_64(file, &info->nsects);
 		info->segs_64 = read_segments_64(file, &info->nsegs);
 	}
-	LOGDEBUG("%s", "OI 5\n");
+	LOGDEBUG("OI 5\n");
 	
 	if (find_common_sections_indexes(info))
 		return (-1);
-	LOGDEBUG("%s", "OI 6\n");
+	LOGDEBUG("OI 6\n");
 	return (find_symbol_table(info, file));
 }
 

@@ -23,8 +23,8 @@ class TestNm < Test::Unit::TestCase
   		err_1 = err_1.sub /^\/.*\/nm:/, '' if err_1 
        	err_2 = err_2.sub /^\/.*\/nm:/, '' if err_2 
 
-   	   	assert_(err_1, err_2)
-   	   	assert_(out_1, out_2)
+		assert_equal(err_1, err_2)
+		assert_equal(out_1, out_2)
    	   	#assert_equal(code_1, code_2)
    	end
 
@@ -72,10 +72,10 @@ class TestNm < Test::Unit::TestCase
 		diff("nm #{files}", "./build/ft_nm #{files}")
 	end
 
-	#def test_multiple_valid_files_with_invalid
-	#	files = "/usr/lib/libc.dylib #{__dir__}/nm.rb /usr/lib/liby.a /bin/ps"
-	#	diff("nm #{files}", "./build/ft_nm #{files}")
-	#end
+	def test_multiple_valid_files_with_invalid
+		files = "/usr/lib/libc.dylib #{__dir__}/nm.rb /usr/lib/liby.a /bin/ps"
+		diff("nm #{files}", "./build/ft_nm #{files}")
+	end
 
 	def test_with_pipe
 		diff("nm | cat /bin/dd", "./build/ft_nm | cat /bin/dd")
@@ -85,21 +85,16 @@ class TestNm < Test::Unit::TestCase
 		diff("nm < /bin/dd", "./build/ft_nm < /bin/dd")
 	end
 
-	# Fail
-	#def test_systems_static_librarys
-	#	samples = [
-	#		'/usr/lib/libATCommandStudio.a',
-	#		#'/usr/lib/libQMIParser.a',
-	#		#'/usr/lib/libkmod.a',
-	#		#'/usr/lib/libkmodc++.a',
-	#		#'/usr/lib/libl.a',
-	#		#'/usr/lib/libpkstart.a',
-	#		#'/usr/lib/libtclstub8.5.a',
-	#		#'/usr/lib/libtkstub8.5.a',
-	#		#'/usr/lib/liby.a',
-	#	].join(" ")
- 	#	diff("nm #{samples}", "./build/ft_nm #{samples}")
-	#end
+	def test_systems_static_librarys
+		samples = [
+			'/usr/lib/libATCommandStudio.a',
+			'/usr/lib/libkmodc++.a',
+			'/usr/lib/libtclstub8.5.a',
+			'/usr/lib/libpkstart.a',
+			'/usr/lib/liby.a',
+		].join(" ")
+ 		diff("nm #{samples}", "./build/ft_nm #{samples}")
+	end
 
 	def test_empty_file
 		file = "#{__dir__}/samples/empty.a"

@@ -1,4 +1,5 @@
 #include "mach_o.h"
+#include <errno.h>
 
 int		map_unloading_file(void *ptr, uint64_t file_size)
 {
@@ -21,7 +22,7 @@ void	*map_loading_file(const char *filename, uint64_t *file_size)
 
 	if ((fd = open(filename, O_RDONLY)) == -1)
 	{
-		mach_o_error(-1, "%s: No such file or directory.\n", filename);
+		mach_o_error(-1, errno == EACCES ? "%s: Permission denied.\n" : "%s: No such file or directory.\n", filename);
 		return (NULL);
 	}
 
@@ -38,10 +39,16 @@ void	*map_loading_file(const char *filename, uint64_t *file_size)
 
   *file_size = (off_t)stats.st_size;
 
+  if (S_ISDIR(stats.st_mode)) {
+    mach_o_error(-1, "%s: Is a directory.\n", filename);
+    return (0);
+  }
+
   if ((stats.st_mode & S_IFMT) != S_IFREG && (stats.st_mode & S_IFMT) != S_IFLNK) {
     mach_o_error(-1, DEFAULT_MACHO_ERROR, filename);
     return (0);
   }
+
 
   if (MAP_FAILED == (map = mmap(NULL, *file_size,
 				PROT_READ | PROT_WRITE, MAP_PRIVATE, fd, 0)))

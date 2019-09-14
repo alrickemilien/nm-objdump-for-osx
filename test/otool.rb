@@ -36,7 +36,9 @@ class TestOtool < Test::Unit::TestCase
        	out_2, err_2, code_2 = Shared.pipe(cmd_2)
 
        	# Substract /path/to/nm part of stderr
-  		err_1 = err_1.sub /^\/.*\/otool:/, '' if err_1 
+		err_1 = err_1.sub /^\/.*\/objdump:/, '' if err_1
+  		err_1 = err_1.sub /^\/.*\/otool:/, '' if err_1
+		  
        	err_2 = err_2.sub /^\/.*\_otool:/, '' if err_2 
 
 		assert_equal(err_1, err_2)

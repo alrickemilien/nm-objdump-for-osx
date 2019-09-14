@@ -30,7 +30,7 @@ int	otool(t_options *options, const char *path)
 
 	// 2) Read file type
 	if (load_macho_file(&file, path, file.addr, file.file_size) < 0)
-		return (-1);
+		return (mach_o_error(-1, OTOOL_DEFAULT_MACHO_ERROR, file.path));
 
 	if (file.type == UNKNOWN_FILE)
 	{

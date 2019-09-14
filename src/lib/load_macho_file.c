@@ -44,5 +44,5 @@ int	load_macho_file(
 		i++;
 	}
 	// Invalid file type
-	return (mach_o_error(-1, DEFAULT_MACHO_ERROR, file->path));
+	return (-1);
 }

@@ -1,6 +1,7 @@
 #include "nm.h"
 
-bool	is_symbol_absolute(t_symbol *symbol, t_mach_o_processor *nm_info)
+bool	is_symbol_absolute(
+	t_symbol *symbol, t_mach_o_processor *nm_info)
 {
 	if (is_symbol_extern(symbol, nm_info))
 		return (false);

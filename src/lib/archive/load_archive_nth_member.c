@@ -30,15 +30,9 @@ int				load_archive_nth_member(t_mach_o *file,
 	file->archive_member_header_addr = NULL;
 	ft_memset(&file->archive_member_header, 0, sizeof(t_member_header));
 	file->archive_member_header_addr = find_archive_member(file, n_member);
-		file->archive_member_header_addr,
-		n_member);
 	if (read_header_of_one_archives_member(file) == -1
 		|| !(file->archive_member_header.st_size > 0))
-	{
-			read_header_of_one_archives_member(file));
-			file->archive_member_header.st_size > 0);
 		return (-1);
-	}
 	return (load_macho_file(file,
                             file->path,
 							get_archive_member_starting_addr(file),

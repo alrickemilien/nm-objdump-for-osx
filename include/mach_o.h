@@ -235,7 +235,7 @@ int								check_archive_addr_size(t_mach_o *file,
 								uint64_t size);
 int								check_archive_addr(t_mach_o *file, void *addr);
 int								check_mach_header_integrity(t_mach_o *file);
-int									heck_lc_symtab_integrity(t_mach_o *file,
+int								check_lc_symtab_integrity(t_mach_o *file,
 									struct load_command *lc);
 int								check_lc_segment_64_integrity(
 	t_mach_o *file, struct load_command *lc);

@@ -33,8 +33,7 @@ int	otool(t_options *options, const char *path)
 		return (mach_o_error(-1, OTOOL_DEFAULT_MACHO_ERROR, file.path));
 
 	if (file.type == UNKNOWN_FILE)
-		return (mach_o_error(-1, "%s: %s %s\n", path, path,
-				MACH_O_ERROR_UNKKNOWN_FILE_FORMAT_STR));
+		return (mach_o_error(-1, "%s: %s Invalid file\n", path, path));
 	error = dispatch(&file, options);
 	if (map_unloading_file(file.addr, file.file_size))
 		return (-1);

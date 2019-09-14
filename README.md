@@ -19,7 +19,7 @@ This project provides three binaries :
 
 ## Architecture
 
-[]!(./doc/nm-otool.svg)
+![](./doc/nm-otool.svg)
 
 ## Debug
 Compile with `DEBUG=true make re` and use macro `LOGDEBUG(fmt, ...)`

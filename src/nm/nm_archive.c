@@ -21,9 +21,10 @@ int32_t	nm_archive(t_mach_o *file, t_options *options)
 			i++;
 			continue ;
 		}
+		
 		printf("\n%s(%s):\n",
-            file->path,
-            file->archive_member_header.member_name);
+           	file->path,
+           	file->archive_member_header.member_name);
 		
         if (nm_object(file, options) == -1)
 			return (-1);

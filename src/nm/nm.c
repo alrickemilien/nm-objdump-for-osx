@@ -32,7 +32,7 @@ int	nm(t_options *options, const char *path)
 				MACH_O_ERROR_UNKKNOWN_FILE_FORMAT_STR);
         return (NOT_RECOGNIZED_VALID_FILE_EXIT_CODE);
 	}
-	if (options->file_count > 1)
+	if (options->file_count > 1 && file.type == OBJECT_FILE)
 		printf("\n%s:\n", path);
 	error = dispatch(&file, options);
 	if (map_unloading_file(file.addr, file.file_size))

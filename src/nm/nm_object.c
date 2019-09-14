@@ -95,15 +95,15 @@ int32_t	nm_object(t_mach_o *file, t_options *options)
 	size_t  			i;
 	t_symbol			*symbols;
 
-	LOGDEBUG("%s", "O1\n");
+	LOGDEBUG("O1\n");
 	if (init_processor_info(file, &info) == -1)
 		return (-1);
-	LOGDEBUG("%s", "O2\n");
+	LOGDEBUG("O2\n");
 	if ((symbols = read_symbols(file, &info)) == NULL)
 		return (-1);
-	LOGDEBUG("%s", "O3\n");
+	LOGDEBUG("O3\n");
 	sort_symbols(symbols, info.st_lc->nsyms, options);
-	LOGDEBUG("%s", "O4\n");
+	LOGDEBUG("O4\n");
 	i = 0;
 	LOGDEBUG("info.st_lc->nsyms : %d\n", info.st_lc->nsyms);
 	while (i < info.st_lc->nsyms)

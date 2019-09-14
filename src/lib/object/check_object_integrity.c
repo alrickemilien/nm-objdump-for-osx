@@ -43,8 +43,6 @@ int					check_load_commands_integrity(t_mach_o *file)
 	struct mach_header	*hdr;
 	struct load_command *cur_lc;
 
-	LOGDEBUG("---- check_load_commands_integrity\n");
-
 	i = 0;
 	if (file->mh)
 		hdr = file->mh;
@@ -56,8 +54,6 @@ int					check_load_commands_integrity(t_mach_o *file)
 		if (check_lc_bound(file, cur_lc) == -1)
 			return (mach_o_error(-1, "Object file is malformed "
 				"(the load commands would go beyond the end of the file)\n"));
-
-		LOGDEBUG("------ check_single_load_command_integrity %ld\n", i);
 
 		if (check_single_load_command_integrity(file, cur_lc) == -1)
 			return (-1);

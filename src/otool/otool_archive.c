@@ -18,10 +18,7 @@ int	otool_archive(t_mach_o *file, t_options *options)
 		}
 		ft_printf("%s(%s):\n", file->path, file->archive_member_header.member_name);
         if (otool_object(file, options) == -1)
-		{
-			LOGDEBUG("INFO otool_archive ended zith code -1\n");
 			return (-1);
-		}
 		i++;
 	}
 }

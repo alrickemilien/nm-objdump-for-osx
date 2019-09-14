@@ -36,13 +36,6 @@ static void	read_symbol_32(t_symbol *symbol, struct nlist *nl)
 static void	read_symbol_64(t_symbol *symbol, struct nlist_64 *nl)
 {
 	symbol->sym_entry = *nl;
-	// LOGDEBUG("Reading symbol :\n"
-	// 		"n_type : %d\n"
-	// 		"n_sect : %d\n"
-	// 		"n_desc : %d\n"
-	// 		"n_value : %llx\n",
-	// 		(int)nl->n_type,
-	// 		(int)nl->n_sect,(int)nl->n_desc,nl->n_value);
 }
 
 t_symbol	*read_symbols(
@@ -68,7 +61,6 @@ t_symbol	*read_symbols(
 			read_symbol_64(symbols + i, nm_info->symtab_64 + i);
 		symbols[i].string = read_string_table_entry(
 			file, nm_info, symbols[i].sym_entry.n_un.n_strx, &symbols[i].len);
-		// LOGDEBUG("symbols[i].string : %s\n", symbols[i].string);
 		i++;
 	}
 	return (symbols);

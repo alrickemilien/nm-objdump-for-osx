@@ -14,10 +14,6 @@ uint32_t	find_section(
 	{
 		while (i < info->nsects)
 		{
-			LOGDEBUG("INFO x32 / seg_name : %s / info->secs[i]->segname : %s\n",
-				seg_name,
-				info->secs[i]->segname);
-			
 			if (ft_strequ(seg_name, info->secs[i]->segname)
 				&& ft_strequ(sec_name, info->secs[i]->sectname))
 				return (i);
@@ -28,10 +24,6 @@ uint32_t	find_section(
 	{
 		while (i < info->nsects)
 		{
-			LOGDEBUG("INFO x64 / seg_name : %s / info->secs[i]->segname : %s\n",
-				seg_name,
-				info->secs_64[i]->segname);
-			
 			if (ft_strequ(seg_name, info->secs_64[i]->segname)
 				&& ft_strequ(sec_name, info->secs_64[i]->sectname))
 				return (i);

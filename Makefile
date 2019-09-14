@@ -12,12 +12,6 @@ LIBFT=libft
 DIR_LIBFT=libft
 LINK_LIBFT=-lft -L $(DIR_LIBFT)
 
-ifneq ($(DEBUG),true)
-DEBUG=
-else
-DEBUG=-D DEBUG
-endif
-
 include make/mach_o.mk
 include make/nm.mk
 include make/otool.mk

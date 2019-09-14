@@ -17,9 +17,6 @@ This project provides three binaries :
 ./build/mach-o-builder mach-o-builder.conf 1> mach-o-object.gen.o
 ```
 
-## Debug
-Compile with `DEBUG=true make re` and use macro `LOGDEBUG(fmt, ...)`
-
 ## Test
 Requires **ruby >= 2.3.7** and **unit-test gem**
 

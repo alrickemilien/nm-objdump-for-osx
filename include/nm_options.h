@@ -1,5 +1,5 @@
-#ifndef NM_OPTIONS
-#define NM_OPTIONS
+#ifndef NM_OPTIONS_H
+# define NM_OPTIONS_H
 
 /*
 ** All parameter
@@ -53,36 +53,35 @@ enum {
 
 # pragma pack(push, 1)
 
-typedef struct s_options {
-	int ALL_SYMBOL;
-	int ONLY_GLOBAL_SYMBOL;
-	int SORT_NUMERIC;
-	int PREPEND_FILE_ARCHIVE_NAME;
-	int ONLY_UNDEFINED_SYMBOL;
-	int DO_NOT_DISPLAY_UNDEFINED_SYMBOL;
-	int DISPLAY_NSECT;
-	int DISPLAY_HEXA;
-	int ONLY_SYMBOL_NAME;
-	int LIST_PSEUDO_SYMBOL;
-	int DISPLAY_DYNAMIC_LIB_SYMBOL;
-	int DISPLAY_PATH_NAME;
-	int DISPLAY_PORTABLE;
-	int ONLY_DYNAMIC;
-	int ARCH_TYPE;
-	int SEGMENT_SECTION;
-	int PRINT_SIZE;
-	int SORT_SIZE;
-	int DO_NOT_SORT;
-	int REVERSE_SORT;
-	int PRINT_AFTER_ALL;
-	int PRINT_BEFORE_ALL;
-	int DEFINED_ONLY;
-	int RADIX;
-	int HELP;
-
-	int	end_index;
-	int	file_count;
-} t_options;
+typedef struct	s_options {
+	int			ALL_SYMBOL;
+	int			ONLY_GLOBAL_SYMBOL;
+	int			SORT_NUMERIC;
+	int			PREPEND_FILE_ARCHIVE_NAME;
+	int			ONLY_UNDEFINED_SYMBOL;
+	int			DO_NOT_DISPLAY_UNDEFINED_SYMBOL;
+	int			DISPLAY_NSECT;
+	int			DISPLAY_HEXA;
+	int			ONLY_SYMBOL_NAME;
+	int			LIST_PSEUDO_SYMBOL;
+	int			DISPLAY_DYNAMIC_LIB_SYMBOL;
+	int			DISPLAY_PATH_NAME;
+	int			DISPLAY_PORTABLE;
+	int			ONLY_DYNAMIC;
+	int			ARCH_TYPE;
+	int			SEGMENT_SECTION;
+	int			PRINT_SIZE;
+	int			SORT_SIZE;
+	int			DO_NOT_SORT;
+	int			REVERSE_SORT;
+	int			PRINT_AFTER_ALL;
+	int			PRINT_BEFORE_ALL;
+	int			DEFINED_ONLY;
+	int			RADIX;
+	int			HELP;
+	int			end_index;
+	int			file_count;
+}				t_options;
 
 # pragma pack(pop)
 
@@ -93,29 +92,33 @@ typedef struct s_options {
 ** waiting_for_value: is option waiting for argument
 */
 
-typedef struct 	s_options_map {
+typedef struct	s_options_map {
 	char		*name;
 	int			offset;
-	int 		(*waiting_for_value)(t_options *options, const char *value);
+	int 		(*waiting_for_value)(
+		t_options *options, const char *value);
 }				t_options_map;
 
 /*
 ** Options utils
 */
 
-bool is_a_multi_option(const char *name);
-bool is_a_single_option(const char *name);
-bool is_a_end_arguments_string(const char *name);
-bool is_an_option(const char *name);
-bool is_a_waiting_value_option(const char *name);
+bool			is_a_multi_option(const char *name);
+bool			is_a_single_option(const char *name);
+bool			is_a_end_arguments_string(const char *name);
+bool			is_an_option(const char *name);
+bool			is_a_waiting_value_option(const char *name);
 
-int read_options_arguments(int ac, char **av, t_options *opt);
+int				read_options_arguments(
+	int ac, char **av, t_options *opt);
 
 /*
 ** Options with specifc values to handle
 */
 
-int read_arch_option(t_options *options, const char *value);
-int read_radix_option(t_options *options, const char *value);
+int				read_arch_option(
+	t_options *options, const char *value);
+int				read_radix_option(
+	t_options *options, const char *value);
 
 #endif

@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   swap_symtab.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: aemilien <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/09/14 18:35:07 by aemilien          #+#    #+#             */
+/*   Updated: 2019/09/14 18:35:09 by aemilien         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "mach_o.h"
 
 void	swap_nlist(struct nlist *nlist)
@@ -21,7 +33,8 @@ void	swap_symtab(t_mach_o *file)
 	struct nlist_64			*nlist_64;
 	size_t					i;
 
-	if (!(sc = ((struct symtab_command *)find_load_command_by_command(file, LC_SYMTAB))))
+	if (!(sc = ((struct symtab_command *)
+		find_load_command_by_command(file, LC_SYMTAB))))
 		return ;
 	i = 0;
 	nlist = (struct nlist *)(void *)((uint8_t*)file->o_addr + sc->symoff);

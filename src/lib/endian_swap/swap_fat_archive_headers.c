@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   swap_fat_archive_headers.c                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: aemilien <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/09/14 18:38:19 by aemilien          #+#    #+#             */
+/*   Updated: 2019/09/14 18:38:34 by aemilien         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "mach_o.h"
 
 static void	swap_fat_header(struct fat_header *header)
@@ -42,7 +54,7 @@ static int	swap_single_fat_archs_header(t_mach_o *file, uint32_t narch)
 	return (0);
 }
 
-int				swap_fat_archive_headers(t_mach_o *file)
+int			swap_fat_archive_headers(t_mach_o *file)
 {
 	size_t	i;
 

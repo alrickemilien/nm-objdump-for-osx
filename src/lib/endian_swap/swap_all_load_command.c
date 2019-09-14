@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   swap_all_load_command.c                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: aemilien <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/09/14 18:34:02 by aemilien          #+#    #+#             */
+/*   Updated: 2019/09/14 18:34:34 by aemilien         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "mach_o.h"
 
 #define NBR_SUPPORTED_LC 4
@@ -9,7 +21,7 @@ static const t_lc_swapper	g_swappers[NBR_SUPPORTED_LC] = {
 	{swap_load_command_symseg, LC_SYMSEG},
 };
 
-static int	check_lc_bound(t_mach_o *file,
+static int					check_lc_bound(t_mach_o *file,
 									struct load_command *cur_lc)
 {
 	if (check_object_addr_size(file, cur_lc,
@@ -20,7 +32,7 @@ static int	check_lc_bound(t_mach_o *file,
 	return (0);
 }
 
-static int			swap_load_command(t_mach_o *file,
+static int					swap_load_command(t_mach_o *file,
 										struct load_command *lc)
 {
 	size_t	i;
@@ -30,7 +42,7 @@ static int			swap_load_command(t_mach_o *file,
 	lc->cmdsize = swap_int32(lc->cmdsize);
 	if (check_lc_bound(file, lc) == -1)
 		return (mach_o_error(-1, "Object file is malformed, "
-			"the load commands would go beyond the end of the file\n"));
+		"the load commands would go beyond the end of the file\n"));
 	while (i < NBR_SUPPORTED_LC)
 	{
 		if (lc->cmd == g_swappers[i].cmd)
@@ -43,7 +55,7 @@ static int			swap_load_command(t_mach_o *file,
 	return (0);
 }
 
-int					swap_all_load_commands(t_mach_o *file)
+int							swap_all_load_commands(t_mach_o *file)
 {
 	size_t				i;
 	struct mach_header	*hdr;

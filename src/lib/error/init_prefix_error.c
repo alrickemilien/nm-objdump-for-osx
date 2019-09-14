@@ -23,13 +23,13 @@ void 	init_prefix_error(char *argv_0)
     size_t	argv_0_len;
 
 	argv_0_extracted = extract_binary_name_from_path(argv_0);
-	memset(buffer, 0, MAX_ERROR_BUFFER);
+	ft_memset(buffer, 0, MAX_ERROR_BUFFER);
 	getcwd(buffer, MAX_ERROR_BUFFER);
 	cwd_len = ft_strlen(buffer);
 	argv_0_len = ft_strlen(argv_0_extracted);
 	if (argv_0_len >= MAX_ERROR_BUFFER - cwd_len)
 	{
-		memset(buffer, 0, MAX_ERROR_BUFFER);
+		ft_memset(buffer, 0, MAX_ERROR_BUFFER);
 		memcpy(buffer, argv_0_extracted, argv_0_len);
 	}
 	else

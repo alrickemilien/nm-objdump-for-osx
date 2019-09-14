@@ -6,7 +6,7 @@ static int		compare_syms(const void *a, const void *b)
 {
 	int	ret;
 
-	ret = strcmp((char *)((const t_symbol*)a)->string,
+	ret = ft_strcmp((char *)((const t_symbol*)a)->string,
 					(char *)((const t_symbol*)b)->string);
 	if (ret)
 		return (g_reverse_flag ? -ret : ret);

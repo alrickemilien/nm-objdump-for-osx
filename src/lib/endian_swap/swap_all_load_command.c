@@ -29,11 +29,8 @@ static int32_t			swap_load_command(t_mach_o *file,
 	lc->cmd = swap_int32(lc->cmd);
 	lc->cmdsize = swap_int32(lc->cmdsize);
 	if (check_lc_bound(file, lc) == -1)
-	{
-		dprintf(2, "Object file is malformed, "
-			"the load commands would go beyond the end of the file\n");
-		return (-1);
-	}
+		return (mach_o_error(-1, "Object file is malformed, "
+			"the load commands would go beyond the end of the file\n"));
 	while (i < NBR_SUPPORTED_LC)
 	{
 		if (lc->cmd == g_swappers[i].cmd)

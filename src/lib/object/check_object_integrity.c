@@ -54,11 +54,9 @@ int					check_load_commands_integrity(t_mach_o *file)
 	while (i < hdr->ncmds)
 	{
 		if (check_lc_bound(file, cur_lc) == -1)
-		{
-			dprintf(2, "Object file is malformed "
-				"(the load commands would go beyond the end of the file)\n");
-			return (-1);
-		}
+			return (mach_o_error(-1, "Object file is malformed "
+				"(the load commands would go beyond the end of the file)\n"));
+
 		LOGDEBUG("------ check_single_load_command_integrity %ld\n", i);
 
 		if (check_single_load_command_integrity(file, cur_lc) == -1)

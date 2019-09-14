@@ -76,7 +76,7 @@ char *merge_strings(char *s1, char *s2) {
 	size_t		i;
 	size_t		j;
 
-	new_str = ft_strnew(strlen(s1) + strlen(s2));
+	new_str = ft_strnew(ft_strlen(s1) + ft_strlen(s2));
 
   if (NULL == new_str)
 		return (NULL);

@@ -22,7 +22,7 @@ int	otool(t_options *options, const char *path)
 	t_mach_o	file;
 	int			error;
 
-	memset(&file, 0, sizeof(t_mach_o));
+	ft_memset(&file, 0, sizeof(t_mach_o));
 
 	// 1) Load the files
 	if ((file.addr = map_loading_file(path, &file.file_size)) == NULL)
@@ -33,11 +33,8 @@ int	otool(t_options *options, const char *path)
 		return (mach_o_error(-1, OTOOL_DEFAULT_MACHO_ERROR, file.path));
 
 	if (file.type == UNKNOWN_FILE)
-	{
-		dprintf(2, "%s: %s %s\n", path, path,
-				MACH_O_ERROR_UNKKNOWN_FILE_FORMAT_STR);
-        return (-1);
-	}
+		return (mach_o_error(-1, "%s: %s %s\n", path, path,
+				MACH_O_ERROR_UNKKNOWN_FILE_FORMAT_STR));
 	error = dispatch(&file, options);
 	if (map_unloading_file(file.addr, file.file_size))
 		return (-1);

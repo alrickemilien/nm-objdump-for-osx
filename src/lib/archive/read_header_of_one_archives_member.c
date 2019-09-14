@@ -36,10 +36,6 @@ int32_t					read_header_of_one_archives_member(t_mach_o *file)
 		(const char *)member_header_addr + 48);
 	
 	if (file->archive_member_header.st_size < 0)
-	{
-		dprintf(2, "Invalid st_size in archive member\n");
-		return (-1);
-	}
-	
+		return (mach_o_error(-1, "Invalid st_size in archive member\n"));
 	return (0);
 }

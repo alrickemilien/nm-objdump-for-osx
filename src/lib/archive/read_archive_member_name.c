@@ -11,10 +11,7 @@ int32_t	read_archive_member_name(t_mach_o *file)
 			+ sizeof(LONG_ARCHIVE_NAME_MAGIC) - 1);
 		
 		if (file->archive_member_header.name_length < 0)
-		{
-			dprintf(2, "Invalid member_name size\n");
-			return (-1);
-		}
+			return (mach_o_error(-1, "Invalid member_name size\n"));
 		
 		file->archive_member_header.member_name =
 			(uint8_t*)file->archive_member_header_addr + 60;

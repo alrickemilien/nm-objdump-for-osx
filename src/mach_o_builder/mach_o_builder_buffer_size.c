@@ -116,7 +116,7 @@ static size_t get_string_table_size(t_mach_o_builder *builder) {
   ret = 0;
 
   if (NULL != builder->string_table)
-    ret = strlen(builder->string_table);
+    ret = ft_strlen(builder->string_table);
 
   debug_s("Finsished zith get_string_table_size\n");
 

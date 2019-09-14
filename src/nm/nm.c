@@ -16,7 +16,7 @@ int	nm(t_options *options, const char *path)
 	t_mach_o	file;
 	int			error;
 
-	memset(&file, 0, sizeof(t_mach_o));
+	ft_memset(&file, 0, sizeof(t_mach_o));
 
 	// 1) Load the files
 	if ((file.addr = map_loading_file(path, &file.file_size)) == NULL)
@@ -27,11 +27,8 @@ int	nm(t_options *options, const char *path)
 		return (mach_o_error(-1, NM_DEFAULT_MACHO_ERROR, file.path));
 
 	if (file.type == UNKNOWN_FILE)
-	{
-		dprintf(2, "%s: %s %s\n", path, path,
-				MACH_O_ERROR_UNKKNOWN_FILE_FORMAT_STR);
-        return (NOT_RECOGNIZED_VALID_FILE_EXIT_CODE);
-	}
+		return (mach_o_error(NOT_RECOGNIZED_VALID_FILE_EXIT_CODE, "%s: %s %s\n", path, path,
+				MACH_O_ERROR_UNKKNOWN_FILE_FORMAT_STR));
 	if (options->file_count > 1 && file.type == OBJECT_FILE)
 		printf("\n%s:\n", path);
 	error = dispatch(&file, options);

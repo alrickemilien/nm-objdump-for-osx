@@ -10,7 +10,7 @@ void				cleanup_otool_info(t_otool_dump *info)
 
 int					init_otool_info(t_mach_o *file, t_otool_dump *info)
 {
-	memset(info, 0, sizeof(t_otool_dump));
+	ft_memset(info, 0, sizeof(t_otool_dump));
 	if (file->mh && file->mh_64)
 		return (-1);
 	if (file->mh)

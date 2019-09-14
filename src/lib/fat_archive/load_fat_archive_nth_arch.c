@@ -9,10 +9,7 @@ static int32_t	load_fat_archive_nth_arch_32(
 
 	if (check_file_addr_size(file, file->fat_archs + narch,
 								sizeof(struct fat_arch)) == -1)
-	{
-		dprintf(2, MACH_O_ERROR_HEADER_TRUNCATED_STR);
-		return (-1);
-	}
+		return (mach_o_error(-1, MACH_O_ERROR_HEADER_TRUNCATED_STR));
 	addr = (void *)((uint8_t *)file->addr +
 					file->fat_archs[narch].offset);
 	object_size = file->fat_archs[narch].size;
@@ -28,10 +25,7 @@ static int32_t	load_fat_archive_nth_arch_64(
 
 	if (check_file_addr_size(file, file->fat_archs_64 + narch,
 								sizeof(struct fat_arch_64)) == -1)
-	{
-		dprintf(2, MACH_O_ERROR_HEADER_TRUNCATED_STR);
-		return (-1);
-	}
+		return (mach_o_error(-1, MACH_O_ERROR_HEADER_TRUNCATED_STR));
 	addr = (void *)((uint8_t *)file->addr +
 					file->fat_archs_64[narch].offset);
 	object_size = file->fat_archs_64[narch].size;

@@ -11,7 +11,7 @@ void        init_prefix_mach_o_error(const char *prefix)
     if (len >= MAX_ERROR_BUFFER)
         len = MAX_ERROR_BUFFER - 1;
 
-    memset(g_prefix, 0, sizeof(g_prefix));
+    ft_memset(g_prefix, 0, sizeof(g_prefix));
     memcpy(g_prefix, prefix, len * sizeof(char));
 }
 

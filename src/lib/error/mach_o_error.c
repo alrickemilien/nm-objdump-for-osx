@@ -30,7 +30,7 @@ int mach_o_error(int code, const char *fmt, ...)
     size_t  cursor;
     va_list arg;
     
-    memset(error_buffer, 0, sizeof(char) * MAX_ERROR_BUFFER);
+    ft_memset(error_buffer, 0, sizeof(char) * MAX_ERROR_BUFFER);
     set_prefix_mach_o_error_to_buffer(error_buffer);
     va_start(arg, fmt);
     i = 0;

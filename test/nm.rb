@@ -46,6 +46,8 @@ class TestNm < Test::Unit::TestCase
 			'U _exit',
 			'U _memcmp',
 			'U _memcpy',
+			'U _strcmp',
+			'U _strlen',			
 			'U _dprintf',
 		].map { |x| assert_not_match(/#{x}/, out, "Forbidden function #{x} into nm binary") }
 	end

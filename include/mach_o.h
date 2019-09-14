@@ -302,44 +302,4 @@ void						init_prefix_mach_o_error(const char *prefix);
 void						set_prefix_mach_o_error_to_buffer(char *buffer);
 void						init_prefix_error(char *argv_0);
 
-/*
-** List each error of parsing a macho file
-*/
-
-# define MACH_O_ERROR_INVALID_MAGICK 0
-# define MACH_O_ERROR_INVALID_MAGICK_STR "Invalid magick number"
-
-# define MACH_O_ERROR_INVALID_FILE_SIZE 1
-# define MACH_O_ERROR_INVALID_FILE_SIZE_STR "Invalid file size"
-
-# define MACH_O_ERROR_INVALID_FILE 2
-# define MACH_O_ERROR_INVALID_FILE_STR "Invalid file type, should be regular file or link on regulat file"
-
-# define MACH_O_ERROR_MAP_LOADING 3
-# define MACH_O_ERROR_MAP_LOADING_STR "File does not exist or permission denied"
-
-# define MACH_O_ERROR_INVALID_MACH_HEADER 4
-# define MACH_O_ERROR_INVALID_MACH_HEADER_STR "Invalid mach header"
-
-# define MACH_O_ERROR_INVALID_FILETYPE 5
-# define MACH_O_ERROR_INVALID_FILETYPE_STR "Invalid file type"
-
-# define MACH_O_ERROR_INVALID_SYMBOL_TYPE 6
-# define MACH_O_ERROR_INVALID_SYMBOL_TYPE_STR "Invalid symbol type"
-
-# define MACH_O_ERROR_NO_SECTION_FOUND 7
-# define MACH_O_ERROR_NO_SECTION_FOUND_STR "No section found with the given sectname and segname"
-
-# define MACH_O_ERROR_INVALID_FILE_TYPE 8
-# define MACH_O_ERROR_INVALID_FILE_TYPE_STR "Unrecognized file type"
-
-# define MACH_O_ERROR_INVALID_SYMDEF 9
-# define MACH_O_ERROR_INVALID_SYMDEF_STR "First member of archive file is not SYMDEF or SYMDEF_SORTED"
-
-# define MACH_O_ERROR_HEADER_TRUNCATED 10
-# define MACH_O_ERROR_HEADER_TRUNCATED_STR "Malformed fat file : the fat header extends past the file"
-
-# define MACH_O_ERROR_UNKKNOWN_FILE_FORMAT 11
-# define MACH_O_ERROR_UNKKNOWN_FILE_FORMAT_STR "The file was not recognized as a valid object file"
-
 #endif

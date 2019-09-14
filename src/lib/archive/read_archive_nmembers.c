@@ -7,7 +7,8 @@ static bool		is_ran_off_already_in_ranlibs(t_mach_o *file,
 	uint64_t	i;
 
 	i = 0;
-	// assert(file->ranlibs && index < file->nran);
+	if (!file->ranlibs || index > file->nran)
+		return (false);
 	while (i < index)
 	{
 		if (file->ranlibs[i].ran_off == ranlib->ran_off)
@@ -24,7 +25,8 @@ static bool		is_ran_off_already_in_ranlibs_64(t_mach_o *file,
 	uint64_t	i;
 
 	i = 0;
-	// assert(file->ranlibs_64 && index < file->nran);
+	if (!file->ranlibs_64 || index > file->nran)
+		return (false);
 	while (i < index)
 	{
 		if (file->ranlibs_64[i].ran_off == ranlib->ran_off)
@@ -68,7 +70,8 @@ static uint64_t	read_archive_nmembers_64(t_mach_o *file)
 
 uint64_t		read_archive_nmembers(t_mach_o *file)
 {
-	// assert(file->ranlibs || file->ranlibs_64);
+	if (!file->ranlibs_64 && file->ranlibs)
+		return (false);
 	if (file->ranlibs)
 		return (read_archive_nmembers_32(file));
 	else

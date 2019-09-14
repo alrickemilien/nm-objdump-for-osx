@@ -27,8 +27,7 @@ int	nm(t_options *options, const char *path)
 		return (mach_o_error(-1, NM_DEFAULT_MACHO_ERROR, file.path));
 
 	if (file.type == UNKNOWN_FILE)
-		return (mach_o_error(NOT_RECOGNIZED_VALID_FILE_EXIT_CODE, "%s: %s %s\n", path, path,
-				MACH_O_ERROR_UNKKNOWN_FILE_FORMAT_STR));
+		return (mach_o_error(NOT_RECOGNIZED_VALID_FILE_EXIT_CODE, "%s: %s Unknown file format\n", path, path));
 	if (options->file_count > 1 && file.type == OBJECT_FILE)
 		ft_printf("\n%s:\n", path);
 	error = dispatch(&file, options);

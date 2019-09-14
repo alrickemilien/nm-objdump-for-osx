@@ -7,7 +7,8 @@ uint32_t	count_segments_32(t_mach_o *file)
 	uint32_t			nsegs;
 	uint32_t			ncmds;
 
-	// assert((file->mh || file->mh_64) && file->load_commands);
+	if ((!file->mh && !file->mh_64) || !file->load_commands)
+		return ((uint32_t)-1);
 	i = 0;
 	nsegs = 0;
 	cur_lc = file->load_commands;
@@ -23,7 +24,7 @@ uint32_t	count_segments_32(t_mach_o *file)
 	return (nsegs);
 }
 
-static void				fill_segments(struct segment_command **segs,
+static int				fill_segments(struct segment_command **segs,
 								uint32_t nsegs,
 								t_mach_o *file)
 {
@@ -31,7 +32,8 @@ static void				fill_segments(struct segment_command **segs,
 	uint32_t			i;
 	uint32_t			ncmds;
 
-	// assert((file->mh || file->mh_64) && file->load_commands);
+	if ((!file->mh && !file->mh_64) || !file->load_commands)
+		return (-1);
 	i = 0;
 	ncmds = file->mh ? file->mh->ncmds : file->mh_64->ncmds;
 	cur_lc = file->load_commands;
@@ -42,6 +44,7 @@ static void				fill_segments(struct segment_command **segs,
 		cur_lc = (struct load_command *)(void *)((uint8_t*)cur_lc
 												+ cur_lc->cmdsize);
 	}
+	return (0);
 }
 
 struct segment_command	**read_segments_32(t_mach_o *file,
@@ -50,8 +53,10 @@ struct segment_command	**read_segments_32(t_mach_o *file,
 	uint32_t				nsegs;
 	struct segment_command	**segs;
 
-	// assert((file->mh || file->mh_64) && file->load_commands);
-	nsegs = count_segments_32(file);
+	if ((!file->mh && !file->mh_64) || !file->load_commands)
+		return (NULL);
+	if ((nsegs = count_segments_32(file)) == (uint32_t)-1)
+		return (NULL);
 	*return_nsegs = 0;
 	if ((segs = malloc(sizeof(struct segment_command *) * nsegs)) == NULL)
 		return (NULL);

@@ -8,7 +8,8 @@ void	swap_object_header(t_mach_o *file)
 	if (!file->mh) 
 		mh = (struct mach_header *)file->mh_64;
 	
-	// assert(mh);
+	if (!mh)
+		return ;
 	
 	mh->cputype = (cpu_type_t)swap_int32((uint32_t)mh->cputype);
 	mh->cpusubtype = (cpu_subtype_t)swap_int32((uint32_t)mh->cpusubtype);

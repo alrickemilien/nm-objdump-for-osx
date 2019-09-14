@@ -105,19 +105,7 @@ void					sort(
     size_t type_size,
     int (*cmp)(const void *, const void *));
 
-/*
-**   __________________  ___________  ______
-** _/ __ \_  __ \_  __ \/  _ \_  __ \/  ___/
-** \  ___/|  | \/|  | \(  <_> )  | \/\___ \
-**  \___  >__|   |__|   \____/|__|  /____  >
-**      \/                               \/
-*/
-
-void	print_error_on_option(const char *msg, const char *option);
-
 int		exit_with_help(void);
-
-# define USAGE "./ft_nm <object file>"
 
 # define NOT_RECOGNIZED_VALID_FILE_EXIT_CODE 1
 

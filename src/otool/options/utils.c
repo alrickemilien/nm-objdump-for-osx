@@ -2,10 +2,6 @@
 
 
 static t_options_map g_waiting_value_options[] = {
-		{ "t", RADIX, &read_radix_option },
-		{ "arch", ARCH_TYPE, &read_arch_option, },
-		{ "s", SEGMENT_SECTION, NULL, },// true
-		{ "radix", RADIX, NULL },// true
 		{ NULL, 0, NULL },
 };
 

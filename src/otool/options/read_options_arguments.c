@@ -43,7 +43,7 @@ static int handle_option(
 			else
 				*last = &options_map[j];
 
-			return (EXIT_OK);
+			return (-1);
 		}
 
 		j++;
@@ -51,7 +51,7 @@ static int handle_option(
 
 	mach_o_error(-1, "Unknown command line argument '%s'\n", name);
 
-	return (EXIT_FAILURE);
+	return (-1);
 }
 
 /*
@@ -74,7 +74,7 @@ int read_options_arguments(int ac, char **av, t_options *options)
 	i = 1;
 	while (i < ac)
 	{
-		ret = EXIT_OK;
+		ret = 0;
 
 		if (options->end_index)
 			options->file_count += 1;

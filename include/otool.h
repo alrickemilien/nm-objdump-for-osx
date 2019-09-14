@@ -1,34 +1,23 @@
 #ifndef OTOOL_H
 #define OTOOL_H
 
-# include "mach_o.h"
 # include "libft.h"
-
-
-/*
-** All ok
-*/
-
-# define EXIT_OK 0
-
-/*
-** If minor problems (e.g., cannot access subdirectory)
-*/
-
-# define EXIT_FAILURE 1
+# include "mach_o.h"
+# include "otool_options.h"
 
 /*
 ** Main
 */
 
+int	otool(t_options *options, const char *path);
+int	otool_object(t_mach_o *file, t_options *options);
+int	otool_archive(t_mach_o *file, t_options *options);
+int	otool_fat_archive(t_mach_o *file, t_options *options);
+
 /*
-**   __________________  ___________  ______
-** _/ __ \_  __ \_  __ \/  _ \_  __ \/  ___/
-** \  ___/|  | \/|  | \(  <_> )  | \/\___ \
-**  \___  >__|   |__|   \____/|__|  /____  >
-**      \/                               \/
+** Exit
 */
 
-# define USAGE "./ft_otool <object file>"
+int exit_with_help(void);
 
 #endif

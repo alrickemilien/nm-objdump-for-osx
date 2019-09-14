@@ -58,8 +58,7 @@ int				swap_fat_archive_headers(t_mach_o *file)
 			|| (file->fat_archs_64 && check_file_addr_size(file,
 										file->fat_archs_64 + i,
 										sizeof(struct fat_arch_64) == -1)))
-			return (mach_o_error(2, "%s: Invalid file format",
-				file->path));
+			return (mach_o_error(2, "%s: Unknown file format", file->path));
 		if (swap_single_fat_archs_header(file, i) < 0)
 			return (-1);
 		i++;

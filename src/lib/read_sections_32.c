@@ -47,7 +47,8 @@ struct section		**read_sections_32(t_mach_o *file,
 	struct load_command	*cur_lc;
 
 	i = 0;
-	// assert(file && file->load_commands);
+	if (!file || !file->load_commands)
+		return (NULL);
 	*return_nsects = 0;
 	nsects = count_sections_32(file);
 	if ((secs = malloc(sizeof(struct section *) * nsects)) == NULL)

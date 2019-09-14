@@ -9,7 +9,7 @@ static int	load_fat_archive_nth_arch_32(
 
 	if (check_file_addr_size(file, file->fat_archs + narch,
 								sizeof(struct fat_arch)) == -1)
-		return (mach_o_error(-1, "Invalid member adress into fat archive\n."));
+		return (mach_o_error(-1, "Truncated fat archive"));
 	addr = (void *)((uint8_t *)file->addr +
 					file->fat_archs[narch].offset);
 	object_size = file->fat_archs[narch].size;
@@ -25,7 +25,7 @@ static int	load_fat_archive_nth_arch_64(
 
 	if (check_file_addr_size(file, file->fat_archs_64 + narch,
 								sizeof(struct fat_arch_64)) == -1)
-		return (mach_o_error(-1, "Invalid member adress into fat archive\n."));
+		return (mach_o_error(-1, "Truncated fat archive"));
 	addr = (void *)((uint8_t *)file->addr +
 					file->fat_archs_64[narch].offset);
 	object_size = file->fat_archs_64[narch].size;
@@ -36,8 +36,10 @@ int         load_fat_archive_nth_arch(
     t_mach_o *file,
     uint32_t narch)
 {
-	// assert(narch < file->fat_header->nfat_arch);
-	// assert(file->fat_archs || file->fat_archs_64);
+	if (narch > file->fat_header->nfat_arch)
+		return (-1);
+	if (!file->fat_archs && !file->fat_archs_64)
+		return (-1);
 	if (narch >= file->fat_header->nfat_arch)
 		return (-1);
 	file->o_addr = NULL;

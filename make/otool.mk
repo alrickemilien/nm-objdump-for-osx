@@ -6,6 +6,8 @@ OTOOL=ft_otool
 
 OTOOL_SRC=src/otool/main.c \
 			src/otool/otool.c \
+			src/lib/load_macho_file.c \
+			src/otool/map_loading_file.c \
 			src/otool/find_section.c \
 			src/otool/otool_object.c \
 			src/otool/otool_archive.c \

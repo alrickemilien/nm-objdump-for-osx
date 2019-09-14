@@ -6,6 +6,7 @@ NM=ft_nm
 
 NM_SRC=src/nm/main.c \
 	src/nm/nm.c \
+	src/nm/map_loading_file.c \
 	src/nm/nm_fat_archive.c \
 	src/nm/nm_archive.c \
 	src/nm/nm_object.c \

@@ -48,26 +48,26 @@ class TestOtool < Test::Unit::TestCase
 	# Tests
 	#
 
-	def test_forbidden_functions
-		out = Shared.pipe("nm #{FT_OTOOL}").join('')
+	# def test_forbidden_functions
+	# 	out = Shared.pipe("nm #{FT_OTOOL}").join('')
 
-		forbidden = [
-			'U _printf',
-			'U _sprintf',
-			'U _fprintf',
-			'U _fopen',
-			'U _exit',
-			'U _memcmp',
-			'U _memcpy',
-			'U _strcmp',
-			'U _strlen',			
-			'U _dprintf',
-		].map { |x| assert_not_match(/#{x}/, out, "Forbidden function #{x} into nm binary") }
-	end
+	# 	forbidden = [
+	# 		'U _printf',
+	# 		'U _sprintf',
+	# 		'U _fprintf',
+	# 		'U _fopen',
+	# 		'U _exit',
+	# 		'U _memcmp',
+	# 		'U _memcpy',
+	# 		'U _strcmp',
+	# 		'U _strlen',			
+	# 		'U _dprintf',
+	# 	].map { |x| assert_not_match(/#{x}/, out, "Forbidden function #{x} into nm binary") }
+	# end
 
-	def test_no_file
-		diff("otool -t", "#{FT_OTOOL}")
-	end
+	# def test_no_file
+	# 	diff("otool -t", "#{FT_OTOOL}")
+	# end
 
 	def test_simple
 		file = Dir["#{__dir__}/samples/*.out"][0]
@@ -83,13 +83,13 @@ class TestOtool < Test::Unit::TestCase
 	#	diff("nm /dev/zero", "#{FT_OTOOL} /dev/zero")
 	#end
 
-	def test_on_dev_null
-		diff("otool -t /dev/null", "#{FT_OTOOL} /dev/null")
-	end
+	# def test_on_dev_null
+	# 	diff("otool -t /dev/null", "#{FT_OTOOL} /dev/null")
+	# end
 
-	def test_on_dir
-		diff("otool -t /usr", "#{FT_OTOOL} /usr")
-	end
+	# def test_on_dir
+	# 	diff("otool -t /usr", "#{FT_OTOOL} /usr")
+	# end
 
 	def test_simple_static_lib
 		diff("otool -t /usr/lib/liby.a", "#{FT_OTOOL} /usr/lib/liby.a")
@@ -110,50 +110,50 @@ class TestOtool < Test::Unit::TestCase
 		diff("otool -t #{files}", "#{FT_OTOOL} #{files}")
 	end
 
-	def test_with_redirect
-		diff("otool -t < /bin/dd", "#{FT_OTOOL} < /bin/dd")
-	end
-
-	def test_systems_static_librarys
-		samples = [
-			'/usr/lib/libATCommandStudio.a',
-			'/usr/lib/libkmodc++.a',
-			'/usr/lib/libtclstub8.5.a',
-			'/usr/lib/libpkstart.a',
-			'/usr/lib/liby.a',
-		].join(" ")
- 		diff("otool -t #{samples}", "#{FT_OTOOL} #{samples}")
-	end
-
-	# def test_corrupted_archives
-	# 	corrupted_archives_samples = Dir["#{__dir__}/corrupted_samples/archives/*.a"].join(" ")
-	# 	diff("nm #{corrupted_archives_samples}", "#{FT_OTOOL} #{corrupted_archives_samples}")
+	# def test_with_redirect
+	# 	diff("otool -t < /bin/dd", "#{FT_OTOOL} < /bin/dd")
 	# end
 
-	def test_empty_file
-		file = "#{__dir__}/samples/empty.a"
-		FileUtils.touch file
-		diff("otool -t #{file}", "#{FT_OTOOL} #{file}")
-	end
+	# def test_systems_static_librarys
+	# 	samples = [
+	# 		'/usr/lib/libATCommandStudio.a',
+	# 		'/usr/lib/libkmodc++.a',
+	# 		'/usr/lib/libtclstub8.5.a',
+	# 		'/usr/lib/libpkstart.a',
+	# 		'/usr/lib/liby.a',
+	# 	].join(" ")
+ 	# 	diff("otool -t #{samples}", "#{FT_OTOOL} #{samples}")
+	# end
 
-	# This test is not triggered because the real nm loops on /dev/random
-	#def test_on_dev_random
-	#	diff("nm /dev/random", "#{FT_OTOOL} /dev/random")
-	#end
+	# # def test_corrupted_archives
+	# # 	corrupted_archives_samples = Dir["#{__dir__}/corrupted_samples/archives/*.a"].join(" ")
+	# # 	diff("nm #{corrupted_archives_samples}", "#{FT_OTOOL} #{corrupted_archives_samples}")
+	# # end
 
-	def test_on_text_file
-		diff("otool -t #{__dir__}/nm.rb", "#{FT_OTOOL} #{__dir__}/nm.rb")
-	end
+	# def test_empty_file
+	# 	file = "#{__dir__}/samples/empty.a"
+	# 	FileUtils.touch file
+	# 	diff("otool -t #{file}", "#{FT_OTOOL} #{file}")
+	# end
 
-	def test_on_tty
-		diff("otool -t /dev/ttyw0", "#{FT_OTOOL} /dev/ttyw0")
-	end
+	# # This test is not triggered because the real nm loops on /dev/random
+	# #def test_on_dev_random
+	# #	diff("nm /dev/random", "#{FT_OTOOL} /dev/random")
+	# #end
 
-	def test_no_read_rights
-		file = "#{__dir__}/samples/to_remove.o"
-		FileUtils.touch file
-		FileUtils.chmod("-r", file)
-		diff("otool -t #{file}", "#{FT_OTOOL} #{file}")
-		FileUtils.chmod("+r", file)
-	end
+	# def test_on_text_file
+	# 	diff("otool -t #{__dir__}/nm.rb", "#{FT_OTOOL} #{__dir__}/nm.rb")
+	# end
+
+	# def test_on_tty
+	# 	diff("otool -t /dev/ttyw0", "#{FT_OTOOL} /dev/ttyw0")
+	# end
+
+	# def test_no_read_rights
+	# 	file = "#{__dir__}/samples/to_remove.o"
+	# 	FileUtils.touch file
+	# 	FileUtils.chmod("-r", file)
+	# 	diff("otool -t #{file}", "#{FT_OTOOL} #{file}")
+	# 	FileUtils.chmod("+r", file)
+	# end
 end

@@ -7,6 +7,13 @@
 
 # define NO_SECT_FOUND ((uint32_t)-1)
 
+# define OTOOL_DEFAULT_MACHO_ERROR "%s: is not an object file\n"
+
+void							*map_loading_file(
+	const char *filename, uint64_t *file_size);
+int								map_unloading_file(
+	void *ptr, uint64_t file_size);
+
 typedef struct                  s_otool_dump {
 	uint32_t					nsects;
 	uint32_t					nsegs;

@@ -3,11 +3,17 @@
 static int	dispatch(t_mach_o *file, t_options *options)
 {
 	if (file->type == OBJECT_FILE)
+	{
+		printf("%s:\n", file->path);
 		return (otool_object(file, options));
+	}
 	else if (file->type == FAT_FILE)
 		return (otool_fat_archive(file, options));
 	else if (file->type == ARCHIVE_FILE)
+	{
+		printf("Archive : %s\n", file->path);
 		return (otool_archive(file, options));
+	}
 	return (-1);
 }
 
@@ -32,8 +38,6 @@ int	otool(t_options *options, const char *path)
 				MACH_O_ERROR_UNKKNOWN_FILE_FORMAT_STR);
         return (-1);
 	}
-	if (options->file_count > 1 && file.type == OBJECT_FILE)
-		printf("\n%s:\n", path);
 	error = dispatch(&file, options);
 	if (map_unloading_file(file.addr, file.file_size))
 		return (-1);

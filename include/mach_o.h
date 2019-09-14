@@ -29,8 +29,6 @@
 # define STATIC_LIB_MAGIC "!<arch>\x0a"
 # define LONG_ARCHIVE_NAME_MAGIC "#1/"
 
-# define DEFAULT_MACHO_ERROR "%s The file was not recognized as a valid object file\n\n"
-
 typedef enum				e_endian
 {
 	UNKNOWN_ENDIAN = 0,
@@ -138,9 +136,6 @@ typedef struct	s_mach_o_processor
 ** Main
 */
 
-void						*map_loading_file(const char *filename, uint64_t *file_size);
-int							map_unloading_file(void *ptr, uint64_t file_size);
-
 bool						is_valid_filetype(uint32_t filetype);
 bool						is_valid_flag(uint32_t flag);
 bool						is_valid_cmd(uint32_t cmd);
@@ -150,12 +145,12 @@ bool						is_valid_symbol_type(uint8_t n_type);
 ** Parsing/Reading functions
 */
 
-int						load_macho_file(
+unsigned				read_file_type(t_mach_o *file);
+int							load_macho_file(
 	t_mach_o *ofile,
 	const char *path,	
 	void *addr,
 	uint64_t file_size);
-unsigned				read_file_type(t_mach_o *file);
 
 /*
 ** Parsing/Reading functions / Archive

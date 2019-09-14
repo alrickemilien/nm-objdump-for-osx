@@ -10,9 +10,8 @@ LIB_SRC=src/lib/find_load_command_by_command.c \
 		src/lib/is_valid_macho_filetype.c \
 		src/lib/is_valid_segment_command_flag.c \
 		src/lib/is_valid_symbol_type.c \
-		src/lib/load_macho_file.c \
 		src/lib/endian.c \
-		src/lib/map_loading_file.c \
+		src/lib/load_macho_file.c \
 		src/lib/check_file_size.c \
 		src/lib/read_file_type.c \
 		src/lib/read_sections_32.c \

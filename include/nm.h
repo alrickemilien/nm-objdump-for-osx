@@ -2,23 +2,15 @@
 #define NM_OTOOL_H
 
 # include <stdio.h>
-
 # include "mach_o.h"
 # include "nm_options.h"
 # include "libft.h"
 
+# define NM_DEFAULT_MACHO_ERROR "%s The file was not recognized as a valid object file\n\n"
 
-/*
-** All ok
-*/
-
-# define EXIT_OK 0
-
-/*
-** If minor problems (e.g., cannot access subdirectory)
-*/
-
-# define EXIT_FAILURE 1
+# define SUPPORTED_NM_CHAR_SYMBOL_NBR 17
+# define NCHARS_SYMBOLS SUPPORTED_NM_CHAR_SYMBOL_NBR
+# define BAD_STRING_INDEX "bad string index"
 
 typedef struct      s_symbol
 {
@@ -27,6 +19,9 @@ typedef struct      s_symbol
 	uint32_t        len;
 	uint32_t		pad;
 }                   t_symbol;
+
+void						*map_loading_file(const char *filename, uint64_t *file_size);
+int							map_unloading_file(void *ptr, uint64_t file_size);
 
 /*
 ** Symbol Predicates
@@ -39,10 +34,6 @@ typedef struct	s_print_symbol_predicate
 							t_mach_o_processor *info);
 	uint8_t				c;
 }				t_print_symbol_predicate;
-
-# define SUPPORTED_NM_CHAR_SYMBOL_NBR 17
-# define NCHARS_SYMBOLS SUPPORTED_NM_CHAR_SYMBOL_NBR
-# define BAD_STRING_INDEX "bad string index"
 
 int     	read_options_arguments(int ac, char **av, t_options *options);
 int     	nm(t_options *options, const char *path);

@@ -15,6 +15,8 @@ int32_t	nm_archive(t_mach_o *file, t_options *options)
 
 		if (load_archive_nth_member(file, i, &error) == -1)
 		{
+			LOGDEBUG ("INFO load_archive_nth_member error is %d\n", error);
+
 			if (error)
 				return (0);
 			LOGDEBUG("%s", "Failed to load member\n");
@@ -27,10 +29,15 @@ int32_t	nm_archive(t_mach_o *file, t_options *options)
            	file->archive_member_header.member_name);
 		
         if (nm_object(file, options) == -1)
-			return (-1);
+		{
+			LOGDEBUG("INFO nm_archive ended zith code -1\n");
+			// return (-1);
+		}
 		
         i++;
 	}
+
+	LOGDEBUG("INFO nm_archive ended zith code 0\n");
 
 	return (0);
 }

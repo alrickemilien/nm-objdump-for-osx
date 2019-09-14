@@ -22,7 +22,7 @@ static int	find_symbol_table(
 {
 	if ((info->st_lc =
 		((struct symtab_command *)find_load_command_by_command(file, LC_SYMTAB))) == NULL)
-		return (-1);
+		return (0);
 	info->dysym_lc =
 		(struct dysymtab_command *)find_load_command_by_command(file, LC_DYSYMTAB);
 	if (file->mh)
@@ -98,6 +98,9 @@ int32_t	nm_object(t_mach_o *file, t_options *options)
 	LOGDEBUG("O1\n");
 	if (init_processor_info(file, &info) == -1)
 		return (-1);
+	// Allow no symtab table, see /usr/lib/libkmodc++.a
+	if (info.st_lc == NULL)
+		return (0);
 	LOGDEBUG("O2\n");
 	if ((symbols = read_symbols(file, &info)) == NULL)
 		return (-1);

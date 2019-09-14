@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   init_prefix_error.c                                :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: aemilien <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/09/14 18:40:01 by aemilien          #+#    #+#             */
+/*   Updated: 2019/09/14 18:40:13 by aemilien         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "mach_o.h"
 
 /*
@@ -5,7 +17,7 @@
 ** binary => binary
 */
 
-static char *extract_binary_name_from_path(char *argv_0)
+static char	*extract_binary_name_from_path(char *argv_0)
 {
 	size_t	i;
 
@@ -15,12 +27,12 @@ static char *extract_binary_name_from_path(char *argv_0)
 	return (argv_0 + i);
 }
 
-void 	init_prefix_error(char *argv_0)
+void		init_prefix_error(char *argv_0)
 {
 	char	buffer[MAX_ERROR_BUFFER];
 	char	*argv_0_extracted;
-    size_t	cwd_len;
-    size_t	argv_0_len;
+	size_t	cwd_len;
+	size_t	argv_0_len;
 
 	argv_0_extracted = extract_binary_name_from_path(argv_0);
 	ft_memset(buffer, 0, MAX_ERROR_BUFFER);
@@ -35,6 +47,6 @@ void 	init_prefix_error(char *argv_0)
 	else
 		memcpy(buffer + cwd_len, argv_0_extracted, argv_0_len);
 	cwd_len = ft_strlen(buffer);
-	memcpy(buffer + cwd_len, ": ", 2 * sizeof(char));	
+	memcpy(buffer + cwd_len, ": ", 2 * sizeof(char));
 	init_prefix_mach_o_error(buffer);
 }

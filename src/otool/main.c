@@ -8,6 +8,7 @@ int			main(int ac, char **av)
 	int 		last;
 
 	i = 1;
+	init_prefix_error(av[0]);
 
 	exit_code = read_options_arguments(ac, av, &options);
 

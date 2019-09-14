@@ -6,3 +6,6 @@
 *~
 *.out
 build/
+
+# Keep corrupted samples
+!test/corrupted_samples/archives/*.a

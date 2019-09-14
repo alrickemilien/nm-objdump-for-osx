@@ -1,6 +1,14 @@
 require 'open3'
 require "test/unit"
 
+if ENV['CC'] == nil
+    ENV['CC'] = 'clang'
+end
+
+if ENV['ASM'] == nil
+    ENV['ASM'] = 'nasm'
+end
+
 class Shared
     def self.pipe(cmd, options = [])
         data = {}
@@ -23,14 +31,6 @@ class Shared
     end
 
     def self.startup()
-        if ENV['CC'] == nil
-            ENV['CC'] = 'clang'
-        end
-
-        if ENV['ASM'] == nil
-            ENV['ASM'] = 'nasm'
-        end
-
         @c_archs = [
 #            'arm-none-eabi',
 #            'armv7a-none-eabi',

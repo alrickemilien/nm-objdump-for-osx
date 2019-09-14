@@ -9,9 +9,9 @@ NM_SRC=src/nm/main.c \
 	src/nm/nm_fat_archive.c \
 	src/nm/nm_archive.c \
 	src/nm/nm_object.c \
-	src/nm/find_section.c \
 	src/nm/print_symbol.c \
 	src/nm/read_symbols.c \
+	src/nm/find_section.c \
 	src/nm/print_symbol_hex_dump.c \
 	src/nm/sort.c \
 	src/nm/sort_symbols.c

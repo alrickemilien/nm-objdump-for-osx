@@ -1,7 +1,5 @@
 #include "otool.h"
 
-#include "ft_otool.h"
-
 void				cleanup_otool_info(t_otool_dump *info)
 {
 	free(info->secs);
@@ -10,43 +8,43 @@ void				cleanup_otool_info(t_otool_dump *info)
 	free(info->segs);
 }
 
-int					init_otool_info(t_mach_o *file, t_otool_dump *otool_info)
+int					init_otool_info(t_mach_o *file, t_otool_dump *info)
 {
-	ft_bzero(info, sizeof(t_otool_info));
-	if (ofile->mh && file->mh_64)
+	memset(info, 0, sizeof(t_otool_dump));
+	if (file->mh && file->mh_64)
 		return (-1);
 	if (file->mh)
 	{
-		info->secs = ofile_get_sections(file, &info->nsects);
-		info->segs = ofile_get_segments(file, &info->nsegs);
+		info->secs = read_sections_32(file, &info->nsects);
+		info->segs = read_segments_32(file, &info->nsegs);
 	}
 	else
 	{
-		info->secs_64 = ofile_get_sections_64(file, &info->nsects);
-		info->segs_64 = ofile_get_segments_64(file, &info->nsegs);
+		info->secs_64 = read_sections_64(file, &info->nsects);
+		info->segs_64 = read_segments_64(file, &info->nsegs);
 	}
-	info->text_nsec = otool_find_section(info, SEG_TEXT, SECT_TEXT);
+	info->text_nsec = find_section(info, SEG_TEXT, SECT_TEXT);
 	return (0);
 }
 
-static int	otool_object_32(t_ofile *ofile, t_otool_dump *info)
+static int	otool_object_32(t_mach_o *file, t_otool_dump *info)
 {
 	int			ret;
 
-	ret = print_section(ofile, otool_info, otool_info->text_nsec);
-	cleanup_otool_info(otool_info);
+	ret = print_section_32(file, info, info->text_nsec);
+	cleanup_otool_info(info);
 	if (ret == -1)
 		return (mach_o_error(-1, "Truncated or malformed object file "
 			"(the text section would go past the end of the file)\n"));
 	return (0);
 }
 
-static int	otool_object_64(t_ofile *ofile, t_otool_dump *otool_info)
+static int	otool_object_64(t_mach_o *file, t_otool_dump *info)
 {
 	int			ret;
 
-	ret = print_section_64(ofile, otool_info, otool_info->text_nsec);
-	cleanup_otool_info(otool_info);
+	ret = print_section_64(file, info, info->text_nsec);
+	cleanup_otool_info(info);
 	if (ret == -1)
 		return (mach_o_error(-1, "Truncated or malformed object file "
 			"(the text section would go past the end of the file)\n"));
@@ -57,7 +55,9 @@ int otool_object(t_mach_o *file, t_options *options)
 {
 	t_otool_dump	info;
 
-	init_otool_info(ofile, &info);
+	(void)options;
+
+	init_otool_info(file, &info);
     if (!info.secs && !info.secs_64)
         return (-1);
 	if (info.text_nsec == NO_SECT_FOUND)
@@ -67,6 +67,6 @@ int otool_object(t_mach_o *file, t_options *options)
 		return (-1);
 	}
 	return (info.secs ? 
-        otool_object_32(ofile, &info)
-        : otool_object_64(ofile, &info));
+        otool_object_32(file, &info)
+        : otool_object_64(file, &info));
 }

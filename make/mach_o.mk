@@ -11,7 +11,6 @@ LIB_SRC=src/lib/find_load_command_by_command.c \
 		src/lib/is_valid_segment_command_flag.c \
 		src/lib/is_valid_symbol_type.c \
 		src/lib/load_macho_file.c \
-		src/lib/mach_o_error.c \
 		src/lib/endian.c \
 		src/lib/map_loading_file.c \
 		src/lib/check_file_size.c \
@@ -63,5 +62,10 @@ LIB_SRC+=src/lib/endian_swap/swap_section.c \
 LIB_SRC+=src/lib/utils/ato16u.c \
 		src/lib/utils/ato16u_base.c \
 		src/lib/utils/ato64.c
+
+# Error
+LIB_SRC+=src/lib/error/mach_o_error.c \
+		src/lib/error/init_prefix_error.c \
+		src/lib/error/prefix_mach_o_error.c 
 
 LIB_OBJ=$(LIB_SRC:.c=.o)

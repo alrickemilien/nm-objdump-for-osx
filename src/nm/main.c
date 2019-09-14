@@ -1,6 +1,6 @@
 #include "nm.h"
 
-int			main(int ac, char **av)
+int				main(int ac, char **av)
 {
 	int			i;
 	int			exit_code;
@@ -8,6 +8,7 @@ int			main(int ac, char **av)
 	int 		last;
 
 	i = 1;
+	init_prefix_error(av[0]);
 
 	exit_code = read_options_arguments(ac, av, &options);
 
@@ -19,6 +20,7 @@ int			main(int ac, char **av)
 
 	if (options.file_count == 0)
 		return (nm(&options, "a.out") < 0 ? 1 : 0);
+
 
 	exit_code = 0;
 	last = 0;

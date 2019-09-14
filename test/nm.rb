@@ -21,7 +21,7 @@ class TestNm < Test::Unit::TestCase
 
        	# Substract /path/to/nm part of stderr
   		err_1 = err_1.sub /^\/.*\/nm:/, '' if err_1 
-       	err_2 = err_2.sub /^\/.*\/nm:/, '' if err_2 
+       	err_2 = err_2.sub /^\/.*\_nm:/, '' if err_2 
 
 		assert_equal(err_1, err_2)
 		assert_equal(out_1, out_2)

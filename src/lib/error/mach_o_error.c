@@ -31,8 +31,7 @@ int mach_o_error(int code, const char *fmt, ...)
     va_list arg;
     
     memset(error_buffer, 0, sizeof(char) * MAX_ERROR_BUFFER);
-    getcwd(error_buffer, MAX_ERROR_BUFFER);
-    memcpy(error_buffer + ft_strlen(error_buffer), "/nm: ", 5 * sizeof(char));
+    set_prefix_mach_o_error_to_buffer(error_buffer);
     va_start(arg, fmt);
     i = 0;
     cursor = ft_strlen(error_buffer);

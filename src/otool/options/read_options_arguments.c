@@ -43,15 +43,13 @@ static int handle_option(
 			else
 				*last = &options_map[j];
 
-			return (-1);
+			return (0);
 		}
 
 		j++;
 	}
 
-	mach_o_error(-1, "Unknown command line argument '%s'\n", name);
-
-	return (-1);
+	return (mach_o_error(-1, "Unknown command line argument '%s'\n", name));
 }
 
 /*

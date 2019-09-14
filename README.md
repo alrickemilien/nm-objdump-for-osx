@@ -17,6 +17,10 @@ This project provides three binaries :
 ./build/mach-o-builder mach-o-builder.conf 1> mach-o-object.gen.o
 ```
 
+## Architecture
+
+[]!(./doc/nm-otool.svg)
+
 ## Debug
 Compile with `DEBUG=true make re` and use macro `LOGDEBUG(fmt, ...)`
 
@@ -55,12 +59,15 @@ rbenv rehash
 ```
 
 **Reopen** the terminal.
+
 Check the location where gems are being installed with gem env:
 ```
 $ gem env home
 # => $PATH_TO_RBENV/versions/<ruby-version>/lib/ruby/gems/...
 ```
+
 Install unit-test with `gem install unit-test`.
+
 And then run `ruby test/[nm|otool].rb`.
 
 ## External sources

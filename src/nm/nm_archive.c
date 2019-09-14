@@ -1,10 +1,10 @@
 #include "nm.h"
 
-int32_t	nm_archive(t_mach_o *file, t_options *options)
+int32_t	nm_archive(
+	t_mach_o *file, t_options *options)
 {
-	size_t  i;
-	bool    error;
-
+	size_t	i;
+	bool	error;
 
 	i = 0;
 	error = 0;
@@ -18,12 +18,11 @@ int32_t	nm_archive(t_mach_o *file, t_options *options)
 			continue ;
 		}
 		ft_printf("\n%s(%s):\n",
-           	file->path,
-           	file->archive_member_header.member_name);
-        if (nm_object(file, options) == -1)
+			file->path,
+			file->archive_member_header.member_name);
+		if (nm_object(file, options) == -1)
 			;
-        i++;
+		i++;
 	}
-
 	return (0);
 }

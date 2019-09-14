@@ -1,6 +1,6 @@
 #include "otool.h"
 
-void				cleanup_otool_info(t_otool_dump *info)
+void		cleanup_otool_info(t_otool_dump *info)
 {
 	free(info->secs);
 	free(info->secs_64);
@@ -8,7 +8,7 @@ void				cleanup_otool_info(t_otool_dump *info)
 	free(info->segs);
 }
 
-int					init_otool_info(t_mach_o *file, t_otool_dump *info)
+int			init_otool_info(t_mach_o *file, t_otool_dump *info)
 {
 	ft_memset(info, 0, sizeof(t_otool_dump));
 	if (file->mh && file->mh_64)
@@ -51,15 +51,15 @@ static int	otool_object_64(t_mach_o *file, t_otool_dump *info)
 	return (0);
 }
 
-int otool_object(t_mach_o *file, t_options *options)
+int			otool_object(
+		t_mach_o *file, t_options *options)
 {
 	t_otool_dump	info;
 
 	(void)options;
-
 	init_otool_info(file, &info);
-    if (!info.secs && !info.secs_64)
-        return (-1);
+	if (!info.secs && !info.secs_64)
+		return (-1);
 	if (info.text_nsec == NO_SECT_FOUND)
 	{
 		mach_o_error(-1, "There is no text section in the mach-o file\n");
@@ -67,6 +67,6 @@ int otool_object(t_mach_o *file, t_options *options)
 		return (-1);
 	}
 	return (info.secs ? 
-        otool_object_32(file, &info)
-        : otool_object_64(file, &info));
+		otool_object_32(file, &info)
+		: otool_object_64(file, &info));
 }

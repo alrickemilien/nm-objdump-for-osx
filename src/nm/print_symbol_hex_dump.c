@@ -7,9 +7,11 @@ void	print_default_symbol(
 	char c)
 {
 	if (info->symtab)
-		ft_printf("%08llx %c %s\n", symbol->sym_entry.n_value, c, (char *)symbol->string);
+		ft_printf("%08llx %c %s\n",
+			symbol->sym_entry.n_value, c, (char *)symbol->string);
 	else
-		ft_printf("%016llx %c %s\n", symbol->sym_entry.n_value, c, (char *)symbol->string);
+		ft_printf("%016llx %c %s\n",
+			symbol->sym_entry.n_value, c, (char *)symbol->string);
 }
 
 void	print_unknown_symbol(

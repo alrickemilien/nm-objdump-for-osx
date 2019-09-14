@@ -37,8 +37,8 @@ int				main(int ac, char **av)
 			else if (i < options.end_index && last)
 				last = 0;
 			else if (i < options.end_index
-				&& !is_an_option(av[i])
-				&& nm(&options, av[i]) < 0)
+					&& !is_an_option(av[i])
+					&& nm(&options, av[i]) < 0)
 				exit_code = 1;
 			else if (i > options.end_index && nm(&options, av[i]) < 0)
 				exit_code = 1;

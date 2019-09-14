@@ -1,9 +1,9 @@
 #include "nm.h"
 
 uint32_t	find_section(
-	t_mach_o_processor *info,
-	char *seg_name,
-	char *sec_name)
+		t_mach_o_processor *info,
+		char *seg_name,
+		char *sec_name)
 {
 	size_t	i;
 
@@ -15,7 +15,7 @@ uint32_t	find_section(
 		while (i < info->nsects)
 		{
 			if (ft_strequ(seg_name, info->secs[i]->segname)
-				&& ft_strequ(sec_name, info->secs[i]->sectname))
+			&& ft_strequ(sec_name, info->secs[i]->sectname))
 				return (i);
 			i++;
 		}
@@ -25,9 +25,8 @@ uint32_t	find_section(
 		while (i < info->nsects)
 		{
 			if (ft_strequ(seg_name, info->secs_64[i]->segname)
-				&& ft_strequ(sec_name, info->secs_64[i]->sectname))
+			&& ft_strequ(sec_name, info->secs_64[i]->sectname))
 				return (i);
-
 			i++;
 		}
 	}

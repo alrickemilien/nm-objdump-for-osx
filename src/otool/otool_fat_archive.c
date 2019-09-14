@@ -29,8 +29,8 @@ static int	otool_all_fat_archs(t_mach_o *file, t_options *options)
 		}
 		if (file->fat_header->nfat_arch != 1)
 			ft_printf("%s (architecture %s):\n", file->path,
-			cpu_type_name(file->fat_archs ? file->fat_archs[i].cputype
-			: file->fat_archs_64[i].cputype));
+					cpu_type_name(file->fat_archs ? file->fat_archs[i].cputype
+						: file->fat_archs_64[i].cputype));
 		else
 			ft_printf("%s:\n", file->path);
 		if (otool_current_arch(file, options) == -1)
@@ -47,7 +47,7 @@ int	otool_fat_archive(t_mach_o *file, t_options *options)
 
 	host_arch = NXGetLocalArchInfo();
 	if ((narch_for_arch = find_fat_archive_architecture(file,
-		host_arch->cputype | CPU_ARCH_ABI64, host_arch->cpusubtype)) == -1)
+					host_arch->cputype | CPU_ARCH_ABI64, host_arch->cpusubtype)) == -1)
 		return (otool_all_fat_archs(file, options));
 	else
 	{

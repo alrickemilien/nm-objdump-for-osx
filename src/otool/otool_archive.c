@@ -2,8 +2,8 @@
 
 int	otool_archive(t_mach_o *file, t_options *options)
 {
-	size_t  i;
-	bool    error;
+	size_t	i;
+	bool	error;
 
 	i = 0;
 	error = 0;
@@ -14,10 +14,13 @@ int	otool_archive(t_mach_o *file, t_options *options)
 			if (error)
 				return (0);
 			else
-				return (mach_o_error(-1, OTOOL_DEFAULT_MACHO_ERROR, file->path));
+				return (mach_o_error(
+				-1, OTOOL_DEFAULT_MACHO_ERROR, file->path));
 		}
-		ft_printf("%s(%s):\n", file->path, file->archive_member_header.member_name);
-        if (otool_object(file, options) == -1)
+		ft_printf("%s(%s):\n",
+			file->path,
+			file->archive_member_header.member_name);
+		if (otool_object(file, options) == -1)
 			return (-1);
 		i++;
 	}

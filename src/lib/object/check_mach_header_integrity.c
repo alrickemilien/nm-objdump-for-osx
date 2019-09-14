@@ -1,6 +1,6 @@
 #include "mach_o.h"
 
-int32_t check_mach_header_integrity(t_mach_o *file)
+int check_mach_header_integrity(t_mach_o *file)
 {
 	if (file->mh)
 	{

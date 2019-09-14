@@ -55,7 +55,7 @@ static void	read_archive_symdef_64(t_mach_o *file)
 	file->nmembers = read_archive_nmembers(file);
 }
 
-int32_t				read_archive_symdef(t_mach_o *file)
+int				read_archive_symdef(t_mach_o *file)
 {
 	file->symdef_addr = file->archive_member_header_addr;
 	if (is_symdef_32(file))

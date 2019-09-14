@@ -1,6 +1,6 @@
 #include "mach_o.h"
 
-static int32_t	load_fat_archive_nth_arch_32(
+static int	load_fat_archive_nth_arch_32(
     t_mach_o *file,
     uint32_t narch)
 {
@@ -16,7 +16,7 @@ static int32_t	load_fat_archive_nth_arch_32(
 	return (load_macho_file(file, file->path, addr, object_size));
 }
 
-static int32_t	load_fat_archive_nth_arch_64(
+static int	load_fat_archive_nth_arch_64(
     t_mach_o *file,
     uint32_t narch)
 {
@@ -32,7 +32,7 @@ static int32_t	load_fat_archive_nth_arch_64(
 	return (load_macho_file(file, file->path, addr, object_size));
 }
 
-int32_t         load_fat_archive_nth_arch(
+int         load_fat_archive_nth_arch(
     t_mach_o *file,
     uint32_t narch)
 {

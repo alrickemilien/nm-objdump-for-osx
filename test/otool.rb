@@ -97,25 +97,21 @@ class TestOtool < Test::Unit::TestCase
 		diff("otool -t #{files}", "#{FT_OTOOL} #{files}")
 	end
 
-	# def test_with_redirect
-	# 	diff("otool -t < /bin/dd", "#{FT_OTOOL} < /bin/dd")
-	# end
+	def test_systems_static_librarys
+		samples = [
+			'/usr/lib/libATCommandStudio.a',
+			'/usr/lib/libkmodc++.a',
+			'/usr/lib/libtclstub8.5.a',
+			'/usr/lib/libpkstart.a',
+			'/usr/lib/liby.a',
+		].join(" ")
+ 		diff("otool -t #{samples}", "#{FT_OTOOL} #{samples}")
+	end
 
-	# def test_systems_static_librarys
-	# 	samples = [
-	# 		'/usr/lib/libATCommandStudio.a',
-	# 		'/usr/lib/libkmodc++.a',
-	# 		'/usr/lib/libtclstub8.5.a',
-	# 		'/usr/lib/libpkstart.a',
-	# 		'/usr/lib/liby.a',
-	# 	].join(" ")
- 	# 	diff("otool -t #{samples}", "#{FT_OTOOL} #{samples}")
-	# end
-
-	# # def test_corrupted_archives
-	# # 	corrupted_archives_samples = Dir["#{__dir__}/corrupted_samples/archives/*.a"].join(" ")
-	# # 	diff("nm #{corrupted_archives_samples}", "#{FT_OTOOL} #{corrupted_archives_samples}")
-	# # end
+	def test_corrupted_archives
+		corrupted_archives_samples = Dir["#{__dir__}/corrupted_samples/archives/*.a"].join(" ")
+		diff("nm #{corrupted_archives_samples}", "#{FT_OTOOL} #{corrupted_archives_samples}")
+	end
 
 	def test_empty_file
 		file = "#{__dir__}/samples/empty.a"

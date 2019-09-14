@@ -1,6 +1,6 @@
 #include "mach_o.h"
 
-int32_t	load_archive_file(t_mach_o *file,
+int	load_archive_file(t_mach_o *file,
 						void *archive_addr,
 						uint64_t archive_size)
 {

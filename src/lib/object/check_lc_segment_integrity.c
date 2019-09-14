@@ -1,6 +1,6 @@
 #include "mach_o.h"
 
-int32_t	check_lc_segment_integrity(t_mach_o *file, struct load_command *lc)
+int	check_lc_segment_integrity(t_mach_o *file, struct load_command *lc)
 {
 	struct segment_command	*sc;
 

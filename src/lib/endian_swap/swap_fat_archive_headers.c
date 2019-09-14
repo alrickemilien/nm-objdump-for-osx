@@ -29,7 +29,7 @@ static void	swap_fat_arch_64(struct fat_arch_64 *fat_arch_64)
 	fat_arch_64->reserved = swap_int32(fat_arch_64->reserved);
 }
 
-static int32_t	swap_single_fat_archs_header(t_mach_o *file, uint32_t narch)
+static int	swap_single_fat_archs_header(t_mach_o *file, uint32_t narch)
 {
 	if ((!file->fat_archs && !file->fat_archs_64)
 		|| sizeof(file->fat_archs->cputype) != sizeof(int32_t)
@@ -42,7 +42,7 @@ static int32_t	swap_single_fat_archs_header(t_mach_o *file, uint32_t narch)
 	return (0);
 }
 
-int32_t				swap_fat_archive_headers(t_mach_o *file)
+int				swap_fat_archive_headers(t_mach_o *file)
 {
 	size_t	i;
 

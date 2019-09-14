@@ -1,6 +1,6 @@
 #include "mach_o.h"
 
-int32_t					read_header_of_one_archives_member(t_mach_o *file)
+int					read_header_of_one_archives_member(t_mach_o *file)
 {
 	// The adrress of the header of a member of the archive
 	uint8_t			*member_header_addr;

@@ -1,7 +1,7 @@
 
 #include "mach_o.h"
 
-static int32_t	check_string_table_integrity(t_mach_o *file,
+static int	check_string_table_integrity(t_mach_o *file,
 											struct symtab_command *sc)
 {
 	if (sc->stroff > file->o_size)
@@ -14,7 +14,7 @@ static int32_t	check_string_table_integrity(t_mach_o *file,
 	return (0);
 }
 
-static int32_t	check_symtab_integrity(t_mach_o *file,
+static int	check_symtab_integrity(t_mach_o *file,
 										struct symtab_command *sc)
 {
 	if (sc->symoff > file->o_size)
@@ -27,7 +27,7 @@ static int32_t	check_symtab_integrity(t_mach_o *file,
 	return (0);
 }
 
-int32_t			check_lc_symtab_integrity(t_mach_o *file,
+int			check_lc_symtab_integrity(t_mach_o *file,
 											struct load_command *lc)
 {
 	struct symtab_command	*sc;

@@ -9,7 +9,7 @@ static const t_lc_swapper	g_swappers[NBR_SUPPORTED_LC] = {
 	{swap_load_command_symseg, LC_SYMSEG},
 };
 
-static int32_t	check_lc_bound(t_mach_o *file,
+static int	check_lc_bound(t_mach_o *file,
 									struct load_command *cur_lc)
 {
 	if (check_object_addr_size(file, cur_lc,
@@ -20,7 +20,7 @@ static int32_t	check_lc_bound(t_mach_o *file,
 	return (0);
 }
 
-static int32_t			swap_load_command(t_mach_o *file,
+static int			swap_load_command(t_mach_o *file,
 										struct load_command *lc)
 {
 	size_t	i;
@@ -43,7 +43,7 @@ static int32_t			swap_load_command(t_mach_o *file,
 	return (0);
 }
 
-int32_t					swap_all_load_commands(t_mach_o *file)
+int					swap_all_load_commands(t_mach_o *file)
 {
 	size_t				i;
 	struct mach_header	*hdr;

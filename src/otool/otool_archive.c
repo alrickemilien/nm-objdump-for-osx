@@ -13,14 +13,14 @@ int	otool_archive(t_mach_o *file, t_options *options)
 		{
 			if (error)
 				return (0);
-			i++;
-			continue ;
+			else
+				return (mach_o_error(-1, OTOOL_DEFAULT_MACHO_ERROR, file->path));
 		}
 		ft_printf("%s(%s):\n", file->path, file->archive_member_header.member_name);
         if (otool_object(file, options) == -1)
 		{
 			LOGDEBUG("INFO otool_archive ended zith code -1\n");
-			// return (-1);
+			return (-1);
 		}
 		i++;
 	}

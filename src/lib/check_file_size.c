@@ -1,6 +1,6 @@
 #include "mach_o.h"
 
-int32_t	check_file_addr(t_mach_o *file, void *addr)
+int	check_file_addr(t_mach_o *file, void *addr)
 {
 	LOGDEBUG("###### check_file_addr\n"
 		"file->addr %p\n"
@@ -17,7 +17,7 @@ int32_t	check_file_addr(t_mach_o *file, void *addr)
 	return (-1);
 }
 
-int32_t	check_file_addr_size(t_mach_o *file,
+int	check_file_addr_size(t_mach_o *file,
 	void *addr,
 	uint64_t size)
 {

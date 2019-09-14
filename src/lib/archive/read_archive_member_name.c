@@ -1,6 +1,6 @@
 #include "mach_o.h"
 
-int32_t	read_archive_member_name(t_mach_o *file)
+int	read_archive_member_name(t_mach_o *file)
 {
 	if (!ft_memcmp(file->archive_member_header_addr, 
 				LONG_ARCHIVE_NAME_MAGIC,

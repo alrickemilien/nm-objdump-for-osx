@@ -21,7 +21,7 @@ static int	read_object(t_mach_o *file)
 	return (0);
 }
 
-int32_t			load_object_file(t_mach_o *file,
+int			load_object_file(t_mach_o *file,
 						void *object_addr,
 						uint64_t object_size)
 {

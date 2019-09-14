@@ -1,6 +1,6 @@
 #include "mach_o.h"
 
-int32_t	find_fat_archive_architecture(t_mach_o *file,
+int	find_fat_archive_architecture(t_mach_o *file,
 							cpu_type_t cputype,
 							cpu_subtype_t subtype)
 {

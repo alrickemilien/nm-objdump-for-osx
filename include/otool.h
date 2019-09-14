@@ -1,5 +1,5 @@
 #ifndef OTOOL_H
-#define OTOOL_H
+# define OTOOL_H
 
 # include "libft.h"
 # include "mach_o.h"
@@ -14,46 +14,46 @@ void							*map_loading_file(
 int								map_unloading_file(
 	void *ptr, uint64_t file_size);
 
-typedef struct                  s_otool_dump {
+typedef struct					s_otool_dump {
 	uint32_t					nsects;
 	uint32_t					nsegs;
 	struct section				**secs;
 	struct section_64			**secs_64;
-	struct segment_command_64   **segs_64;
+	struct segment_command_64	**segs_64;
 	struct segment_command		**segs;
 	uint32_t					text_nsec;
-}                               t_otool_dump;
+}								t_otool_dump;
 
 /*
 ** Main
 */
 
-int                             otool(
-                                    t_options *options, const char *path);
-int                             otool_object(
-                                    t_mach_o *file, t_options *options);
-int                             otool_archive(
-                                    t_mach_o *file, t_options *options);
-int                             otool_fat_archive(
-                                    t_mach_o *file, t_options *options);
+int								otool(
+	t_options *options, const char *path);
+int								otool_object(
+	t_mach_o *file, t_options *options);
+int								otool_archive(
+	t_mach_o *file, t_options *options);
+int								otool_fat_archive(
+	t_mach_o *file, t_options *options);
 uint32_t						find_section(
-									t_otool_dump *info,
-									char *seg_name,
-									char *sec_name);
+	t_otool_dump *info,
+	char *seg_name,
+	char *sec_name);
 
 /*
 ** Print
 */
 
-int                             print_section_32(
-                                    t_mach_o *file, t_otool_dump *info, uint32_t nsec);
-int                             print_section_64(
-                                    t_mach_o *file, t_otool_dump *otool_info, uint32_t nsec);
+int								print_section_32(
+	t_mach_o *file, t_otool_dump *info, uint32_t nsec);
+int								print_section_64(
+	t_mach_o *file, t_otool_dump *otool_info, uint32_t nsec);
 
 /*
 ** Exit
 */
 
-int exit_with_help(void);
+int								exit_with_help(void);
 
 #endif

@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   load_archive_nth_member.c                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: aemilien <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/09/14 18:28:37 by aemilien          #+#    #+#             */
+/*   Updated: 2019/09/14 18:28:39 by aemilien         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "mach_o.h"
 
 static void	*find_archive_member(t_mach_o *file, uint64_t n_member)
@@ -19,12 +31,12 @@ static void	*find_archive_member(t_mach_o *file, uint64_t n_member)
 	return (file->archive_member_header_addr);
 }
 
-int				load_archive_nth_member(t_mach_o *file,
+int			load_archive_nth_member(t_mach_o *file,
 											uint64_t n_member,
 											bool *error)
 {
-    if (!file->symdef_addr || (!file->ranlibs && !file->ranlibs_64))
-        return (-1);
+	if (!file->symdef_addr || (!file->ranlibs && !file->ranlibs_64))
+		return (-1);
 	if (n_member >= file->nmembers && error)
 		*error = 1;
 	file->archive_member_header_addr = NULL;
@@ -34,7 +46,7 @@ int				load_archive_nth_member(t_mach_o *file,
 		|| !(file->archive_member_header.st_size > 0))
 		return (-1);
 	return (load_macho_file(file,
-                            file->path,
-							get_archive_member_starting_addr(file),
-							(uint64_t)file->archive_member_header.st_size));
+		file->path,
+		get_archive_member_starting_addr(file),
+		(uint64_t)file->archive_member_header.st_size));
 }

@@ -1,9 +1,20 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   read_header_of_one_archives_member.c               :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: aemilien <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/09/14 18:24:01 by aemilien          #+#    #+#             */
+/*   Updated: 2019/09/14 18:24:02 by aemilien         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "mach_o.h"
 
-int					read_header_of_one_archives_member(t_mach_o *file)
+int	read_header_of_one_archives_member(t_mach_o *file)
 {
-	// The adrress of the header of a member of the archive
-	uint8_t			*member_header_addr;
+	uint8_t	*member_header_addr;
 
 	member_header_addr = (uint8_t *)file->archive_member_header_addr;
 	if (check_archive_addr_size(file, member_header_addr, 60) == -1)

@@ -1,5 +1,5 @@
-#ifndef OTOOL_OPTIONS
-#define OTOOL_OPTIONS
+#ifndef OTOOL_OPTIONS_H
+# define OTOOL_OPTIONS_H
 
 /*
 ** All parameter
@@ -28,12 +28,11 @@ enum {
 
 # pragma pack(push, 1)
 
-typedef struct s_options {
-	int PRINT_FAT_HEADER;
-
-	int	end_index;
-	int	file_count;
-} t_options;
+typedef	struct	s_options {
+	int			PRINT_FAT_HEADER;
+	int			end_index;
+	int			file_count;
+}				t_options;
 
 # pragma pack(pop)
 
@@ -44,23 +43,25 @@ typedef struct s_options {
 ** waiting_for_value: is option waiting for argument
 */
 
-typedef struct 	s_options_map {
+typedef struct	s_options_map {
 	char		*name;
 	int			offset;
-	int 		(*waiting_for_value)(t_options *options, const char *value);
+	int			(*waiting_for_value)(
+		t_options *options, const char *value);
 }				t_options_map;
 
 /*
 ** Options utils
 */
 
-bool is_a_multi_option(const char *name);
-bool is_a_single_option(const char *name);
-bool is_a_end_arguments_string(const char *name);
-bool is_an_option(const char *name);
-bool is_a_waiting_value_option(const char *name);
+bool			is_a_multi_option(const char *name);
+bool			is_a_single_option(const char *name);
+bool			is_a_end_arguments_string(const char *name);
+bool			is_an_option(const char *name);
+bool			is_a_waiting_value_option(const char *name);
 
-int read_options_arguments(int ac, char **av, t_options *opt);
+int				read_options_arguments(
+	int ac, char **av, t_options *opt);
 
 /*
 ** Options with specifc values to handle

@@ -14,20 +14,6 @@ class TestOtool < Test::Unit::TestCase
 		end
 	end
 
-    # Wrapping function that make diff of two calls (equivalent of diff <(cmd_1) <(cmd_2))
-    def diff(cmd_1, cmd_2)
-		out_1, err_1, code_1 = Shared.pipe(cmd_1)
-		out_2, err_2, code_2 = Shared.pipe(cmd_2)
-
-		# Substract /path/to/nm part of stderr
-	   	err_1 = err_1.sub /^\/.*\/otool:/, '' if err_1 
-		err_2 = err_2.sub /^\/.*\_otool:/, '' if err_2 
-
-	 	assert_equal(err_1, err_2)
-	 	assert_equal(out_1, out_2)
-		   #assert_equal(code_1, code_2)
-	end
-
 	FT_OTOOL = ENV['FT_OTOOL'] || './build/ft_otool'
 
     # Wrapping function that make diff of two calls (equivalent of diff <(cmd_1) <(cmd_2))
@@ -37,35 +23,34 @@ class TestOtool < Test::Unit::TestCase
 
        	# Substract /path/to/nm part of stderr
 		err_1 = err_1.sub /^\/.*\/objdump:/, '' if err_1
-  		err_1 = err_1.sub /^\/.*\/otool:/, '' if err_1
 		  
-       	err_2 = err_2.sub /^\/.*\_otool:/, '' if err_2 
+       	err_2 = err_2.sub /^\/.*\/ft_otool:/, '' if err_2 
 
 		assert_equal(err_1, err_2)
 		assert_equal(out_1, out_2)
-   	   	#assert_equal(code_1, code_2)
+   	   	assert_equal(code_1, code_2)
    	end
 
 	#
 	# Tests
 	#
 
-	# def test_forbidden_functions
-	# 	out = Shared.pipe("nm #{FT_OTOOL}").join('')
+	def test_forbidden_functions
+		out = Shared.pipe("nm #{FT_OTOOL}").join('')
 
-	# 	forbidden = [
-	# 		'U _printf',
-	# 		'U _sprintf',
-	# 		'U _fprintf',
-	# 		'U _fopen',
-	# 		'U _exit',
-	# 		'U _memcmp',
-	# 		'U _memcpy',
-	# 		'U _strcmp',
-	# 		'U _strlen',			
-	# 		'U _dprintf',
-	# 	].map { |x| assert_not_match(/#{x}/, out, "Forbidden function #{x} into nm binary") }
-	# end
+		forbidden = [
+			'U _printf',
+			'U _sprintf',
+			'U _fprintf',
+			'U _fopen',
+			'U _exit',
+			'U _memcmp',
+			'U _memcpy',
+			'U _strcmp',
+			'U _strlen',			
+			'U _dprintf',
+		].map { |x| assert_not_match(/#{x}/, out, "Forbidden function #{x} into nm binary") }
+	end
 
 	# def test_no_file
 	# 	diff("otool -t", "#{FT_OTOOL}")
@@ -89,9 +74,9 @@ class TestOtool < Test::Unit::TestCase
 	# 	diff("otool -t /dev/null", "#{FT_OTOOL} /dev/null")
 	# end
 
-	# def test_on_dir
-	# 	diff("otool -t /usr", "#{FT_OTOOL} /usr")
-	# end
+	def test_on_dir
+		diff("otool -t /usr", "#{FT_OTOOL} /usr")
+	end
 
 	def test_simple_static_lib
 		diff("otool -t /usr/lib/liby.a", "#{FT_OTOOL} /usr/lib/liby.a")
@@ -132,30 +117,30 @@ class TestOtool < Test::Unit::TestCase
 	# # 	diff("nm #{corrupted_archives_samples}", "#{FT_OTOOL} #{corrupted_archives_samples}")
 	# # end
 
-	# def test_empty_file
-	# 	file = "#{__dir__}/samples/empty.a"
-	# 	FileUtils.touch file
-	# 	diff("otool -t #{file}", "#{FT_OTOOL} #{file}")
-	# end
+	def test_empty_file
+		file = "#{__dir__}/samples/empty.a"
+		FileUtils.touch file
+		diff("otool -t #{file}", "#{FT_OTOOL} #{file}")
+	end
 
-	# # This test is not triggered because the real nm loops on /dev/random
-	# #def test_on_dev_random
-	# #	diff("nm /dev/random", "#{FT_OTOOL} /dev/random")
-	# #end
+	# This test is not triggered because the real nm loops on /dev/random
+	#def test_on_dev_random
+	#	diff("nm /dev/random", "#{FT_OTOOL} /dev/random")
+	#end
 
-	# def test_on_text_file
-	# 	diff("otool -t #{__dir__}/nm.rb", "#{FT_OTOOL} #{__dir__}/nm.rb")
-	# end
+	def test_on_text_file
+		diff("otool -t #{__dir__}/otool.rb", "#{FT_OTOOL} #{__dir__}/otool.rb")
+	end
 
-	# def test_on_tty
-	# 	diff("otool -t /dev/ttyw0", "#{FT_OTOOL} /dev/ttyw0")
-	# end
+	def test_on_tty
+		diff("otool -t /dev/ttyw0", "#{FT_OTOOL} /dev/ttyw0")
+	end
 
-	# def test_no_read_rights
-	# 	file = "#{__dir__}/samples/to_remove.o"
-	# 	FileUtils.touch file
-	# 	FileUtils.chmod("-r", file)
-	# 	diff("otool -t #{file}", "#{FT_OTOOL} #{file}")
-	# 	FileUtils.chmod("+r", file)
-	# end
+	def test_no_read_rights
+		file = "#{__dir__}/samples/to_remove.o"
+		FileUtils.touch file
+		FileUtils.chmod("-r", file)
+		diff("otool -t #{file}", "#{FT_OTOOL} #{file}")
+		FileUtils.chmod("+r", file)
+	end
 end

@@ -23,11 +23,11 @@ void	*map_loading_file(const char *filename, uint64_t *file_size)
 	if ((fd = open(filename, O_RDONLY)) == -1)
 	{
     if (errno == EACCES)
-		  mach_o_error(0, "'%s': Permission denied.\n", filename);
+		  mach_o_error(0, "'%s': Permission denied\n", filename);
     else if (errno == EAGAIN)
-		  mach_o_error(0, "'%s': Resource temporarily unavailable.\n", filename);
+		  mach_o_error(0, "'%s': Resource temporarily unavailable\n", filename);
     else
-		  mach_o_error(0, "'%s': No such file or directory.\n", filename);
+		  mach_o_error(0, "'%s': No such file or directory\n", filename);
 		return (NULL);
 	}
 
@@ -40,7 +40,7 @@ void	*map_loading_file(const char *filename, uint64_t *file_size)
   *file_size = (off_t)stats.st_size;
 
   if (S_ISDIR(stats.st_mode))
-    return ((void*)(intptr_t)mach_o_error(0, "'%s': Is a directory.\n", filename));
+    return ((void*)(intptr_t)mach_o_error(0, "'%s': Is a directory\n", filename));
 
   if ((stats.st_mode & S_IFMT) != S_IFREG && (stats.st_mode & S_IFMT) != S_IFLNK)
     return ((void*)(intptr_t)mach_o_error(-1, OTOOL_DEFAULT_MACHO_ERROR, filename));

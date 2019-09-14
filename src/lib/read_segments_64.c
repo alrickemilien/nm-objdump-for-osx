@@ -55,8 +55,8 @@ struct segment_command_64	**read_segments_64(
 	// assert((file->mh || file->mh_64) && file->load_commands);
 	nsegs = count_segments_64(file);
 	*return_nsegs = 0;
-	if (NULL == (segs = malloc(sizeof(struct segment_command_64 *) * nsegs)))
-		exit(EXIT_FAILURE);
+	if ((segs = malloc(sizeof(struct segment_command_64 *) * nsegs)) == NULL)
+		return (NULL);
 	fill_segments(segs, nsegs, file);
 	*return_nsegs = nsegs;
 	return (segs);

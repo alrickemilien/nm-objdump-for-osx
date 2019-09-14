@@ -46,7 +46,6 @@ int				main(int ac, char **av)
 		// Regular case without --
 		else
 		{
-			// printf("LQ\n");
 			// Handle --arch x86_64
 			if (!last && is_a_waiting_value_option(av[i]))
 				last = 1;

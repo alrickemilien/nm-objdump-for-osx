@@ -50,8 +50,8 @@ struct section_64	**read_sections_64(t_mach_o *file,
 	// assert(file && file->load_commands);
 	*return_nsects = 0;
 	nsects = count_sections_64(file);
-	if (NULL == (secs = malloc(sizeof(struct section_64 *) * nsects)))
-		exit(EXIT_FAILURE);
+	if ((secs = malloc(sizeof(struct section_64 *) * nsects)) == NULL)
+		return (NULL);
 	cur_lc = file->load_commands;
 	while (i < nsects)
 	{

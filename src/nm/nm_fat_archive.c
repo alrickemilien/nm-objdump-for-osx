@@ -25,11 +25,11 @@ static int32_t	nm_all_fat_archs(t_mach_o *file, t_options *options)
 			continue ;
 		}
 		if (file->fat_header->nfat_arch != 1)
-			printf("\n%s (for architecture %s):\n", file->path,
+			ft_printf("\n%s (for architecture %s):\n", file->path,
 				cpu_type_name(file->fat_archs ? file->fat_archs[i].cputype
 									: file->fat_archs_64[i].cputype));
 		else
-			printf("%s:\n", file->path);
+			ft_printf("%s:\n", file->path);
 		if (find_current_arch(file, options) == -1)
 			return (-1);
 		i++;

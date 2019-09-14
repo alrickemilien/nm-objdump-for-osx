@@ -9,7 +9,7 @@ static int	otool_current_arch(t_mach_o *file, t_options *options)
 		return (otool_fat_archive(file, options));
 	else if (file->arch_type == ARCHIVE_FILE)
 	{
-		printf("Archive : %s\n", file->path);
+		ft_printf("Archive : %s\n", file->path);
 		return (otool_archive(file, options));
 	}
 	return (-1);
@@ -28,11 +28,11 @@ static int	otool_all_fat_archs(t_mach_o *file, t_options *options)
 			continue ;
 		}
 		if (file->fat_header->nfat_arch != 1)
-			printf("%s (architecture %s):\n", file->path,
+			ft_printf("%s (architecture %s):\n", file->path,
 			cpu_type_name(file->fat_archs ? file->fat_archs[i].cputype
 			: file->fat_archs_64[i].cputype));
 		else
-			printf("%s:\n", file->path);
+			ft_printf("%s:\n", file->path);
 		if (otool_current_arch(file, options) == -1)
 			return (-1);
 		i++;
@@ -54,7 +54,7 @@ int	otool_fat_archive(t_mach_o *file, t_options *options)
 		if (load_fat_archive_nth_arch(file, (uint32_t)narch_for_arch) == -1)
 			return (-1);
 		if (file->arch_type != ARCHIVE_FILE)
-			printf("%s:\n", file->path);
+			ft_printf("%s:\n", file->path);
 		return (otool_current_arch(file, options));
 	}
 }

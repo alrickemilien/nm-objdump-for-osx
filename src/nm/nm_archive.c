@@ -24,7 +24,7 @@ int32_t	nm_archive(t_mach_o *file, t_options *options)
 			continue ;
 		}
 		
-		printf("\n%s(%s):\n",
+		ft_printf("\n%s(%s):\n",
            	file->path,
            	file->archive_member_header.member_name);
 		

@@ -59,7 +59,7 @@ void		print_symbol(t_mach_o *file,
 	if (!is_print_symbol_required(symbol, info, options, c))
 		return ;
 	if (options->ONLY_SYMBOL_NAME || options->ONLY_UNDEFINED_SYMBOL)
-		printf("%s\n", (char *)symbol->string);
+		ft_printf("%s\n", (char *)symbol->string);
 	else if (options->DISPLAY_HEXA)
 		print_hex_dump_symbol(symbol, info);
 	else if (c == 'u' || c == 'U')

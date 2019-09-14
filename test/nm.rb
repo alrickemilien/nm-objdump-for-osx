@@ -39,16 +39,16 @@ class TestNm < Test::Unit::TestCase
 		out = Shared.pipe("nm #{FT_NM}").join('')
 
 		forbidden = [
-			'U _printf',
-			'U _sprintf',
-			'U _fprintf',
-			'U _fopen',
-			'U _exit',
-			'U _memcmp',
-			'U _memcpy',
-			'U _strcmp',
-			'U _strlen',			
-			'U _dprintf',
+			"U _printf\n",
+			"U _sprintf\n",
+			"U _fprintf\n",
+			"U _fopen\n",
+			"U _exit\n",
+			"U _memcmp\n",
+			"U _memcpy\n",
+			"U _strcmp\n",
+			"U _strlen\n",			
+			"U _dprintf\n",
 		].map { |x| assert_not_match(/#{x}/, out, "Forbidden function #{x} into nm binary") }
 	end
 

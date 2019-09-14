@@ -2,7 +2,7 @@
 
 int32_t	read_archive_member_name(t_mach_o *file)
 {
-	if (!memcmp(file->archive_member_header_addr, 
+	if (!ft_memcmp(file->archive_member_header_addr, 
 				LONG_ARCHIVE_NAME_MAGIC,
 				sizeof(LONG_ARCHIVE_NAME_MAGIC) - 1))
 	{

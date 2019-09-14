@@ -20,7 +20,7 @@ static bool		is_archive_file(t_mach_o *file)
 		return (false);
 	}
 	
-	if (!memcmp(
+	if (!ft_memcmp(
 			file->o_addr,
 			STATIC_LIB_MAGIC,
 			sizeof(STATIC_LIB_MAGIC) - 1)) {

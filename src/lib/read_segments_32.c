@@ -53,8 +53,8 @@ struct segment_command	**read_segments_32(t_mach_o *file,
 	// assert((file->mh || file->mh_64) && file->load_commands);
 	nsegs = count_segments_32(file);
 	*return_nsegs = 0;
-	if (NULL == (segs = malloc(sizeof(struct segment_command *) * nsegs)))
-		exit(EXIT_FAILURE);
+	if ((segs = malloc(sizeof(struct segment_command *) * nsegs)) == NULL)
+		return (NULL);
 	fill_segments(segs, nsegs, file);
 	*return_nsegs = nsegs;
 	return (segs);

@@ -1,25 +1,31 @@
 #include "mach_o_builder.h"
 
-static inline bool is_digit(char c) {
+static bool is_digit(char c)
+{
   if (c >= '0' && c <= '9')
     return (true);
   return (false);
 }
 
-static inline bool is_alpha_low(char c) {
+static bool is_alpha_low(char c)
+{
   if (c >= 'a' && c <= 'z')
     return (true);
   return (false);
 }
 
-static inline bool is_alpha_big(char c) {
+static bool is_alpha_big(char c)
+{
   if (c >= 'A' && c <= 'Z')
     return (true);
   return (false);
 }
 
-static inline bool is_alpha_num(char c) {
-  if ((c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z') || (c >= 0 && c <= '9'))
+static bool is_alpha_num(char c)
+{
+  if ((c >= 'A' && c <= 'Z')
+    || (c >= 'a' && c <= 'z')
+    || (c >= 0 && c <= '9'))
     return (true);
   return (false);
 }
@@ -41,7 +47,7 @@ uint64_t atoi_base(const char *str, size_t base)
 //debug("yaaa %s\n", str);
 
   start_index = 0;
-  if (0 == memcmp(str, "0x", sizeof(char) * 2))
+  if (ft_memcmp(str, "0x", sizeof(char) * 2) == 0)
     start_index = 2;
 
 //  debug("%s\n", str + start_index);

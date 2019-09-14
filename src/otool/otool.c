@@ -4,14 +4,14 @@ static int	dispatch(t_mach_o *file, t_options *options)
 {
 	if (file->type == OBJECT_FILE)
 	{
-		printf("%s:\n", file->path);
+		ft_printf("%s:\n", file->path);
 		return (otool_object(file, options));
 	}
 	else if (file->type == FAT_FILE)
 		return (otool_fat_archive(file, options));
 	else if (file->type == ARCHIVE_FILE)
 	{
-		printf("Archive : %s\n", file->path);
+		ft_printf("Archive : %s\n", file->path);
 		return (otool_archive(file, options));
 	}
 	return (-1);

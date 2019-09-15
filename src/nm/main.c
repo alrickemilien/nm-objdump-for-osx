@@ -63,6 +63,6 @@ int			main(int ac, char **av)
 	exit_code = 0;
 	last = 0;
 	while (i < ac)
-		loop_over_command_line(av[i], &options, &exit_code, &i);
+		loop_over_command_line(av[i++], &options, &exit_code, &i);
 	return (exit_code);
 }

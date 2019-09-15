@@ -57,7 +57,7 @@ t_symbol	*read_symbols(
 	size_t		i;
 
 	if (nm_info->st_lc == NULL
-			|| (nm_info->symtab == NULL && nm_info->symtab_64 == NULL))
+		|| (nm_info->symtab == NULL && nm_info->symtab_64 == NULL))
 		return (NULL);
 	if ((symbols = malloc(nm_info->st_lc->nsyms * sizeof(t_symbol))) == NULL)
 		return (NULL);

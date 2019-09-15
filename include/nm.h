@@ -64,6 +64,10 @@ void	print_unknown_symbol(
 void	print_hex_dump_symbol(
 	t_symbol *symbol,
 	t_mach_o_processor *info);
+void	print_posix_dump_symbol(
+	t_symbol *symbol,
+	t_mach_o_processor *info,
+    char c);
 
 /*
 ** Symbols

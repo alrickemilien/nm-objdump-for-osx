@@ -58,7 +58,9 @@ void		print_symbol(t_mach_o *file,
 		c = '?';
 	if (!is_print_symbol_required(symbol, info, options, c))
 		return ;
-	if (options->ONLY_SYMBOL_NAME || options->ONLY_UNDEFINED_SYMBOL)
+	if (options->POSIX)
+		print_posix_dump_symbol(symbol, info, c);
+	else if (options->ONLY_SYMBOL_NAME || options->ONLY_UNDEFINED_SYMBOL)
 		ft_printf("%s\n", (char *)symbol->string);
 	else if (options->DISPLAY_HEXA)
 		print_hex_dump_symbol(symbol, info);

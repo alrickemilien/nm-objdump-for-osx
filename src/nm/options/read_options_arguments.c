@@ -1,28 +1,8 @@
 #include "nm.h"
 
-/*
-** This map regroups all options :
-**  -a     Display all symbol table entries, including those inserted for use by debuggers.
-**  -g     Display only global (external) symbols.
-**  -n     Sort numerically rather than alphabetically.
-**  -o     Prepend file or archive element name to each output line, rather than only once.
-**  -p     Don't sort; display in symbol-table order.
-**  -r     Sort in reverse order.
-**  -u     Display only undefined symbols.
-**  -U     Don't display undefined symbols.
-**  -m     Display  the  N_SECT  type  symbols (Mach-O symbols) as (segment_name, section_name) followed by either external or non-external and then the symbol
-**  						name.  Undefined, common, absolute and indirect symbols get displayed as (undefined), (common), (absolute), and (indirect), respectively.
-**  -x     Display the symbol table entry's fields in hexadecimal, along with the name as a string.
-**  -j     Just display the symbol names (no value or type).
-**  -l     List a pseudo symbol .section_start if no symbol has as its value the starting address of the section.  (This is used with the -s option above.)
-**  -f     For nm-classic(1) this displays the symbol table of a dynamic library flat (as one file not separate modules).  This is obsolete and  not  supported
-**  			with llvm-nm(1).
-**  -A     Write the pathname or library name of an object on each line.
-**  -P     Write information in a portable output forma
-*/
-
 static t_options_map options_map[] = {
 		{ "a", ALL_SYMBOL, NULL },
+		{ "P", POSIX, NULL },
 		{ "g", ONLY_GLOBAL_SYMBOL, NULL },
 		{ "n", SORT_NUMERIC, NULL },
 		{ "o", PREPEND_FILE_ARCHIVE_NAME, NULL },
@@ -58,28 +38,6 @@ static t_options_map options_map[] = {
 		{ "radix", RADIX, &read_radix_option },
 		{ NULL, 0, NULL },
 };
-
-
-// static int handle_option_waiting_value(t_options *options, const char *name)
-// {
-// 	size_t j;
-
-// 	j = 0;
-// 	while (options_map[j].name != NULL)
-// 	{
-// 		if (!ft_strcmp(name + 2, options_map[j].name)) {
-// 			((int*)options)[options_map[j].offset] = 1;
-
-// 			return (EXIT_OK);
-// 		}
-
-// 		j++;
-// 	}
-
-// 	print_error_on_option("nm: unrecognized option ", name);
-
-// 	return (EXIT_FAILURE);
-// }
 
 /*
 ** Read option like -- or --reverse

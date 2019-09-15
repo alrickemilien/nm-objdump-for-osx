@@ -14,6 +14,7 @@ NM_SRC=src/nm/main.c \
 	src/nm/read_symbols.c \
 	src/nm/find_section.c \
 	src/nm/print_symbol_hex_dump.c \
+	src/nm/print_posix_dump_symbol.c \
 	src/nm/sort.c \
 	src/nm/sort_symbols.c
 

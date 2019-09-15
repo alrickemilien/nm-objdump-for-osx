@@ -31,6 +31,7 @@ enum {
 	DEFINED_ONLY,
 	RADIX,
 	HELP,
+	POSIX,
 	OPTIONS_NUMBER,
 };
 
@@ -79,6 +80,7 @@ typedef struct s_options {
 	int DEFINED_ONLY;
 	int RADIX;
 	int HELP;
+	int POSIX;
 
 	int	end_index;
 	int	file_count;

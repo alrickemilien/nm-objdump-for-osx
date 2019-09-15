@@ -1,35 +1,39 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   find_fat_archive_architecture.c                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: aemilien <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/09/15 13:19:20 by aemilien          #+#    #+#             */
+/*   Updated: 2019/09/15 13:19:53 by aemilien         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "mach_o.h"
 
 int	find_fat_archive_architecture(t_mach_o *file,
-							cpu_type_t cputype,
-							cpu_subtype_t subtype)
+		cpu_type_t cputype,
+		cpu_subtype_t subtype)
 {
 	size_t	i;
 
-	if (!file->fat_header || (!file->fat_archs && !file->fat_archs_64))
+	if (!file->fat_header
+	|| (!file->fat_archs && !file->fat_archs_64))
 		return (-1);
-	
 	i = 0;
 	(void)subtype;
 	while (i < file->fat_header->nfat_arch)
 	{
 		if (check_file_addr_size(file,
-			(file->fat_archs ? (void *)file->fat_archs : (void *)file->fat_archs_64),
-			sizeof(struct fat_arch_64)) == -1) 
-		{
+			(file->fat_archs
+			? (void *)file->fat_archs : (void *)file->fat_archs_64),
+			sizeof(struct fat_arch_64)) == -1)
 			return (-1);
-		}
-
 		if (file->fat_archs && file->fat_archs[i].cputype == cputype)
-		{
 			return ((int32_t)i);
-		}
-		
 		else if (file->fat_archs_64 && file->fat_archs_64[i].cputype)
-		{
 			return ((int32_t)i);
-		}
-		
 		i++;
 	}
 	return (-1);

@@ -6,23 +6,23 @@
 /*   By: aemilien <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/15 14:52:58 by aemilien          #+#    #+#             */
-/*   Updated: 2019/09/15 14:52:59 by aemilien         ###   ########.fr       */
+/*   Updated: 2019/09/15 17:20:35 by aemilien         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "nm.h"
 
 t_arch_option g_arch_options[] = {
-    { "x86_64", CPU_TYPE_X86_64 },
-    { "x86-64", CPU_TYPE_X86_64 },
-    { "i386", CPU_TYPE_I386 },
-    { "ABI64", CPU_ARCH_ABI64 },
-    { "ppc", CPU_TYPE_POWERPC },
-    { NULL, -1 },
+	{ "x86_64", CPU_TYPE_X86_64 },
+	{ "x86-64", CPU_TYPE_X86_64 },
+	{ "i386", CPU_TYPE_I386 },
+	{ "ABI64", CPU_ARCH_ABI64 },
+	{ "ppc", CPU_TYPE_POWERPC },
+	{ NULL, -1 },
 };
 
 int				read_arch_option(
-	t_options *options, const char *value)
+		t_options *options, const char *value)
 {
 	size_t	i;
 	size_t	len;
@@ -42,5 +42,5 @@ int				read_arch_option(
 		i++;
 	}
 	return (mach_o_error(-1,
-	"for the -arch option: Unknown architecture named '%s'.\n", value));
+		"for the -arch option: Unknown architecture named '%s'.\n", value));
 }

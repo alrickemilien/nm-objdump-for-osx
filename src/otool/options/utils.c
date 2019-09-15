@@ -1,5 +1,16 @@
-#include "nm.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   utils.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: aemilien <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/09/15 14:02:02 by aemilien          #+#    #+#             */
+/*   Updated: 2019/09/15 14:02:03 by aemilien         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
+#include "nm.h"
 
 static const t_options_map	g_waiting_value_options[] = {
 	{ NULL, 0, NULL },
@@ -10,7 +21,7 @@ static const t_options_map	g_waiting_value_options[] = {
 ** Return 0 when the argument name is an option like --reverse
 */
 
-bool 						is_a_single_option(
+bool						is_a_single_option(
 		const char *name)
 {
 	if (name[0] == '-' && name[1] != '-')

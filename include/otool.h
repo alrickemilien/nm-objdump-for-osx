@@ -21,6 +21,8 @@
 # define INTADDR(x) ((void*)(intptr_t)(x))
 # define OTOOL_DEFAULT_MACHO_ERROR "%s: is not an object file\n"
 
+# define OTOOL_MULTI_OPT_ERROR "for the -%s option: may only occur zero or one times!\n"
+
 void							*map_loading_file(
 	const char *filename, uint64_t *file_size);
 int								map_unloading_file(

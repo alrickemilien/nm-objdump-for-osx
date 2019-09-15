@@ -1,7 +1,22 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   help.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: aemilien <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/09/15 14:07:46 by aemilien          #+#    #+#             */
+/*   Updated: 2019/09/15 14:07:48 by aemilien         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <unistd.h>
 
-static const char help[] = 
-"Usage: %s [-arch arch_type] [-fahlLDtdorSTMRIHGvVcXmqQjCP] [-mcpu=arg] [--version] <object file> ...\n"
+static const char	g_help[] =
+"Usage: %s [-arch arch_type]"
+" [-fahlLDtdorSTMRIHGvVcXmqQjCP]"
+" [-mcpu=arg] [--version]"
+" <object file> ...\n"
 "	-f print the fat headers\n"
 "	-a print the archive header\n"
 "	-h print the mach header\n"
@@ -35,9 +50,9 @@ static const char help[] =
 "	-C print linker optimization hints\n"
 "	--version print the version of %s\n";
 
-int exit_with_help(void)
+int	exit_with_help(void)
 {
-  if (write(1, help, sizeof(help)) < 0)
-    return (-1);
-  return (0);
+	if (write(1, g_help, sizeof(g_help)) < 0)
+		return (-1);
+	return (0);
 }

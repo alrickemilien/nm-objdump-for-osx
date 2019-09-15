@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   read_options_arguments.c                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: aemilien <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/09/15 14:04:59 by aemilien          #+#    #+#             */
+/*   Updated: 2019/09/15 14:05:00 by aemilien         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "otool.h"
 
 /*
@@ -32,10 +44,10 @@ static int					handle_option(
 			&& len == ft_strlen(g_options_map[j].name))
 		{
 			if (((int*)options)[g_options_map[j].offset] == 1)
-				return (mach_o_error(-1, 
-					"for the -%s option: "
-					"may only occur zero or one times!\n",
+			{
+				return (mach_o_error(-1, OTOOL_MULTI_OPT_ERROR,
 					g_options_map[j].name));
+			}
 			if (!g_options_map[j].waiting_for_value)
 				((int*)options)[g_options_map[j].offset] = 1;
 			else

@@ -1,6 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   read_sections_64.c                                 :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: aemilien <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/09/15 12:45:55 by aemilien          #+#    #+#             */
+/*   Updated: 2019/09/15 12:46:34 by aemilien         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "mach_o.h"
 
-uint32_t	count_sections_64(t_mach_o *file)
+uint32_t			count_sections_64(t_mach_o *file)
 {
 	struct load_command	*cur_lc;
 	uint32_t			i;
@@ -24,7 +36,8 @@ uint32_t	count_sections_64(t_mach_o *file)
 	return (nsects);
 }
 
-static uint32_t		fill_sections_from_segment(struct load_command *lc,
+static uint32_t		fill_sections_from_segment(
+		struct load_command *lc,
 										struct section_64 **secs,
 										uint32_t count)
 {

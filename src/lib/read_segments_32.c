@@ -1,6 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   read_segments_32.c                                 :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: aemilien <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/09/15 12:45:08 by aemilien          #+#    #+#             */
+/*   Updated: 2019/09/15 12:45:29 by aemilien         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "mach_o.h"
 
-uint32_t	count_segments_32(t_mach_o *file)
+uint32_t				count_segments_32(t_mach_o *file)
 {
 	struct load_command *cur_lc;
 	uint32_t			i;

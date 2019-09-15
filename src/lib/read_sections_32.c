@@ -1,6 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   read_sections_32.c                                 :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: aemilien <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/09/15 12:46:45 by aemilien          #+#    #+#             */
+/*   Updated: 2019/09/15 12:46:59 by aemilien         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "mach_o.h"
 
-uint32_t	count_sections_32(t_mach_o *file)
+uint32_t		count_sections_32(t_mach_o *file)
 {
 	struct load_command	*cur_lc;
 	uint32_t			i;
@@ -24,7 +36,7 @@ uint32_t	count_sections_32(t_mach_o *file)
 	return (nsects);
 }
 
-static uint32_t		fill_sections_from_seg(struct load_command *lc,
+static uint32_t	fill_sections_from_seg(struct load_command *lc,
 										struct section **secs,
 										uint32_t count)
 {
@@ -38,7 +50,7 @@ static uint32_t		fill_sections_from_seg(struct load_command *lc,
 	return (count);
 }
 
-struct section		**read_sections_32(t_mach_o *file,
+struct section	**read_sections_32(t_mach_o *file,
 										uint32_t *return_nsects)
 {
 	size_t				i;

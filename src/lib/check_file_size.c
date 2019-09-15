@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   check_file_size.c                                  :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: aemilien <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/09/15 13:17:09 by aemilien          #+#    #+#             */
+/*   Updated: 2019/09/15 13:17:10 by aemilien         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "mach_o.h"
 
 int	check_file_addr(t_mach_o *file, void *addr)
@@ -5,17 +17,18 @@ int	check_file_addr(t_mach_o *file, void *addr)
 	if (file->addr <= addr
 		&& ((uint8_t*)file->addr + file->file_size > (uint8_t*)addr
 			|| (((uint64_t)file->addr + file->file_size - 1)
-				& ~4095UL) == ((uint64_t)addr & ~4095UL)))
+			& ~4095UL) == ((uint64_t)addr & ~4095UL)))
 		return (0);
 	return (-1);
 }
 
 int	check_file_addr_size(t_mach_o *file,
-	void *addr,
-	uint64_t size)
+		void *addr,
+		uint64_t size)
 {
 	if (check_file_addr(file, addr) == 0
-		&& (size == 0 || check_file_addr(file, (uint8_t*)addr + size - 1) == 0))
+		&& (size == 0
+		|| check_file_addr(file, (uint8_t*)addr + size - 1) == 0))
 		return (0);
 	return (-1);
 }

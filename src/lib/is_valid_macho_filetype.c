@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   is_valid_macho_filetype.c                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: aemilien <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/09/15 13:00:07 by aemilien          #+#    #+#             */
+/*   Updated: 2019/09/15 13:00:27 by aemilien         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "mach_o.h"
 
 /*
@@ -26,14 +38,13 @@ static const uint32_t g_filetype_map[] = {
 	MH_DYLINKER,
 	MH_BUNDLE,
 	MH_DYLIB_STUB,
-                                        /*  linking only, no section contents */
 	MH_DSYM,
-                                        /*  sections */
 	MH_KEXT_BUNDLE,
 	(uint32_t)-1,
 };
 
-bool is_valid_filetype(uint32_t filetype)
+bool	is_valid_filetype(
+		uint32_t filetype)
 {
 	int	i;
 
@@ -44,6 +55,5 @@ bool is_valid_filetype(uint32_t filetype)
 			return (true);
 		i++;
 	}
-
 	return (false);
 }

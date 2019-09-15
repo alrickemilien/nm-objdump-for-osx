@@ -1,10 +1,22 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   load_macho_file.c                                  :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: aemilien <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/09/15 12:54:37 by aemilien          #+#    #+#             */
+/*   Updated: 2019/09/15 12:56:31 by aemilien         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "mach_o.h"
 
-
-typedef struct s_map_type_to_loaders {
-	int32_t			(*loader)(t_mach_o *ofile, void *addr, uint64_t size);
-	uint32_t		type;
-}				t_map_type_to_loaders;
+typedef struct						s_map_type_to_loaders {
+	int32_t							(*loader)(
+		t_mach_o *ofile, void *addr, uint64_t size);
+	uint32_t						type;
+}									t_map_type_to_loaders;
 
 static const t_map_type_to_loaders	g_file_loaders_map[] = {
 	{&load_archive_file, ARCHIVE_FILE},
@@ -19,23 +31,20 @@ static const t_map_type_to_loaders	g_file_loaders_map[] = {
 ** - Load the entire file informations according to file type
 */
 
-int	load_macho_file(
+int									load_macho_file(
 	t_mach_o *file,
 	const char *path,
 	void *addr,
 	uint64_t file_size)
 {
 	size_t	i;
-	
+
 	file->o_addr = addr;
 	file->o_size = file_size;
 	file->path = path;
-	
 	file->type = read_file_type(file);
-	
 	if (file->fat_header)
 		file->arch_type = file->type;
-
 	i = 0;
 	while (i < SUPPORTED_FILE_TYPES)
 	{
@@ -43,6 +52,5 @@ int	load_macho_file(
 			return (g_file_loaders_map[i].loader(file, addr, file_size));
 		i++;
 	}
-	// Invalid file type
 	return (-1);
 }

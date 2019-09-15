@@ -1,8 +1,20 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   read_segments_64.c                                 :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: aemilien <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/09/15 12:42:29 by aemilien          #+#    #+#             */
+/*   Updated: 2019/09/15 12:44:51 by aemilien         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "mach_o.h"
 
-uint32_t	count_segments_64(t_mach_o *file)
+uint32_t					count_segments_64(t_mach_o *file)
 {
-	struct load_command *cur_lc;
+	struct load_command	*cur_lc;
 	uint32_t			i;
 	uint32_t			nsegs;
 	uint32_t			ncmds;
@@ -18,16 +30,16 @@ uint32_t	count_segments_64(t_mach_o *file)
 		if (cur_lc->cmd == LC_SEGMENT_64)
 			nsegs++;
 		cur_lc = (struct load_command *)(void *)((uint8_t*)cur_lc
-												+ cur_lc->cmdsize);
+				+ cur_lc->cmdsize);
 		i++;
 	}
 	return (nsegs);
 }
 
 static int					fill_segments(
-	struct segment_command_64 **segs,
-	uint32_t nsegs,
-	t_mach_o *file)
+		struct segment_command_64 **segs,
+		uint32_t nsegs,
+		t_mach_o *file)
 {
 	struct load_command	*cur_lc;
 	size_t				i;
@@ -43,14 +55,14 @@ static int					fill_segments(
 		if (cur_lc->cmd == LC_SEGMENT_64)
 			segs[i++] = (struct segment_command_64*)(void*)cur_lc;
 		cur_lc = (struct load_command *)(void *)((uint8_t*)cur_lc
-												+ cur_lc->cmdsize);
+				+ cur_lc->cmdsize);
 	}
 	return (0);
 }
 
 struct segment_command_64	**read_segments_64(
-	t_mach_o *file,
-	uint32_t *return_nsegs)
+		t_mach_o *file,
+		uint32_t *return_nsegs)
 {
 	uint32_t					nsegs;
 	struct segment_command_64	**segs;

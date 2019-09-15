@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   is_valid_symbol_type.c                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: aemilien <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/09/15 12:57:42 by aemilien          #+#    #+#             */
+/*   Updated: 2019/09/15 12:57:43 by aemilien         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "mach_o.h"
 
 /*
@@ -9,7 +21,7 @@
 ** #define N_INDR  0xa             // indirect
 */
 
-static const uint32_t g_symbol_type_map[] = {
+static const uint32_t	g_symbol_type_map[] = {
 	N_UNDF,
 	N_ABS,
 	N_SECT,
@@ -18,7 +30,8 @@ static const uint32_t g_symbol_type_map[] = {
 	(uint32_t)-1,
 };
 
-bool is_valid_symbol_type(uint8_t n_type)
+bool					is_valid_symbol_type(
+	uint8_t n_type)
 {
 	size_t	i;
 
@@ -29,6 +42,5 @@ bool is_valid_symbol_type(uint8_t n_type)
 			return (true);
 		i++;
 	}
-
 	return (false);
 }

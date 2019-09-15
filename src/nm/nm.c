@@ -32,7 +32,7 @@ int			nm(t_options *options, const char *path)
 	if ((file.addr = map_loading_file(path, &file.file_size)) == NULL)
 		return (-1);
 	if (load_macho_file(&file, path, file.addr, file.file_size) < 0)
-		return (mach_o_error(-1, NM_DEFAULT_MACHO_ERROR, file.path));
+		return (mach_o_error(-1, NM_ERR, file.path));
 	if (file.type == UNKNOWN_FILE)
 		return (mach_o_error(-1, "%s: %s Unknown file format\n", path, path));
 	if (options->file_count > 1 && file.type == OBJECT_FILE)

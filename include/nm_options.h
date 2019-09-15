@@ -6,7 +6,7 @@
 /*   By: aemilien <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/15 12:41:38 by aemilien          #+#    #+#             */
-/*   Updated: 2019/09/15 12:41:39 by aemilien         ###   ########.fr       */
+/*   Updated: 2019/09/15 16:55:23 by aemilien         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,8 +38,6 @@ enum {
 	SORT_SIZE,
 	DO_NOT_SORT,
 	REVERSE_SORT,
-	PRINT_AFTER_ALL,
-	PRINT_BEFORE_ALL,
 	DEFINED_ONLY,
 	RADIX,
 	HELP,
@@ -67,32 +65,30 @@ enum {
 # pragma pack(push, 1)
 
 typedef struct	s_options {
-	int			ALL_SYMBOL;
-	int			ONLY_GLOBAL_SYMBOL;
-	int			SORT_NUMERIC;
-	int			PREPEND_FILE_ARCHIVE_NAME;
-	int			ONLY_UNDEFINED_SYMBOL;
-	int			DO_NOT_DISPLAY_UNDEFINED_SYMBOL;
-	int			DISPLAY_NSECT;
-	int			DISPLAY_HEXA;
-	int			ONLY_SYMBOL_NAME;
-	int			LIST_PSEUDO_SYMBOL;
-	int			DISPLAY_DYNAMIC_LIB_SYMBOL;
-	int			DISPLAY_PATH_NAME;
-	int			DISPLAY_PORTABLE;
-	int			ONLY_DYNAMIC;
-	int			ARCH_TYPE;
-	int			SEGMENT_SECTION;
-	int			PRINT_SIZE;
-	int			SORT_SIZE;
-	int			DO_NOT_SORT;
-	int			REVERSE_SORT;
-	int			PRINT_AFTER_ALL;
-	int			PRINT_BEFORE_ALL;
-	int			DEFINED_ONLY;
-	int			RADIX;
-	int			HELP;
-	int			POSIX;
+	int			all_symbol;
+	int			only_global_symbol;
+	int			sort_numeric;
+	int			prepend_file_archive_name;
+	int			only_undefined_symbol;
+	int			do_not_display_undefined_symbols;
+	int			display_nsect;
+	int			display_hexa;
+	int			only_symbol_name;
+	int			list_pseudo_symbol;
+	int			display_dynamic_lib_symbol;
+	int			display_path_name;
+	int			display_portable;
+	int			only_dynamic;
+	int			arch_type;
+	int			segment_section;
+	int			print_size;
+	int			sort_size;
+	int			do_not_sort;
+	int			reverse_sort;
+	int			defined_only;
+	int			radix;
+	int			help;
+	int			posix;
 	int			end_index;
 	int			file_count;
 }				t_options;
@@ -109,8 +105,9 @@ typedef struct	s_options {
 typedef struct	s_options_map {
 	char		*name;
 	int			offset;
-	int 		(*waiting_for_value)(
-		t_options *options, const char *value);
+	int			(*waiting_for_value)(
+				t_options *options,
+				const char *value);
 }				t_options_map;
 
 /*

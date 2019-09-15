@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   nm.h                                               :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: aemilien <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/09/15 16:53:57 by aemilien          #+#    #+#             */
+/*   Updated: 2019/09/15 16:54:51 by aemilien         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef NM_H
 # define NM_H
 
@@ -7,7 +19,7 @@
 # include "libft.h"
 
 # define INTADDR(x) ((void*)(intptr_t)(x))
-# define NM_DEFAULT_MACHO_ERROR "%s The file was not recognized as a valid object file\n\n"
+# define NM_ERR "%s The file was not recognized as a valid object file\n\n"
 # define SUPPORTED_NM_CHAR_SYMBOL_NBR 17
 # define NCHARS_SYMBOLS SUPPORTED_NM_CHAR_SYMBOL_NBR
 # define BAD_STRING_INDEX "bad string index"
@@ -72,10 +84,10 @@ void				print_unknown_symbol(
 void				print_hex_dump_symbol(
 	t_symbol *symbol,
 	t_mach_o_processor *info);
-void	print_posix_dump_symbol(
+void				print_posix_dump_symbol(
 	t_symbol *symbol,
 	t_mach_o_processor *info,
-    char c);
+	char c);
 
 /*
 ** Symbols

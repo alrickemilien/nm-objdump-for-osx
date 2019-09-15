@@ -42,8 +42,6 @@ static t_options_map	g_options_map[] = {
 	{ "undefined-only", ONLY_UNDEFINED_SYMBOL, NULL, },
 	{ "no-sort", DO_NOT_SORT, NULL },
 	{ "reverse-sort", REVERSE_SORT, NULL },
-	{ "print-after-all", PRINT_AFTER_ALL, NULL },
-	{ "print-before-all", PRINT_BEFORE_ALL, NULL },
 	{ "just-symbol-name", ONLY_SYMBOL_NAME, NULL },
 	{ "extern-only", ONLY_GLOBAL_SYMBOL, NULL },
 	{ "defined-only", DEFINED_ONLY, NULL },

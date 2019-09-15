@@ -41,7 +41,7 @@ enum {
 # pragma pack(push, 1)
 
 typedef	struct	s_options {
-	int			PRINT_FAT_HEADER;
+	int			print_fat_header;
 	int			end_index;
 	int			file_count;
 }				t_options;

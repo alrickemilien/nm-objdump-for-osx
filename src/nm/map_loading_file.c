@@ -45,16 +45,16 @@ void		*map_loading_file(
 	if ((fd = open(filename, O_RDONLY)) == -1)
 		return (INTADDR(custom_error(filename)));
 	if ((fstat(fd, &st)) == -1 || st.st_size <= 0)
-		return (INTADDR(mach_o_error(0, NM_DEFAULT_MACHO_ERROR, filename)));
+		return (INTADDR(mach_o_error(0, NM_ERR, filename)));
 	*file_size = (off_t)st.st_size;
 	if (S_ISDIR(st.st_mode))
 		return (INTADDR(mach_o_error(0, "%s: Is a directory.\n", filename)));
 	if ((st.st_mode & S_IFMT) != S_IFREG && (st.st_mode & S_IFMT) != S_IFLNK)
-		return (INTADDR(mach_o_error(-1, NM_DEFAULT_MACHO_ERROR, filename)));
+		return (INTADDR(mach_o_error(-1, NM_ERR, filename)));
 	if (MAP_FAILED == (map = mmap(NULL, *file_size,
 					PROT_READ | PROT_WRITE, MAP_PRIVATE, fd, 0)))
 	{
-		mach_o_error(-1, NM_DEFAULT_MACHO_ERROR, filename);
+		mach_o_error(-1, NM_ERR, filename);
 		map = NULL;
 	}
 	close(fd);

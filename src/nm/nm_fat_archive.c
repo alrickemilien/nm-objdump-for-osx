@@ -61,8 +61,8 @@ int32_t			nm_fat_archive(
 	if ((narch_for_arch = find_fat_archive_architecture(file,
 		host_arch->cputype | CPU_ARCH_ABI64, host_arch->cpusubtype)) == -1)
 		return (nm_all_fat_archs(file, options));
-	else if (!options->ARCH_TYPE
-	|| (options->ARCH_TYPE == file->fat_archs[narch_for_arch].cputype))
+	else if (!options->arch_type
+	|| (options->arch_type == file->fat_archs[narch_for_arch].cputype))
 	{
 		if (load_fat_archive_nth_arch(file, (uint32_t)narch_for_arch) == -1)
 			return (-1);
@@ -70,5 +70,5 @@ int32_t			nm_fat_archive(
 	}
 	return (mach_o_error(-1,
 		"file: %s does not contain architecture: %s.\n",
-		file->path, name_arch(options->ARCH_TYPE)));
+		file->path, name_arch(options->arch_type)));
 }

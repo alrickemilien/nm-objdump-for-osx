@@ -54,7 +54,7 @@ int			main(int ac, char **av)
 	i = 1;
 	init_prefix_error(av[0]);
 	exit_code = read_options_arguments(ac, av, &options);
-	if (options.HELP)
+	if (options.help)
 		return (exit_with_help());
 	if (exit_code != 0)
 		return (exit_code);

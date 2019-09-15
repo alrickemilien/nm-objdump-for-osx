@@ -54,13 +54,13 @@ void			sort_symbols(t_symbol *symbols,
 		const uint64_t symbols_number,
 		const t_options *options)
 {
-	if (options->DO_NOT_SORT)
+	if (options->do_not_sort)
 		return ;
-	if (options->REVERSE_SORT)
+	if (options->reverse_sort)
 		g_reverse_flag = 1;
 	else
 		g_reverse_flag = 0;
-	if (options->SORT_NUMERIC)
+	if (options->sort_numeric)
 		sort((void *)symbols,
 				symbols_number,
 				sizeof(t_symbol),

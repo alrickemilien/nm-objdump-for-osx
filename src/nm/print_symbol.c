@@ -49,11 +49,11 @@ static bool								is_print_symbol_required(
 {
 	if (c == '-')
 		return (false);
-	if (options->ONLY_GLOBAL_SYMBOL && !is_symbol_extern(symbol, info))
+	if (options->only_global_symbol && !is_symbol_extern(symbol, info))
 		return (false);
-	if (options->ONLY_UNDEFINED_SYMBOL && !(c == 'u' || c == 'U'))
+	if (options->only_undefined_symbol && !(c == 'u' || c == 'U'))
 		return (false);
-	if (options->DO_NOT_DISPLAY_UNDEFINED_SYMBOL && (c == 'u' || c == 'U'))
+	if (options->do_not_display_undefined_symbols && (c == 'u' || c == 'U'))
 		return (false);
 	return (true);
 }
@@ -72,14 +72,14 @@ void									print_symbol(
 		c = '?';
 	if (!is_print_symbol_required(symbol, info, options, c))
 		return ;
-	if (options->POSIX)
+	if (options->posix)
 		print_posix_dump_symbol(symbol, info, c);
-	if ((options->PREPEND_FILE_ARCHIVE_NAME || options->DISPLAY_PATH_NAME)
-		&& (options->ONLY_SYMBOL_NAME || options->ONLY_UNDEFINED_SYMBOL))
+	if ((options->prepend_file_archive_name || options->display_path_name)
+		&& (options->only_symbol_name || options->only_undefined_symbol))
 		ft_printf("%s: %s\n", file->path, (char *)symbol->string);
-	else if (options->ONLY_SYMBOL_NAME || options->ONLY_UNDEFINED_SYMBOL)
+	else if (options->only_symbol_name || options->only_undefined_symbol)
 		ft_printf("%s\n", (char *)symbol->string);
-	else if (options->DISPLAY_HEXA)
+	else if (options->display_hexa)
 		print_hex_dump_symbol(symbol, info);
 	else if (c == 'u' || c == 'U')
 		print_unknown_symbol(symbol, info, c);

@@ -36,7 +36,7 @@ int				read_arch_option(
 		if (ft_strcmp(value, g_arch_options[i].name) == 0
 				&& ft_strlen(g_arch_options[i].name) == len)
 		{
-			options->ARCH_TYPE = g_arch_options[i].value;
+			options->arch_type = g_arch_options[i].value;
 			return (0);
 		}
 		i++;

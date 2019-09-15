@@ -34,7 +34,7 @@ int				read_radix_option(
 		if (ft_strcmp(value, g_radix_options[i].name) == 0
 				&& ft_strlen(g_radix_options[i].name) == len)
 		{
-			options->RADIX = g_radix_options[i].value;
+			options->radix = g_radix_options[i].value;
 			return (0);
 		}
 		i++;

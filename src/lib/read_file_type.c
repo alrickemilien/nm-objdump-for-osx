@@ -21,11 +21,6 @@
 ** specific for macho file header
 */
 
-typedef struct						s_map_type_to_checkers {
-	bool							(*checker)(t_mach_o *file);
-	int								file_type;
-}									t_map_type_to_checkers;
-
 static bool							is_archive_file(
 	t_mach_o *file)
 {

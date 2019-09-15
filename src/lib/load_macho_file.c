@@ -12,12 +12,6 @@
 
 #include "mach_o.h"
 
-typedef struct						s_map_type_to_loaders {
-	int32_t							(*loader)(
-		t_mach_o *ofile, void *addr, uint64_t size);
-	uint32_t						type;
-}									t_map_type_to_loaders;
-
 static const t_map_type_to_loaders	g_file_loaders_map[] = {
 	{&load_archive_file, ARCHIVE_FILE},
 	{&load_fat_archive_file, FAT_FILE},

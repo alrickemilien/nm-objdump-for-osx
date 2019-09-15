@@ -10,18 +10,14 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "mach_o.h"
+#include <mach/machine.h>
+#include <stddef.h>
+
 /*
 ** Get identifier for cpu
 ** according to cpu type
 */
-
-#include <mach/machine.h>
-#include <stddef.h>
-
-typedef struct					s_cpu_type_names {
-	cpu_type_t					cputype;
-	const char					*cpu_name;
-}								t_cpu_type_names;
 
 static const t_cpu_type_names	g_cpu_type_names[] = {
 	{ CPU_TYPE_I386, "i386" },

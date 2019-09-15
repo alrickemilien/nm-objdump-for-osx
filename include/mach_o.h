@@ -126,6 +126,22 @@ typedef struct					s_mach_o_processor
 	uint32_t					bss_nsect;
 }								t_mach_o_processor;
 
+typedef struct					s_map_type_to_checkers {
+	bool						(*checker)(t_mach_o *file);
+	int							file_type;
+}								t_map_type_to_checkers;
+
+typedef struct					s_cpu_type_names {
+	cpu_type_t					cputype;
+	const char					*cpu_name;
+}								t_cpu_type_names;
+
+typedef struct					s_map_type_to_loaders {
+	int32_t						(*loader)(
+		t_mach_o *ofile, void *addr, uint64_t size);
+	uint32_t					type;
+}								t_map_type_to_loaders;
+
 /*
 ** Main
 */

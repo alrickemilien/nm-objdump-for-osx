@@ -12,10 +12,6 @@ This project provides three binaries :
 # This program displays segment text of mach o files
 ./build/ft_otool
 ```
-```bash
-# This program generate a mach o file from a config
-./build/mach-o-builder mach-o-builder.conf 1> mach-o-object.gen.o
-```
 
 ## Architecture
 

@@ -6,7 +6,7 @@
 /*   By: aemilien <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/15 13:07:41 by aemilien          #+#    #+#             */
-/*   Updated: 2019/09/15 13:07:43 by aemilien         ###   ########.fr       */
+/*   Updated: 2019/09/15 13:47:17 by aemilien         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -163,7 +163,6 @@ static const uint32_t g_flag_map[] = {
 	MH_HAS_TLV_DESCRIPTORS,
 	MH_NO_HEAP_EXECUTION,
 	MH_APP_EXTENSION_SAFE,
-	MH_NLIST_OUTOFSYNC_WITH_DYLDINFO,
 	(uint32_t)-1,
 };
 

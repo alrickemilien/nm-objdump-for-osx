@@ -1,10 +1,22 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   print_section.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: aemilien <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/09/15 13:34:02 by aemilien          #+#    #+#             */
+/*   Updated: 2019/09/15 13:34:03 by aemilien         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "otool.h"
 
 static void	print_sections_line_32(void *addr,
 		uint32_t bytes_number,
 		cpu_type_t cputype)
 {
-	size_t  i;
+	size_t	i;
 
 	i = 0;
 	if (cputype != CPU_TYPE_POWERPC)
@@ -28,8 +40,8 @@ int			print_section_32(t_mach_o *file,
 		uint32_t nsec)
 {
 	void		*section_addr;
-	uint32_t    size;
-	uint32_t    i;
+	uint32_t	size;
+	uint32_t	i;
 
 	if (!info->secs || info->segs)
 		return (-1);
@@ -41,9 +53,8 @@ int			print_section_32(t_mach_o *file,
 			+ info->secs[nsec]->offset);
 	size = info->secs[nsec]->size;
 	i = 0;
-	ft_printf(
-		"Contents of (%s,%s) section\n", info->secs[nsec]->segname,
-		info->secs[nsec]->sectname);
+	ft_printf("Contents of (%s,%s) section\n",
+		info->secs[nsec]->segname, info->secs[nsec]->sectname);
 	while (i < size)
 	{
 		ft_printf("%08x\t", info->secs[nsec]->addr + i);
@@ -70,8 +81,8 @@ int			print_section_64(
 		t_mach_o *file, t_otool_dump *info, uint32_t nsec)
 {
 	void		*section_addr;
-	uint64_t    size;
-	uint64_t    i;
+	uint64_t	size;
+	uint64_t	i;
 
 	if (!info->secs_64 || !info->segs_64)
 		return (-1);

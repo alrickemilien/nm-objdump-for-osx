@@ -18,7 +18,7 @@
 # include "otool_options.h"
 
 # define NO_SECT_FOUND ((uint32_t)-1)
-
+# define INTADDR(x) ((void*)(intptr_t)(x))
 # define OTOOL_DEFAULT_MACHO_ERROR "%s: is not an object file\n"
 
 void							*map_loading_file(

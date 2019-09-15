@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   otool_archive.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: aemilien <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/09/15 13:37:00 by aemilien          #+#    #+#             */
+/*   Updated: 2019/09/15 13:37:01 by aemilien         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "otool.h"
 
 int	otool_archive(t_mach_o *file, t_options *options)
@@ -15,7 +27,7 @@ int	otool_archive(t_mach_o *file, t_options *options)
 				return (0);
 			else
 				return (mach_o_error(
-				-1, OTOOL_DEFAULT_MACHO_ERROR, file->path));
+					-1, OTOOL_DEFAULT_MACHO_ERROR, file->path));
 		}
 		ft_printf("%s(%s):\n",
 			file->path,

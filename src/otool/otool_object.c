@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   otool_object.c                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: aemilien <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/09/15 13:34:28 by aemilien          #+#    #+#             */
+/*   Updated: 2019/09/15 13:35:08 by aemilien         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "otool.h"
 
 void		cleanup_otool_info(t_otool_dump *info)
@@ -35,7 +47,8 @@ static int	otool_object_32(t_mach_o *file, t_otool_dump *info)
 	cleanup_otool_info(info);
 	if (ret == -1)
 		return (mach_o_error(-1, "Truncated or malformed object file "
-			"(the text section would go past the end of the file)\n"));
+		"(the text section would go"
+		" past the end of the file)\n"));
 	return (0);
 }
 
@@ -47,7 +60,7 @@ static int	otool_object_64(t_mach_o *file, t_otool_dump *info)
 	cleanup_otool_info(info);
 	if (ret == -1)
 		return (mach_o_error(-1, "Truncated or malformed object file "
-			"(the text section would go past the end of the file)\n"));
+		"(the text section would go past the end of the file)\n"));
 	return (0);
 }
 
@@ -66,7 +79,7 @@ int			otool_object(
 		cleanup_otool_info(&info);
 		return (-1);
 	}
-	return (info.secs ? 
+	return (info.secs ?
 		otool_object_32(file, &info)
 		: otool_object_64(file, &info));
 }

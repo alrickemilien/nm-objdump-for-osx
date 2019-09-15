@@ -31,7 +31,7 @@ void	*map_loading_file(
 			mach_o_error(0, "%s: No such file or directory.\n", filename);
 		return (NULL);
 	}
-	if ((fstat(fd, &stats)) == -1 || stats.st_size <= 0)
+	if ((fstat(fd, &stats)) == -1 || stats.st_size <= 0)
 		return ((void*)(intptr_t)mach_o_error(0, NM_DEFAULT_MACHO_ERROR, filename));
 	*file_size = (off_t)stats.st_size;
 	if (S_ISDIR(stats.st_mode))

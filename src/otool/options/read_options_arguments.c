@@ -39,7 +39,7 @@ static int					handle_option(
 			if (!g_options_map[j].waiting_for_value)
 				((int*)options)[g_options_map[j].offset] = 1;
 			else
-				*last = &g_options_map[j];
+				ft_memcpy(last, &g_options_map[j], sizeof(t_options_map*));
 			return (0);
 		}
 		j++;

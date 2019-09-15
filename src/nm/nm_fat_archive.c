@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   nm_fat_archive.c                                   :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: aemilien <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/09/15 14:15:41 by aemilien          #+#    #+#             */
+/*   Updated: 2019/09/15 14:15:42 by aemilien         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "nm.h"
 #include <mach-o/arch.h>
 
@@ -16,7 +28,7 @@ int32_t			find_current_arch(
 static int32_t	nm_all_fat_archs(
 	t_mach_o *file, t_options *options)
 {
-	size_t  i;
+	size_t	i;
 
 	i = 0;
 	while (i < file->fat_header->nfat_arch)

@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   find_section.c                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: aemilien <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/09/15 14:17:26 by aemilien          #+#    #+#             */
+/*   Updated: 2019/09/15 14:17:57 by aemilien         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "nm.h"
 
 uint32_t	find_section(
@@ -19,16 +31,14 @@ uint32_t	find_section(
 				return (i);
 			i++;
 		}
+		return (-1);
 	}
-	else
+	while (i < info->nsects)
 	{
-		while (i < info->nsects)
-		{
-			if (ft_strequ(seg_name, info->secs_64[i]->segname)
-			&& ft_strequ(sec_name, info->secs_64[i]->sectname))
-				return (i);
-			i++;
-		}
+		if (ft_strequ(seg_name, info->secs_64[i]->segname)
+		&& ft_strequ(sec_name, info->secs_64[i]->sectname))
+			return (i);
+		i++;
 	}
 	return (-1);
 }

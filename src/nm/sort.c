@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   sort.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: aemilien <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/09/15 14:11:01 by aemilien          #+#    #+#             */
+/*   Updated: 2019/09/15 14:11:59 by aemilien         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "nm.h"
 
 #define A_ uint64_t last, int (*cmp)(const void *, const void *), size_t
@@ -5,7 +17,7 @@
 static void		swap(void *a, void *b, size_t type_size)
 {
 	size_t		i;
-	uint8_t     tmp_short;
+	uint8_t		tmp_short;
 	uint64_t	tmp;
 
 	i = 0;
@@ -26,10 +38,10 @@ static void		swap(void *a, void *b, size_t type_size)
 }
 
 static uint64_t	partitioning(
-    void *tab,
-    uint64_t start,
-    uint64_t pivot,
-    A_ type_size)
+		void *tab,
+		uint64_t start,
+		uint64_t pivot,
+		A_ type_size)
 {
 	uint64_t	i;
 	uint64_t	u;
@@ -61,11 +73,11 @@ static void		quicksort(void *tab, uint64_t start, A_ type_size)
 	}
 }
 
-void					sort(
-    void *tab,
-    size_t elem_nbr,
-    size_t type_size,
-    int (*cmp)(const void *, const void *))
+void			sort(
+		void *tab,
+		size_t elem_nbr,
+		size_t type_size,
+		int (*cmp)(const void *, const void *))
 {
 	if (!elem_nbr)
 		return ;

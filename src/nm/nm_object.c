@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   nm_object.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: aemilien <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/09/15 14:14:09 by aemilien          #+#    #+#             */
+/*   Updated: 2019/09/15 14:15:18 by aemilien         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "nm.h"
 
 static int	find_common_sections_indexes(t_mach_o_processor *info)
@@ -9,33 +21,35 @@ static int	find_common_sections_indexes(t_mach_o_processor *info)
 }
 
 static int	find_symbol_table(
-	t_mach_o_processor *info,
-	t_mach_o *file)
+		t_mach_o_processor *info,
+		t_mach_o *file)
 {
 	if ((info->st_lc =
-		((struct symtab_command *)find_load_command_by_command(file, LC_SYMTAB))) == NULL)
+		((struct symtab_command *)
+		find_load_command_by_command(file, LC_SYMTAB))) == NULL)
 		return (0);
 	info->dysym_lc =
-		(struct dysymtab_command *)find_load_command_by_command(file, LC_DYSYMTAB);
+		(struct dysymtab_command *)
+		find_load_command_by_command(file, LC_DYSYMTAB);
 	if (file->mh)
 	{
 		info->symtab = (struct nlist *)(void *)((uint8_t*)file->o_addr
-										+ info->st_lc->symoff);
+				+ info->st_lc->symoff);
 		info->string_table = (uint8_t*)((uint8_t*)file->o_addr
-										+ info->st_lc->stroff);
+				+ info->st_lc->stroff);
 	}
 	else
 	{
 		info->symtab_64 = (struct nlist_64 *)(void *)(
-										(uint8_t*)file->o_addr
-										+ info->st_lc->symoff);
+				(uint8_t*)file->o_addr
+				+ info->st_lc->symoff);
 		info->string_table = (uint8_t*)((uint8_t*)file->o_addr
-										+ info->st_lc->stroff);
+				+ info->st_lc->stroff);
 	}
 	return (0);
 }
 
-void	cleanup_processor_info(t_mach_o_processor *info)
+void		cleanup_processor_info(t_mach_o_processor *info)
 {
 	free(info->secs);
 	free(info->secs_64);
@@ -43,9 +57,9 @@ void	cleanup_processor_info(t_mach_o_processor *info)
 	free(info->segs);
 }
 
-int	init_processor_info(
-	t_mach_o *file,
-	t_mach_o_processor *info)
+int			init_processor_info(
+		t_mach_o *file,
+		t_mach_o_processor *info)
 {
 	ft_memset(info, 0, sizeof(t_mach_o_processor));
 	if (!file->mh && !file->mh_64)
@@ -69,15 +83,14 @@ int	init_processor_info(
 ** The object sent here has already been loaded
 */
 
-int32_t	nm_object(t_mach_o *file, t_options *options)
+int32_t		nm_object(t_mach_o *file, t_options *options)
 {
-	t_mach_o_processor  info;
-	size_t  			i;
+	t_mach_o_processor	info;
+	size_t				i;
 	t_symbol			*symbols;
 
 	if (init_processor_info(file, &info) == -1)
 		return (-1);
-	// Allow no symtab table, see /usr/lib/libkmodc++.a
 	if (info.st_lc == NULL)
 		return (0);
 	if ((symbols = read_symbols(file, &info)) == NULL)

@@ -1,9 +1,21 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   read_symbols.c                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: aemilien <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/09/15 14:12:48 by aemilien          #+#    #+#             */
+/*   Updated: 2019/09/15 14:12:49 by aemilien         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "nm.h"
 
-uint8_t					*read_string_table_entry(t_mach_o *file,
-													t_mach_o_processor *nm_info,
-													uint32_t index,
-													uint32_t *returned_len)
+uint8_t		*read_string_table_entry(t_mach_o *file,
+		t_mach_o_processor *nm_info,
+		uint32_t index,
+		uint32_t *returned_len)
 {
 	size_t	i;
 
@@ -23,7 +35,6 @@ uint8_t					*read_string_table_entry(t_mach_o *file,
 	return (nm_info->string_table + index);
 }
 
-
 static void	read_symbol_32(t_symbol *symbol, struct nlist *nl)
 {
 	symbol->sym_entry.n_un.n_strx = nl->n_un.n_strx;
@@ -39,14 +50,14 @@ static void	read_symbol_64(t_symbol *symbol, struct nlist_64 *nl)
 }
 
 t_symbol	*read_symbols(
-	t_mach_o *file,
-	t_mach_o_processor *nm_info)
+		t_mach_o *file,
+		t_mach_o_processor *nm_info)
 {
 	t_symbol	*symbols;
 	size_t		i;
 
 	if (nm_info->st_lc == NULL
-		|| (nm_info->symtab == NULL && nm_info->symtab_64 == NULL))
+			|| (nm_info->symtab == NULL && nm_info->symtab_64 == NULL))
 		return (NULL);
 	if ((symbols = malloc(nm_info->st_lc->nsyms * sizeof(t_symbol))) == NULL)
 		return (NULL);

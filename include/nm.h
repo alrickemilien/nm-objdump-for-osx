@@ -6,10 +6,15 @@
 # include "nm_options.h"
 # include "libft.h"
 
+# define INTADDR(x) ((void*)(intptr_t)(x))
 # define NM_DEFAULT_MACHO_ERROR "%s The file was not recognized as a valid object file\n\n"
 # define SUPPORTED_NM_CHAR_SYMBOL_NBR 17
 # define NCHARS_SYMBOLS SUPPORTED_NM_CHAR_SYMBOL_NBR
 # define BAD_STRING_INDEX "bad string index"
+
+# define NM_EACCESS "%s: Permission denied.\n"
+# define NM_EAGAIN "%s: Resource temporarily unavailable.\n"
+# define NM_NO_SUCH_FILE "%s: No such file or directory.\n"
 
 typedef struct		s_symbol
 {

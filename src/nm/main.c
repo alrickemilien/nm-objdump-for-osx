@@ -6,18 +6,50 @@
 /*   By: aemilien <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/15 14:16:30 by aemilien          #+#    #+#             */
-/*   Updated: 2019/09/15 14:16:57 by aemilien         ###   ########.fr       */
+/*   Updated: 2019/09/15 14:34:38 by aemilien         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "nm.h"
 
-int				main(int ac, char **av)
+static void	loop_over_command_line(
+		char *opt,
+		t_options *options,
+		int *exit_code, int *i)
+{
+	static int			last = 0;
+
+	if (options->end_index != 0)
+	{
+		if (*i <= options->end_index
+			&& !(last) && is_a_waiting_value_option(opt))
+			last = 1;
+		else if (*i < options->end_index && last)
+			last = 0;
+		else if (*i < options->end_index
+			&& !is_an_option(opt)
+			&& nm(options, opt) < 0)
+			*exit_code = 1;
+		else if (*i > options->end_index
+			&& nm(options, opt) < 0)
+			*exit_code = 1;
+		return ;
+	}
+	if (!last && is_a_waiting_value_option(opt))
+		last = 1;
+	else if (last)
+		last = 0;
+	else if (!is_an_option(opt)
+		&& nm(options, opt) < 0)
+		*exit_code = 1;
+}
+
+int			main(int ac, char **av)
 {
 	int			i;
 	int			exit_code;
 	t_options	options;
-	int 		last;
+	int			last;
 
 	i = 1;
 	init_prefix_error(av[0]);
@@ -31,30 +63,6 @@ int				main(int ac, char **av)
 	exit_code = 0;
 	last = 0;
 	while (i < ac)
-	{
-		if (options.end_index != 0)
-		{
-			if (i <= options.end_index && !last && is_a_waiting_value_option(av[i]))
-				last = 1;
-			else if (i < options.end_index && last)
-				last = 0;
-			else if (i < options.end_index
-					&& !is_an_option(av[i])
-					&& nm(&options, av[i]) < 0)
-				exit_code = 1;
-			else if (i > options.end_index && nm(&options, av[i]) < 0)
-				exit_code = 1;
-		}
-		else
-		{
-			if (!last && is_a_waiting_value_option(av[i]))
-				last = 1;
-			else if (last)
-				last = 0;
-			else if (!is_an_option(av[i]) && nm(&options, av[i]) < 0)
-				exit_code = 1;
-		}
-		i++;
-	}
+		loop_over_command_line(av[i], &options, &exit_code, &i);
 	return (exit_code);
 }

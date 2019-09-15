@@ -142,6 +142,11 @@ typedef struct					s_map_type_to_loaders {
 	uint32_t					type;
 }								t_map_type_to_loaders;
 
+typedef struct					s_arch_map {
+	const char					*name;
+	int							value;
+}								t_arch_map;
+
 /*
 ** Main
 */

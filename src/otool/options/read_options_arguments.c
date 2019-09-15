@@ -60,6 +60,35 @@ static int					handle_option(
 		"Unknown command line argument '%s'\n", name));
 }
 
+void						read_one_options_argument(
+	char *arg,
+	t_options *options,
+	int i,
+	int *error)
+{
+	int						ret;
+	static t_options_map	*last = NULL;
+
+	ret = 0;
+	if (options->end_index)
+		options->file_count += 1;
+	else if (last)
+	{
+		ret = last->waiting_for_value(options, arg);
+		last = NULL;
+	}
+	else if (is_a_end_arguments_string(arg))
+		options->end_index = i;
+	else if (is_a_single_option(arg))
+		ret = handle_option(options, &last, arg + 1);
+	else if (is_a_multi_option(arg))
+		ret = handle_option(options, &last, arg + 2);
+	else
+		options->file_count += 1;
+	if (ret != 0)
+		*error = ret;
+}
+
 /*
 ** Read args by filling t_options structure with 0 or 1
 ** list is the list of files passed as parameter
@@ -69,35 +98,15 @@ int							read_options_arguments(
 	int ac, char **av, t_options *options)
 {
 	int				i;
-	int				ret;
 	int				error;
-	t_options_map	*last;
 
 	ft_memset(options, 0, sizeof(t_options));
 	error = 0;
 	options->file_count = 0;
-	last = NULL;
 	i = 1;
 	while (i < ac)
 	{
-		ret = 0;
-		if (options->end_index)
-			options->file_count += 1;
-		else if (last)
-		{
-			ret = last->waiting_for_value(options, av[i]);
-			last = NULL;
-		}
-		else if (is_a_end_arguments_string(av[i]))
-			options->end_index = i;
-		else if (is_a_single_option(av[i]))
-			ret = handle_option(options, &last, av[i] + 1);
-		else if (is_a_multi_option(av[i]))
-			ret = handle_option(options, &last, av[i] + 2);
-		else
-			options->file_count += 1;
-		if (ret != 0)
-			error = ret;
+		read_one_options_argument(av[i], options, i, &error);
 		i++;
 	}
 	return (error);

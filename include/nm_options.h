@@ -128,6 +128,16 @@ int				read_options_arguments(
 ** Options with specifc values to handle
 */
 
+typedef struct	s_arch_option {
+	char		*name;
+	int			value;
+}				t_arch_option;
+
+typedef struct	s_radix_option {
+	char		*name;
+	int			value;
+}				t_radix_option;
+
 int				read_arch_option(
 	t_options *options, const char *value);
 int				read_radix_option(

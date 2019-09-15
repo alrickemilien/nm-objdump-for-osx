@@ -12,11 +12,6 @@
 
 #include "nm.h"
 
-typedef struct	s_radix_option {
-	char		*name;
-	int			value;
-}				t_radix_option;
-
 t_radix_option	g_radix_options[] = {
 	{ "o", 8 },
 	{ "x", 16 },

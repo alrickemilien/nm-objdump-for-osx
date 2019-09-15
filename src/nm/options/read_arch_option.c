@@ -12,11 +12,6 @@
 
 #include "nm.h"
 
-typedef struct	s_arch_option {
-	char		*name;
-	int			value;
-}				t_arch_option;
-
 t_arch_option	g_arch_options[] = {
 	{ "x86_64", 0 },
 	{ "x86-64", 0 },

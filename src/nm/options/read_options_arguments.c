@@ -2,6 +2,7 @@
 
 static t_options_map options_map[] = {
 		{ "a", ALL_SYMBOL, NULL },
+		{ "h", HELP, NULL },
 		{ "P", POSIX, NULL },
 		{ "g", ONLY_GLOBAL_SYMBOL, NULL },
 		{ "n", SORT_NUMERIC, NULL },
@@ -24,18 +25,16 @@ static t_options_map options_map[] = {
 		{ "s", SEGMENT_SECTION, NULL, },// true
 		{ "print-size", PRINT_SIZE, NULL },
 		{ "dynamic", ONLY_DYNAMIC, NULL },
-		{ "size-sort", SORT_SIZE, NULL },
 		{ "print-file-name", PREPEND_FILE_ARCHIVE_NAME, NULL },
 		{ "undefined-only", ONLY_UNDEFINED_SYMBOL, NULL, },
 		{ "no-sort", DO_NOT_SORT, NULL },
 		{ "reverse-sort", REVERSE_SORT, NULL },
-		{ "print-after-all", PRINT_AFTER_ALL, NULL },
-		{ "print-before-all", PRINT_BEFORE_ALL, NULL },
 		{ "just-symbol-name", ONLY_SYMBOL_NAME, NULL },
 		{ "extern-only", ONLY_GLOBAL_SYMBOL, NULL },
 		{ "defined-only", DEFINED_ONLY, NULL },
 		{ "synthetic", DEFINED_ONLY, NULL },
 		{ "radix", RADIX, &read_radix_option },
+		{ "help", HELP, NULL },
 		{ NULL, 0, NULL },
 };
 

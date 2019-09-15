@@ -60,6 +60,9 @@ void		print_symbol(t_mach_o *file,
 		return ;
 	if (options->POSIX)
 		print_posix_dump_symbol(symbol, info, c);
+	if ((options->PREPEND_FILE_ARCHIVE_NAME || options->DISPLAY_PATH_NAME)
+		&& (options->ONLY_SYMBOL_NAME || options->ONLY_UNDEFINED_SYMBOL))
+		ft_printf("%s: %s\n", file->path, (char *)symbol->string);
 	else if (options->ONLY_SYMBOL_NAME || options->ONLY_UNDEFINED_SYMBOL)
 		ft_printf("%s\n", (char *)symbol->string);
 	else if (options->DISPLAY_HEXA)

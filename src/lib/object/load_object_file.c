@@ -1,19 +1,31 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   load_object_file.c                                 :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: aemilien <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/09/15 13:24:49 by aemilien          #+#    #+#             */
+/*   Updated: 2019/09/15 13:24:51 by aemilien         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "mach_o.h"
 
 static int	read_object(t_mach_o *file)
 {
 	file->endian = read_object_endian(((struct mach_header *)file->o_addr));
 	if (file->endian == UNKNOWN_ENDIAN)
-		return (mach_o_error(-1, "Unknown endian found for mach-o object, aborting...\n"));
+		return (mach_o_error(-1, "Unknown endian found for object\n"));
 	if (file->endian != endian())
 		file->must_be_swapped = true;
 	else
 		file->must_be_swapped = false;
 	if (read_object_header(file) == NULL)
 		return (mach_o_error(-1, "Malformed object file, "
-				"the mach-o header is truncated or non-existant\n"));
+		"the mach-o header is truncated or non-existant\n"));
 	if (read_object_load_commands(file) == NULL)
-		return (mach_o_error(-1, "Malformed object file, there are no load commands\n"));
+		return (mach_o_error(-1, "Malformed object file: no load commands\n"));
 	return (0);
 }
 
@@ -23,7 +35,6 @@ int			load_object_file(t_mach_o *file,
 {
 	file->o_addr = object_addr;
 	file->o_size = object_size;
-
 	if (check_file_addr_size(file,
 					file->o_addr,
 					file->o_size) == -1)

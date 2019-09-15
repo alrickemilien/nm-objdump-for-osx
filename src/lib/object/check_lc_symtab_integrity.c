@@ -1,3 +1,14 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   check_lc_symtab_integrity.c                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: aemilien <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/09/15 13:29:10 by aemilien          #+#    #+#             */
+/*   Updated: 2019/09/15 13:29:53 by aemilien         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "mach_o.h"
 
@@ -35,7 +46,7 @@ int			check_lc_symtab_integrity(t_mach_o *file,
 	sc = (struct symtab_command *)(void *)lc;
 	if (sizeof(struct symtab_command) != sc->cmdsize)
 		return (mach_o_error(2, "Malformed object "
-			"(LC_SYMTAB command has incorrect cmdsize)\n"));
+		"(LC_SYMTAB command has incorrect cmdsize)\n"));
 	if (check_string_table_integrity(file, sc) == -1
 		|| check_symtab_integrity(file, sc) == -1)
 		return (-1);

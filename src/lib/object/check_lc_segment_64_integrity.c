@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   check_lc_segment_64_integrity.c                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: aemilien <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/09/15 13:30:23 by aemilien          #+#    #+#             */
+/*   Updated: 2019/09/15 13:31:16 by aemilien         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "mach_o.h"
 
 int	check_lc_segment_64_integrity(t_mach_o *file, struct load_command *lc)
@@ -8,10 +20,11 @@ int	check_lc_segment_64_integrity(t_mach_o *file, struct load_command *lc)
 	if (sc->fileoff > file->o_size
 		|| sc->fileoff + sc->filesize > file->o_size)
 		return (mach_o_error(-1, "Truncated or malformed object"
-				" (inconsistent filesize or fileoff in LC_SEGMENT_64)\n"));
+		" (inconsistent filesize or fileoff in LC_SEGMENT_64)\n"));
 	if (sc->nsects * sizeof(struct section_64)
 		+ sizeof(struct segment_command_64) != lc->cmdsize)
 		return (mach_o_error(-1, "Truncated or malformed object"
-	    " (inconsistent cmdsize in LC_SEGMENT_64 for the number of sections)\n"));
+		" (inconsistent cmdsize in LC_SEGMENT_64"
+		" for the number of sections)\n"));
 	return (0);
 }

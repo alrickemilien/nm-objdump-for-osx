@@ -5,6 +5,7 @@
 /*
 ** Gnereate a random filename
 */
+
 static int generate_random_file(void)
 {
 	int			fd;

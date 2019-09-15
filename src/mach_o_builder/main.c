@@ -62,7 +62,7 @@ int main(int ac, const char **av)
 	while (i != ac && !is_an_option(av[i]))
 		build_mach_o_from_conf(&builder, av[i++]);
 
-	debug_s("PARSING HAS FINISHED.\n");
+	debug("PARSING HAS FINISHED.\n");
 
 	ret = mach_o_builder(&builder, &buffer, &size);
 

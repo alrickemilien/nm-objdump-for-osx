@@ -8,8 +8,7 @@
 # include "libft.h"
 # include "mach_o_builder_options.h"
 
-# define debug(x, ...) dprintf(2, x, __VA_ARGS__)
-# define debug_s(x) dprintf(2, x)
+# define debug(x, ...) dprintf(2, x, ##__VA_ARGS__)
 
 /*
 ** All ok

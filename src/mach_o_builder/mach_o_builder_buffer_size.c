@@ -25,8 +25,7 @@ static size_t get_segment_command_list_size(t_mach_o_builder *builder) {
     x = x->next;
   }
 
-  debug_s("Finsished zith get_segment_command_list_size\n");
-
+  debug("Finsished zith get_segment_command_list_size\n");
 
   return (ret);
 }
@@ -53,7 +52,7 @@ static size_t get_section_command_list_size(t_mach_o_builder *builder) {
     x = x->next;
   }
 
-  debug_s("Finsished zith get_section_command_list_size\n");
+  debug("Finsished zith get_section_command_list_size\n");
 
   return (ret);
 }
@@ -80,7 +79,7 @@ static size_t get_symtab_command_list_size(t_mach_o_builder *builder) {
     x = x->next;
   }
 
-  debug_s("Finsished zith get_symtab_command_list_size\n");
+  debug("Finsished zith get_symtab_command_list_size\n");
 
   return (ret);
 }
@@ -105,7 +104,7 @@ static size_t get_symbol_command_list_size(t_mach_o_builder *builder) {
     x = x->next;
   }
 
-  debug_s("Finsished zith get_symbol_command_list_size\n");
+  debug("Finsished zith get_symbol_command_list_size\n");
 
   return (ret);
 }
@@ -118,7 +117,7 @@ static size_t get_string_table_size(t_mach_o_builder *builder) {
   if (NULL != builder->string_table)
     ret = ft_strlen(builder->string_table);
 
-  debug_s("Finsished zith get_string_table_size\n");
+  debug("Finsished zith get_string_table_size\n");
 
   return (ret);
 }

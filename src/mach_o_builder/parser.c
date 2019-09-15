@@ -553,7 +553,7 @@ int build_mach_o_from_conf(t_mach_o_builder *b, const char *path)
 	while(get_next_line(fd, &line) > 0) {
     debug("%s\n", line);
     parse_line(line, &state);
-  //  debug_s("ok\n");
+  //  debug("ok\n");
     free(line);
   }
 

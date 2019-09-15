@@ -35,6 +35,7 @@ static bool is_alpha_num(char c)
 ** start_index is the index of start of the number
 ** 0F will be 0, 0x0F will be 2
 */
+
 uint64_t atoi_base(const char *str, size_t base)
 {
   size_t      start_index;
@@ -42,9 +43,6 @@ uint64_t atoi_base(const char *str, size_t base)
   size_t      i;
   uint64_t    ret;
 //  const char  *map = "0123456789ABCDEF";
-
-//debug_s("yaaa\n");
-//debug("yaaa %s\n", str);
 
   start_index = 0;
   if (ft_memcmp(str, "0x", sizeof(char) * 2) == 0)

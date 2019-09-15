@@ -6,7 +6,7 @@
 /*   By: aemilien <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/15 12:41:29 by aemilien          #+#    #+#             */
-/*   Updated: 2019/09/15 12:41:30 by aemilien         ###   ########.fr       */
+/*   Updated: 2019/09/15 16:48:28 by aemilien         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@
 # define INTADDR(x) ((void*)(intptr_t)(x))
 # define OTOOL_DEFAULT_MACHO_ERROR "%s: is not an object file\n"
 
-# define OTOOL_MULTI_OPT_ERROR "for the -%s option: may only occur zero or one times!\n"
+# define OTOOL_MUL_ERR "for the -%s option: may only occur zero or one times!\n"
 
 void							*map_loading_file(
 	const char *filename, uint64_t *file_size);

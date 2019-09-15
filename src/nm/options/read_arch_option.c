@@ -12,12 +12,13 @@
 
 #include "nm.h"
 
-t_arch_option	g_arch_options[] = {
-	{ "x86_64", 0 },
-	{ "x86-64", 0 },
-	{ "i386", 1 },
-	{ "ppc", 2 },
-	{ NULL, -1 },
+t_arch_option g_arch_options[] = {
+    { "x86_64", CPU_TYPE_X86_64 },
+    { "x86-64", CPU_TYPE_X86_64 },
+    { "i386", CPU_TYPE_I386 },
+    { "ABI64", CPU_ARCH_ABI64 },
+    { "ppc", CPU_TYPE_POWERPC },
+    { NULL, -1 },
 };
 
 int				read_arch_option(

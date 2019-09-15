@@ -72,7 +72,12 @@ void									print_symbol(
 		c = '?';
 	if (!is_print_symbol_required(symbol, info, options, c))
 		return ;
-	if (options->ONLY_SYMBOL_NAME || options->ONLY_UNDEFINED_SYMBOL)
+	if (options->POSIX)
+		print_posix_dump_symbol(symbol, info, c);
+	if ((options->PREPEND_FILE_ARCHIVE_NAME || options->DISPLAY_PATH_NAME)
+		&& (options->ONLY_SYMBOL_NAME || options->ONLY_UNDEFINED_SYMBOL))
+		ft_printf("%s: %s\n", file->path, (char *)symbol->string);
+	else if (options->ONLY_SYMBOL_NAME || options->ONLY_UNDEFINED_SYMBOL)
 		ft_printf("%s\n", (char *)symbol->string);
 	else if (options->DISPLAY_HEXA)
 		print_hex_dump_symbol(symbol, info);

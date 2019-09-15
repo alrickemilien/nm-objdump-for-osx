@@ -14,6 +14,8 @@
 
 static t_options_map	g_options_map[] = {
 	{ "a", ALL_SYMBOL, NULL },
+	{ "P", POSIX, NULL },
+	{ "h", HELP, NULL },
 	{ "g", ONLY_GLOBAL_SYMBOL, NULL },
 	{ "n", SORT_NUMERIC, NULL },
 	{ "o", PREPEND_FILE_ARCHIVE_NAME, NULL },
@@ -47,6 +49,7 @@ static t_options_map	g_options_map[] = {
 	{ "defined-only", DEFINED_ONLY, NULL },
 	{ "synthetic", DEFINED_ONLY, NULL },
 	{ "radix", RADIX, &read_radix_option },
+	{ "help", HELP, NULL },
 	{ NULL, 0, NULL },
 };
 

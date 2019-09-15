@@ -45,7 +45,7 @@ static int					handle_option(
 		{
 			if (((int*)options)[g_options_map[j].offset] == 1)
 			{
-				return (mach_o_error(-1, OTOOL_MULTI_OPT_ERROR,
+				return (mach_o_error(-1, OTOOL_MUL_ERR,
 					g_options_map[j].name));
 			}
 			if (!g_options_map[j].waiting_for_value)

@@ -310,6 +310,7 @@ uint16_t						ato16u_base(
 int64_t							ato64(const char *str);
 uint64_t						endian(void);
 const char						*cpu_type_name(cpu_type_t cpu_type);
+const char						*name_arch(int arch_type);
 
 /*
 ** MACH O ERROR

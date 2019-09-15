@@ -18,6 +18,7 @@ LIB_SRC=src/lib/find_load_command_by_command.c \
 		src/lib/read_sections_64.c \
 		src/lib/read_segments_32.c \
 		src/lib/read_segments_64.c \
+		src/lib/name_arch.c \
 
 # Archive
 LIB_SRC+=src/lib/archive/check_archive_size.c \

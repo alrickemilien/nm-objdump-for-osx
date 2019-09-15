@@ -43,13 +43,17 @@ int32_t			nm_fat_archive(t_mach_o *file, t_options *options)
 	const NXArchInfo	*host_arch;
 
 	host_arch = NXGetLocalArchInfo();
-	if (-1 == (narch_for_arch = find_fat_archive_architecture(file,
-		host_arch->cputype | CPU_ARCH_ABI64, host_arch->cpusubtype)))
+	if ((narch_for_arch = find_fat_archive_architecture(file,
+		host_arch->cputype | CPU_ARCH_ABI64, host_arch->cpusubtype)) == -1)
 		return (nm_all_fat_archs(file, options));
-	else
+	else if (!options->ARCH_TYPE
+	|| (options->ARCH_TYPE == file->fat_archs[narch_for_arch].cputype))
 	{
 		if (load_fat_archive_nth_arch(file, (uint32_t)narch_for_arch) == -1)
 			return (-1);
 		return (find_current_arch(file, options));
 	}
+	return (mach_o_error(-1,
+		"file: %s does not contain architecture: %s.\n",
+		file->path, name_arch(options->ARCH_TYPE)));
 }
